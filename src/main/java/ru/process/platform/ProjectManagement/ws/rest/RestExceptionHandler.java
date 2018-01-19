@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import ru.process.platform.ProjectManagement.entity.RestResponse;
-import ru.process.platform.ProjectManagement.utils.ErrorMessage;
 
 import java.util.HashMap;
 import java.util.Map;

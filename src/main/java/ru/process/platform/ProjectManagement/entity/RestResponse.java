@@ -9,15 +9,15 @@ public class RestResponse<T> {
     private String message = "";
     private List<T> result = new ArrayList<>();
 
-    private RestResponse(T result) {
+    public RestResponse(T result) {
         this.result.add(result);
     }
 
-    private RestResponse(List<T> result) {
+    public RestResponse(List<T> result) {
         this.result = result;
     }
 
-    private RestResponse(int status, String message) {
+    public RestResponse(int status, String message) {
         this.status = status;
         this.message = message;
     }
@@ -32,6 +32,34 @@ public class RestResponse<T> {
         this.status = status;
         this.message = message;
         this.result.add(result);
+    }
+
+    public List<T> getResult() {
+        return result;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public void addResult(T result) {
+        this.result.add(result);
+    }
+
+    public void setResult(List<T> result) {
+        this.result = result;
+    }
+
+    public String getMessage() {
+        return message;
     }
 
     public static <T> RestResponse<T> ok(T result) {

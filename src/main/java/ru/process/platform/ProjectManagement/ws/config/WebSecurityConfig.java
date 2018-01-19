@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import ru.process.platform.ProjectManagement.ws.config.filter.JwtAuthenticationTokenFilter;
 
@@ -27,15 +28,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
     }
 
     @Autowired
-    public void configureAuthentication(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
+    public void configureAuthentication(AuthenticationManagerBuilder authenticationManagerBuilder, PasswordEncoder encoder) throws Exception {
         authenticationManagerBuilder
                 .userDetailsService(this.userDetailsService)
-                .passwordEncoder(passwordEncoder());
-    }
-
-    @Bean
-    public BCryptPasswordEncoder passwordEncoder (){
-        return new BCryptPasswordEncoder();
+                .passwordEncoder(encoder);
     }
 
     @Bean

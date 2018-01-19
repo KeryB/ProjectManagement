@@ -24,24 +24,24 @@ public class User {
     private int id;
 
     @Pattern(regexp = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$")
+    @Column(name = "email", unique = true)
     private String email;
 
     @JsonIgnore
-    @Size(min=5,max=100)
     @Pattern(regexp = "(\\w|\\D)+")
     private String password;
 
     @JsonIgnore
     @DateTimeFormat(pattern = "MM/dd/yyyy")
-    private Date creation_date;
+    private Date creationDate;
 
     @Size(min = 3,max = 64)
     @Pattern(regexp = "([А-аЯ-я]|[A-aZ-z]|\\d)+")
-    private String first_name;
+    private String firstName;
 
     @Size(min = 3,max = 64)
     @Pattern(regexp = "([А-аЯ-я]|[A-aZ-z]|\\d)+")
-    private String second_name;
+    private String secondName;
 
     @Size(min = 3,max = 64)
     @Pattern(regexp = "([А-аЯ-я]|[A-aZ-z]|\\d)+")

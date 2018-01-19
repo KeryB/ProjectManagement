@@ -18,7 +18,7 @@ public class JwtWrapper {
         userDetails.setLogin(user.getEmail());
         userDetails.setPassword(user.getPassword());
         userDetails.setEnabled(true);
-        userDetails.setAuthorities(setAuthorities());
+        userDetails.setAuthorities(setAuthorities(user.getRole()));
         return userDetails;
     }
 

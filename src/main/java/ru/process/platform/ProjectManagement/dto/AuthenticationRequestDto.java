@@ -1,15 +1,15 @@
-package ru.process.platform.ProjectManagement.entity.jwt;
+package ru.process.platform.ProjectManagement.dto;
 
 
 import lombok.Getter;
 import lombok.Setter;
-import ru.process.platform.ProjectManagement.utils.ErrorMessage;
+import ru.process.platform.ProjectManagement.utils.error.ErrorMessage;
 
 import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
-public class JwtAuthenticationRequest {
+public class AuthenticationRequestDto {
 
     @NotNull(message = ErrorMessage.EMPTY_FIELD)
     private String email;
