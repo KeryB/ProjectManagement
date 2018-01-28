@@ -1,0 +1,1 @@
+export const NOT_AUTH = 'NOT_AUTH';

@@ -12,8 +12,8 @@ spring:
       ddl-auto: update
 
 jwt:
-  header: x-auth-token
+  header: X-Auth-Token
   secret: da7ca69f41dce5179752a7546dfa0959
   expiration: 259200 #3days
 role:
-  header: X-Role-Header
+  header: X-Role-Navbar

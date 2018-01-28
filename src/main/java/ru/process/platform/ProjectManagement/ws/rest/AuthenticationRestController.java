@@ -52,7 +52,7 @@ public class AuthenticationRestController {
             authentication = authenticationManager.authenticate(authenticationToken);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         } catch (Exception ex) {
-            return RestResponse.error(ErrorStatus.EMAIL_OR_PASSWORD_IS_NOT_CORRECT, ErrorMessage.EMPTY_FIELD);
+            return RestResponse.error(ErrorStatus.EMAIL_OR_PASSWORD_IS_NOT_CORRECT, ErrorMessage.EMAIL_OR_PASSWORD_IS_NOT_CORRECT);
         }
         User user = userService.findByEmail(authRequest.getEmail());
         final String token = jwtService.buildJwtToken(user);
@@ -82,7 +82,7 @@ public class AuthenticationRestController {
         if(user == null){
             return RestResponse.error(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
         }
-        if(jwtService.isTokenExpired(token.getExpiration())){
+        if(jwtService.validateToken(token)){
             String refreshedToken = jwtService.buildJwtToken(user);
             return RestResponse.ok(refreshedToken);
         } else {

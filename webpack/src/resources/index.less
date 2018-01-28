@@ -1,0 +1,140 @@
+.ant-layout-header {
+  height: 46px;
+
+  .position-right {
+    float: right;
+  }
+
+  .logo {
+    width: 120px;
+    height: 25px;
+    background: rgba(255, 255, 255, .2);
+    margin: 10px 5px;
+    float: left;
+  }
+}
+
+.ant-layout-layout .ant-menu {
+  height: 46px;
+}
+
+//login
+//@import url(https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,700|Open+Sans:400,300,600);
+//
+//*{box-sizing:border-box;}
+//
+//body {
+//  font-family: 'open sans', helvetica, arial, sans;
+//  -webkit-background-size: cover;
+//  -moz-background-size: cover;
+//  -o-background-size: cover;
+//  background-size: cover;
+//}
+//
+@grey: #2a2a2a;
+@blue: #1fb5bf;
+@red: #FF0000;
+.log-form {
+  width: 40%;
+  min-width: 320px;
+  max-width: 475px;
+  background: #fff;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  -o-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, .25);
+
+  @media (max-width: 40em) {
+    width: 95%;
+    position: relative;
+    margin: 2.5% auto 0 auto;
+    left: 0%;
+    -webkit-transform: translate(0%, 0%);
+    -moz-transform: translate(0%, 0%);
+    -o-transform: translate(0%, 0%);
+    -ms-transform: translate(0%, 0%);
+    transform: translate(0%, 0%);
+  }
+
+  form {
+    display: block;
+    width: 100%;
+    padding: 10px 30px;
+  }
+
+  input {
+    display: block;
+    width: 100%;
+    border: none;
+    border-bottom: solid 1px #ccc;
+    color: #2196F3;
+    padding: 10px 10px 10px 0;
+    box-sizing: border-box;
+    outline: none;
+    font-size: 15px
+  }
+  .line {
+    .line-form(#2196F3);
+  }
+  .line-error{
+    .line-form(@red);
+  }
+
+  .line-form(@color) {
+    display: block;
+    background: @color;
+    height: 2px;
+    margin: 0 auto;
+    margin-top: -2px;
+    width: 0px;
+    transition: width .3s cubic-bezier(0.4, 0, 0.2, 1)
+  }
+
+  input:focus + span.line{
+    width: 100%
+  }
+  input:focus + span.line-error{
+    width: 100%
+  }
+  #send {
+    width: 50%;
+    margin: 0 auto;
+    margin-top: 30px;
+    background: #2196F3;
+    border-bottom: none;
+    color: #fff;
+    cursor: pointer
+  }
+  .footer {
+    background: #1C384E;
+    color: #FFF;
+    padding: 15px;
+    box-sizing: border-box;
+    text-align: center;
+  }
+  h2 {
+    margin-top: 10px;
+    text-align: center;
+  }
+  .error-label {
+    color: red;
+  }
+  .user{
+    background-image: url(/resources/images/customer.png);
+    background-repeat: no-repeat;
+  }
+}
+
+.ant-tabs-bar {
+  margin: 0;
+}
+
+body {
+  background-color: #e9ebee;
+}

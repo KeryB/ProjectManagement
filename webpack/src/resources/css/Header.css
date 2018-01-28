@@ -1,0 +1,21 @@
+
+.ant-layout-header{
+    height: 46px;
+}
+.ant-layout-header .position-right{
+    float: right;
+}
+
+.ant-layout-header .logo {
+    width: 120px;
+    height: 25px;
+    background: rgba(255, 255, 255, .2);
+    margin: 10px 5px;
+    float: left;
+}
+
+.ant-layout-layout .ant-menu {
+    height: 46px;
+}
+
+

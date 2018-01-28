@@ -60,6 +60,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authentication);
                 request.setAttribute("token", token);
+                response.addHeader(roleHeader, user.getRole().name());
             } else {
                 HttpUtils.writeError(response, ErrorStatus.TOKEN_SHOULD_BE_REFRESHED, ErrorMessage.REFRESH_TOKEN_REQUIRED_MESSAGE);
                 return;
