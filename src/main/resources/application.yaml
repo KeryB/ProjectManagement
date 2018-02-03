@@ -16,4 +16,4 @@ jwt:
   secret: da7ca69f41dce5179752a7546dfa0959
   expiration: 259200 #3days
 role:
-  header: X-Role-Navbar
+  header: X-Role-Header

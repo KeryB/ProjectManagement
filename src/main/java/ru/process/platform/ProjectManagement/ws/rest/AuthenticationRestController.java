@@ -56,6 +56,7 @@ public class AuthenticationRestController {
         }
         User user = userService.findByEmail(authRequest.getEmail());
         final String token = jwtService.buildJwtToken(user);
+        response.addHeader(roleHeader, user.getRole().name());
         return RestResponse.ok(token);
     }
 

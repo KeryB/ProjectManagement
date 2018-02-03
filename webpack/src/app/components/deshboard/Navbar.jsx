@@ -1,12 +1,15 @@
 import * as React from "react";
 import {Layout, Menu, Breadcrumb, Button} from 'antd';
 import {Link} from "react-router-dom";
-
 const {Header, Content, Footer} = Layout;
 import * as Path from '../../utils/RoutePath'
+import * as Status from '../../utils/AuthStatus';
 
 const notAuthComponent = () => (
     <div>
+        <Menu.Item key="1">Пример</Menu.Item>
+        <Menu.Item key="2">Пример</Menu.Item>
+        <Menu.Item key="3">Пример</Menu.Item>
     </div>
 );
 
@@ -16,8 +19,9 @@ const authorizedComponents = () => {
 class Navbar extends React.Component {
 
     render() {
-        const {auth} = this.props;
-        console.log(auth);
+        const {props} = this.props;
+        const{location, auth} = props;
+        console.log(this.props);
         return (
             <div>
                 <Layout className="layout">
@@ -27,14 +31,20 @@ class Navbar extends React.Component {
                             theme="dark"
                             mode="horizontal"
                         >
-                            <Menu.Item key="1">Пример</Menu.Item>
-                            <Menu.Item key="2">Пример</Menu.Item>
-                            <Menu.Item key="3">Пример</Menu.Item>
-                            <Menu.Item className='position-right'>
-                                <Button type="primary">
-                                    <Link to={Path.LOGIN}>Регистрация/Авторизация</Link>
-                                </Button>
-                            </Menu.Item>
+                            {/*{auth.user.status === Status.NOT_AUTH ? notAuthComponent : authorizedComponents}*/}
+                            {/*<Menu.Item className='position-right'>*/}
+                            {/*<Button type="primary">*/}
+                            {/*<Link to={Path.LOGIN}>Регистрация/Авторизация</Link>*/}
+                            {/*</Button>*/}
+                            {/*</Menu.Item>*/}
+                            {
+                                (location.pathname !== Path.LOGIN) ?
+                                    <Button type="primary" className='position-right'>
+                                        <Link to={Path.LOGIN}>Регистрация/Авторизация</Link>
+                                    </Button>
+                                    :
+                                    undefined
+                            }
                         </Menu>
                     </Header>
                 </Layout>
@@ -44,7 +54,7 @@ class Navbar extends React.Component {
 }
 
 Navbar.propTypes = {
-    auth: React.PropTypes.object.isRequired,
+    props: React.PropTypes.object.isRequired,
 };
 
 export default Navbar;

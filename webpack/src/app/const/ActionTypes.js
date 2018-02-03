@@ -1,0 +1,5 @@
+export const API_CALL = 'API_CALL';
+
+export const MAKE_AUTH_REQUEST = 'MAKE_AUTH_REQUEST';
+export const MAKE_AUTH_FAILED = 'MAKE_AUTH_FAILED';
+export const MAKE_AUTH_SUCCESS = 'MAKE_AUTH_SUCCESS';

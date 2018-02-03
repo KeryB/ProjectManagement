@@ -32,7 +32,7 @@ class App extends React.Component {
         const {auth, location} = this.props;
         return (
             <div>
-                <Navbar auth={auth}/>
+                <Navbar props={this.props}/>
                 <LoginRoute path={Path.LOGIN}
                             component={Login}
                             predicate={() => auth.status === AuthStatus.NOT_AUTH || !getToken()}

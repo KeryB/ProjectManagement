@@ -1,8 +1,11 @@
 import React from 'react'
-import {Icon, Tabs} from 'antd';
-import {Field, reduxForm} from 'redux-form'
-import {email, inputName, maxLength, required} from "./Validation";
-import * as Path from '../../utils/RoutePath'
+import {Icon, Tabs, Button} from 'antd';
+import {Field, reduxForm, SubmissionError} from 'redux-form'
+import {email, inputName, maxLength, required, PASSWORD_IS_NOT_CONFIRM} from "./Validation";
+import {connect} from "react-redux";
+import * as authAction from "../../actions/AuthAction";
+import {bindActionCreators} from "redux";
+import {API_AUTH_LOGIN} from "../../const/ApiPath";
 
 const TabPane = Tabs.TabPane;
 
@@ -18,7 +21,6 @@ const renderField = ({input, label, type, meta: {touched, error, warning}}) => (
 
 const renderFieldRegistration = ({input, label, type, meta: {touched, error, warning}, placeHolder}) => (
     <div>
-        <label>{placeHolder}</label>
         {touched && error ? <Icon type='exclamation-circle' className='error-icon'/> : undefined}
         <input {...input} placeholder={label} type={type}>
         </input>
@@ -32,22 +34,43 @@ class AuthProvider extends React.Component {
 
     constructor(props) {
         super(props);
-
     }
 
-    onSubmitLogin = () => {
-
+    state = {
+        loading: false,
+        iconLoading: false,
     };
 
-    onSubmitRegistration = () => {
+    enterLoading = () => {
+        this.setState({loading: true});
+    };
 
+    enterIconLoading = () => {
+        this.setState({iconLoading: true});
+    };
+
+    onSubmitLogin = (values) => {
+        const {handleSubmit, authAction} = this.props;
+        handleSubmit((values, event, props) => new Promise((resolve, reject) => {
+            authAction.makeAuth(API_AUTH_LOGIN, values, resolve, () => reject(new SubmissionError({
+                password: 'Неверно E-mail или пароль'
+            })))
+        }))()
+    };
+
+    onSubmitRegistration = (values) => {
+        if (values.password !== values.confirmPassword) {
+            throw new SubmissionError({confirmPassword: PASSWORD_IS_NOT_CONFIRM});
+        }
+        console.log(values);
     };
 
     onChange(props) {
     }
 
     loginForm() {
-        const {handleSubmit} = this.props;
+        const {submitting, handleSubmit} = this.props;
+        console.log(submitting);
         return (
             <div>
                 <div>
@@ -72,16 +95,19 @@ class AuthProvider extends React.Component {
                         validate={[required, maxLength]}
                         label="Пароль"
                     />
-                    <input type="submit" value="Войти" id="send"/>
+                    <Button type="primary" loading={submitting} onClick={this.onSubmitLogin}>
+                        Войти
+                    </Button>
                 </form>
                 <div className="forget-password">
                     <a href="#">Забыли пароль?</a>
                 </div>
                 <div className='footer'>
-                    <a className='social-media'>
-                        <Icon type='google' className='icon-google-plus'>
-                            <span   />
-                        </Icon>
+                    <a href='#'>
+                        <Icon type="google-plus" className='fa-google-plus'/>
+                    </a>
+                    <a href='#'>
+                        <Icon type="twitter" className='fa-twitter'/>
                     </a>
                 </div>
             </div>
@@ -134,7 +160,8 @@ class AuthProvider extends React.Component {
                         validate={required}
                         label="Повторите пароль"
                     />
-                    <input type="submit" value="Регистрация" id="send"/>
+                    <input type="submit" value="Регистрация" id="send"
+                           onClick={handleSubmit(this.onSubmitRegistration)}/>
                 </form>
                 <div className='footer'>
                     <Icon type='anticon-google'/>
@@ -147,7 +174,7 @@ class AuthProvider extends React.Component {
         return (
             <div>
                 <div className="log-form">
-                    <Tabs defaultActiveKey="1" onChange={this.onChange(this.props)}>
+                    <Tabs defaultActiveKey="1" onChange={this.onChange()}>
                         <TabPane tab="Авторизация" key="1">
                             {this.loginForm()}
                         </TabPane>
@@ -161,8 +188,22 @@ class AuthProvider extends React.Component {
     }
 }
 
+function mapStateToProps(state) {
+    return {};
+}
+
+function mapDispatchToProps(dispatch) {
+    return {
+        authAction: bindActionCreators(authAction, dispatch)
+    };
+}
+
+AuthProvider.propTypes = {
+    authAction: React.PropTypes.object.isRequired,
+};
+
 AuthProvider = reduxForm({
     form: 'loginForm'
 })(AuthProvider);
 
-export default AuthProvider;
+export default connect(mapStateToProps, mapDispatchToProps)(AuthProvider);
