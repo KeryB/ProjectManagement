@@ -56,6 +56,7 @@ export const api = (path, method, data = null) => (successHandler, errorHandler)
                 message: 'Данные от сервера не получены',
             };
         } else {
+            console.log(body.result, role);
             successHandler(body.result, role);
         }
     }).catch(e => errorHandler(e));

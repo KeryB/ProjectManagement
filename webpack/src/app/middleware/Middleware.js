@@ -11,6 +11,7 @@ const middleware = store => next => action => {
         successCallback,
         errorMessage,
         errorCallback,
+        ignoreErrors = false
     } = action;
 
     if (requestAction) {
@@ -19,9 +20,17 @@ const middleware = store => next => action => {
 
     action.promise((data, role) => {
             console.log(action);
-            if (successAction) store.dispatch({type: successAction, payload: data, additionalData});
+            if (successAction) {
+                store.dispatch({type: successAction, payload: data, role: role});
+            }
 
-            if (successCallback) successCallback(data, role);
+            if (successCallback) {
+                successCallback(data, role);
+            }
+
+            if (role && store.getState().user.user.role !== role) {
+                console.log("kek");
+            }
         },
         error => {
             if (failureAction) {
@@ -31,7 +40,13 @@ const middleware = store => next => action => {
             if (errorCallback) {
                 errorCallback(error);
             }
+            if (ignoreErrors) {
+                return;
+            }
         })
+
+
+    //todo если получен некорректный токе, то удалять токен, ошибка 16
 };
 
 

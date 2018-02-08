@@ -3,14 +3,19 @@ import Navbar from "./deshboard/Navbar";
 import {connect} from "react-redux";
 import * as Path from '../utils/RoutePath';
 import Login from './forms/AuthProvider';
-// import Login from './example';
-import {Redirect, Route, Switch} from "react-router-dom";
-import * as AuthStatus from "../utils/Roles";
+import {Redirect, Route} from "react-router-dom";
+import * as Roles from "../utils/Roles";
 import {getToken} from "../utils/token/TokenManager";
+import * as userActions from '../actions/UserAction';
+import {bindActionCreators} from "redux";
+import * as Status from "../utils/AuthStatus";
+import {Spin, Icon} from 'antd';
+import DashBoard from "./deshboard/DashBoard";
+
 
 const LoginRoute = ({component: Component, predicate, redirectTo, componentProps, ...rest}) => (
     <div>
-        <Route {...rest} path={Path.LOGIN} render={props =>
+        <Route {...rest} render={props =>
             predicate()
                 ? <Component {...componentProps}/>
                 : <Redirect to={redirectTo}/>
@@ -18,26 +23,70 @@ const LoginRoute = ({component: Component, predicate, redirectTo, componentProps
     </div>
 );
 
+const DashboardRoute = ({component: Component, user, predicate, redirectTo, componentProps, ...rest}) => (
+
+    <div>
+        <Route {...rest} render={props =>
+            predicate()
+                ? <Component {...componentProps}/>
+                : (<Redirect to={(user.tokenStatus === Status.NOT_AUTH || user.tokenStatus === Status.NOT_VALID) ? Path.LOGIN : redirectTo}/>)
+        }/>
+    </div>
+);
+
 class App extends React.Component {
 
     componentWillMount() {
-        console.log(this.props)
+        const {user: {isFetched, isLoading, user}, userActions} = this.props;
+        console.log("componentWillMount");
+
+        if (!isFetched && getToken()) {
+            userActions.fetchUserData();
+        }
+
     }
 
     componentWillReceiveProps(props) {
-        console.log(props);
+        const {user: {isFetched, isLoading, user}, userActions} = props;
+        console.log(isFetched, isLoading);
+
+        console.log("componentWillReceiveProps");
+        if (user.tokenStatus === Status.REFRESH_TOKEN_REQUIRED) {
+            userActions.refreshToken();
+        } else if (!isFetched && !isLoading && user.tokenStatus === Status.VALID) {
+            userActions.fetchUserData();
+        }
     }
 
     render() {
-        const {auth, location} = this.props;
+        const {user: {user, isLoading}, location} = this.props;
+        console.log(user);
+
         return (
             <div>
-                <Navbar props={this.props}/>
-                <LoginRoute path={Path.LOGIN}
-                            component={Login}
-                            predicate={() => auth.status === AuthStatus.NOT_AUTH || !getToken()}
-                            redirectTo={Path.DASHBOARD}
-                />
+                {
+                    isLoading ?
+                        <div>
+                            <Icon type="loading" className='spinner-large' spin/>
+                        </div> :
+                        <div>
+                            <Navbar location={location} user={user}/>
+                            <LoginRoute path={Path.LOGIN}
+                                         component={Login}
+                                         predicate={() => user.role === Roles.NOT_AUTH || !getToken()}
+                                         redirectTo={Path.DASHBOARD}
+                                         componentProps={this.props}
+                            />
+
+                            <DashboardRoute path={Path.DASHBOARD}
+                                            component={DashBoard}
+                                            user={user}
+                                            predicate={() => user.role !== Roles.NOT_AUTH || getToken()}
+                                            redirectTo={Path.DASHBOARD}
+                                            componentProps={this.props}
+                            />
+                        </div>
+                }
 
             </div>
         )
@@ -45,13 +94,19 @@ class App extends React.Component {
 }
 
 App.propTypes = {
-    auth: React.PropTypes.object.isRequired,
+    user: React.PropTypes.object.isRequired,
 };
 
-function mapStateToProps(state) {
+function mapDispatchToProps(dispatch) {
     return {
-        auth: state.auth,
+        userActions: bindActionCreators(userActions, dispatch),
     }
 }
 
-export default connect(mapStateToProps)(App);
+function mapStateToProps(state) {
+    return {
+        user: state.user,
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

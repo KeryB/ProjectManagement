@@ -47,6 +47,7 @@ public class User {
     @Pattern(regexp = "([А-аЯ-я]|[A-aZ-z]|\\d)+")
     private String nickname;
 
+    @JsonIgnore
     private UserRole role;
 
     @JsonIgnore
