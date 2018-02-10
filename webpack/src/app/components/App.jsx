@@ -11,7 +11,7 @@ import {bindActionCreators} from "redux";
 import * as Status from "../utils/AuthStatus";
 import {Spin, Icon} from 'antd';
 import DashBoard from "./deshboard/DashBoard";
-
+import PropTypes from 'prop-types';
 
 const LoginRoute = ({component: Component, predicate, redirectTo, componentProps, ...rest}) => (
     <div>
@@ -29,7 +29,8 @@ const DashboardRoute = ({component: Component, user, predicate, redirectTo, comp
         <Route {...rest} render={props =>
             predicate()
                 ? <Component {...componentProps}/>
-                : (<Redirect to={(user.tokenStatus === Status.NOT_AUTH || user.tokenStatus === Status.NOT_VALID) ? Path.LOGIN : redirectTo}/>)
+                : (<Redirect
+                    to={(user.tokenStatus === Status.NOT_AUTH || user.tokenStatus === Status.NOT_VALID) ? Path.LOGIN : redirectTo}/>)
         }/>
     </div>
 );
@@ -37,7 +38,7 @@ const DashboardRoute = ({component: Component, user, predicate, redirectTo, comp
 class App extends React.Component {
 
     componentWillMount() {
-        const {user: {isFetched, isLoading, user}, userActions} = this.props;
+        const {userData: {isFetched}, userActions} = this.props;
         console.log("componentWillMount");
 
         if (!isFetched && getToken()) {
@@ -47,8 +48,8 @@ class App extends React.Component {
     }
 
     componentWillReceiveProps(props) {
-        const {user: {isFetched, isLoading, user}, userActions} = props;
-        console.log(isFetched, isLoading);
+        const {userData: {isFetched, isLoading, user}, userActions} = props;
+        console.log(isFetched, isLoading, user);
 
         console.log("componentWillReceiveProps");
         if (user.tokenStatus === Status.REFRESH_TOKEN_REQUIRED) {
@@ -59,8 +60,8 @@ class App extends React.Component {
     }
 
     render() {
-        const {user: {user, isLoading}, location} = this.props;
-        console.log(user);
+        const {userData: {user, isLoading, projectPermissions}, location} = this.props;
+        console.log(this.props);
 
         return (
             <div>
@@ -70,12 +71,12 @@ class App extends React.Component {
                             <Icon type="loading" className='spinner-large' spin/>
                         </div> :
                         <div>
-                            <Navbar location={location} user={user}/>
+                            <Navbar location={location} user={user} project={projectPermissions}/>
                             <LoginRoute path={Path.LOGIN}
-                                         component={Login}
-                                         predicate={() => user.role === Roles.NOT_AUTH || !getToken()}
-                                         redirectTo={Path.DASHBOARD}
-                                         componentProps={this.props}
+                                        component={Login}
+                                        predicate={() => user.role === Roles.NOT_AUTH || !getToken()}
+                                        redirectTo={Path.DASHBOARD}
+                                        componentProps={this.props}
                             />
 
                             <DashboardRoute path={Path.DASHBOARD}
@@ -94,7 +95,7 @@ class App extends React.Component {
 }
 
 App.propTypes = {
-    user: React.PropTypes.object.isRequired,
+    userData: PropTypes.object.isRequired,
 };
 
 function mapDispatchToProps(dispatch) {
@@ -105,7 +106,7 @@ function mapDispatchToProps(dispatch) {
 
 function mapStateToProps(state) {
     return {
-        user: state.user,
+        userData: state.user,
     }
 }
 

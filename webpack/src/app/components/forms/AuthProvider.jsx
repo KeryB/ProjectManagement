@@ -7,8 +7,7 @@ import * as userAction from "../../actions/UserAction";
 import {bindActionCreators} from "redux";
 import {API_AUTH_LOGIN, API_AUTH_REGISTRATION} from "../../const/ApiPath";
 import {EMAIL_NOT_UNIQUE} from "../../const/http/HttpStatus";
-import browserHistory from 'react-router-dom';
-import * as Path from "../../utils/RoutePath";
+import PropTypes from 'prop-types';
 
 const TabPane = Tabs.TabPane;
 
@@ -222,7 +221,7 @@ function mapDispatchToProps(dispatch) {
 }
 
 AuthProvider.propTypes = {
-    userAction: React.PropTypes.object.isRequired,
+    userAction: PropTypes.object.isRequired,
 };
 
 AuthProvider = reduxForm({

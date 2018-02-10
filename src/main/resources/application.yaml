@@ -10,6 +10,9 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: update
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
 
 jwt:
   header: X-Auth-Token

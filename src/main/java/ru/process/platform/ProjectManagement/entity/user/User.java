@@ -23,7 +23,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
-    @Pattern(regexp = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$")
+    @Pattern(regexp = "^[_A-Za-z0-9-+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$")
     @Column(name = "email", unique = true)
     private String email;
 
@@ -53,4 +53,7 @@ public class User {
     @JsonIgnore
     private  String googleId;
 
+//    @JsonIgnore
+//    @OneToMany(cascade = CascadeType.ALL, mappedBy = "primaryUser")
+//    private List<UserProject> userProjects;
 }

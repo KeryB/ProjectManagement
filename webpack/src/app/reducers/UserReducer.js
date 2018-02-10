@@ -6,6 +6,7 @@ import {putToken} from "../utils/token/TokenManager";
 const initialState = {
     isFetched: false,
     isLoading: false,
+    projectPermissions: [],
     user: {
         role: Roles.NOT_AUTH,
         tokenStatus: Status.NOT_AUTH
@@ -40,7 +41,13 @@ export default (state = initialState, action = {}) => {
                 ...state,
                 isLoading: false,
                 isFetched: true,
-                user: {...action.payload[0], tokenStatus: Status.VALID, role: action.role}
+                projectPermissions:[
+                    ...action.payload[0].projectPermissions
+                ],
+                user: {
+                    ...action.payload[0].user,
+                    tokenStatus: Status.VALID,
+                    role: action.role}
             };
         default:
             return state;
