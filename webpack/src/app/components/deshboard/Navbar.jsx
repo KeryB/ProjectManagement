@@ -4,6 +4,9 @@ import {Link} from "react-router-dom";
 import * as Path from '../../utils/RoutePath'
 import * as Status from '../../utils/AuthStatus';
 import PropTypes from 'prop-types';
+import {removeToken} from "../../utils/token/TokenManager";
+import {bindActionCreators} from "redux";
+import AuthHeader from "./header/AuthHeader";
 
 const SubMenu = Menu.SubMenu;
 const MenuItemGroup = Menu.ItemGroup;
@@ -11,91 +14,43 @@ const {Header, Content, Footer} = Layout;
 
 
 const notAuthComponent = (location) => (
-    <SubMenu>
-        <Menu.Item key="1">Пример</Menu.Item>
-        <Menu.Item key="2">Пример</Menu.Item>
-        <Menu.Item key="3">Пример</Menu.Item>
+    <div>
         {location.pathname !== Path.LOGIN
             ?
-            <Menu.Item><Button type="primary" className='position-right'>
-                <Link to={Path.LOGIN}>Регистрация/Авторизация</Link>
+            <Button type="primary" className='position-right'>
+                <Link to={Path.LOGIN}><Icon type="login"/> Войти</Link>
             </Button>
-            </Menu.Item>
             : undefined
 
         }
-    </SubMenu>
-);
-
-const profileMenu = (
-    <Menu>
-        <Menu.Item key="0">
-            <a><Icon type="profile"/> Профайл</a>
-        </Menu.Item>
-        <Menu.Item key="1">
-            <a>фыв</a>
-        </Menu.Item>
-        <Menu.Divider/>
-        <Menu.Item key="3"><Icon type="logout"/> Выйти</Menu.Item>
-    </Menu>
-);
-
-const projectList = (item, index) => {
-    return <Menu.Item key={index}>asd</Menu.Item>
-};
-
-const projectMenu = (project) => (
-    <Menu>
-        {
-            project
-                ? project.map((item, index) => {
-                    return <Menu.Item key={index}>
-                        <a href='#'>{item.project.shortTitle}</a>
-                    </Menu.Item>
-                })
-                : <div> У вас нет проектов</div>
-        }
-    </Menu>
+    </div>
 );
 
 class Navbar extends React.Component {
+
+    logout = () => {
+        removeToken();
+        window.location.href = '/';
+    };
 
     render() {
         const {location, user, project} = this.props;
         console.log(project);
         return (
             <Layout className="layout">
-                <Header>
-                    <Link to={Path.DASHBOARD} className='logo'>
+                <div className='ant-layout-header ant-menu-horizontal'>
+                    <Link to={user.tokenStatus === Status.NOT_AUTH ? Path.ROOT : Path.DASHBOARD} className='logo'>
                         <div className='top_home_logo'>
                         </div>
                     </Link>
-                    <Menu
-                        theme="dark"
-                        mode="horizontal"
-                    >
-                        {
-                            (user.tokenStatus === Status.NOT_AUTH) ?
-                                notAuthComponent(location)
-                                :
-                                <Menu>
-                                    <Dropdown overlay={projectMenu(project)}>
-                                        <a className="ant-dropdown-link" href="#">
-                                            <Icon type="folder"/>
-                                            <span> Проекты</span>
-                                            <Icon type="down"/>
-                                        </a>
-                                    </Dropdown>
-                                    <Dropdown overlay={profileMenu} trigger={['click']}>
-                                        <a className='top_profile'>
-                                            <Avatar size='large'/>
-                                            <span>{user.firstName + ' ' + user.secondName}</span>
-                                        </a>
-                                    </Dropdown>
-                                </Menu>
-                        }
-                    </Menu>
-                </Header>
+                    {(user.tokenStatus === Status.NOT_AUTH) ?
+                        notAuthComponent(location)
+                        :
+                        <div>
+                            <AuthHeader user={user} project={project} logout={this.logout}/>
+                        </div>
+                    }
+                </div>
             </Layout>
         )
     }

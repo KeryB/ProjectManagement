@@ -3,14 +3,14 @@ import Navbar from "./deshboard/Navbar";
 import {connect} from "react-redux";
 import * as Path from '../utils/RoutePath';
 import Login from './forms/AuthProvider';
-import {Redirect, Route} from "react-router-dom";
+import {Redirect, Route, Switch} from "react-router-dom";
 import * as Roles from "../utils/Roles";
 import {getToken} from "../utils/token/TokenManager";
 import * as userActions from '../actions/UserAction';
 import {bindActionCreators} from "redux";
 import * as Status from "../utils/AuthStatus";
 import {Spin, Icon} from 'antd';
-import DashBoard from "./deshboard/DashBoard";
+import DashBoard from "./deshboard/Dashboard";
 import PropTypes from 'prop-types';
 
 const LoginRoute = ({component: Component, predicate, redirectTo, componentProps, ...rest}) => (
@@ -60,7 +60,7 @@ class App extends React.Component {
     }
 
     render() {
-        const {userData: {user, isLoading, projectPermissions}, location} = this.props;
+        const {userData: {user, isLoading, projectPermissions, tokenStatus}, location, history} = this.props;
         console.log(this.props);
 
         return (
@@ -72,20 +72,27 @@ class App extends React.Component {
                         </div> :
                         <div>
                             <Navbar location={location} user={user} project={projectPermissions}/>
-                            <LoginRoute path={Path.LOGIN}
-                                        component={Login}
-                                        predicate={() => user.role === Roles.NOT_AUTH || !getToken()}
-                                        redirectTo={Path.DASHBOARD}
-                                        componentProps={this.props}
-                            />
-
-                            <DashboardRoute path={Path.DASHBOARD}
-                                            component={DashBoard}
-                                            user={user}
-                                            predicate={() => user.role !== Roles.NOT_AUTH || getToken()}
+                            <Switch>
+                                <LoginRoute path={Path.LOGIN}
+                                            component={Login}
+                                            predicate={() => user.role === Roles.NOT_AUTH || !getToken()}
                                             redirectTo={Path.DASHBOARD}
                                             componentProps={this.props}
-                            />
+                                />
+
+                                <DashboardRoute path={Path.DASHBOARD}
+                                                component={DashBoard}
+                                                user={user}
+                                                predicate={() => user.role !== Roles.NOT_AUTH || getToken()}
+                                                redirectTo={Path.DASHBOARD}
+                                                componentProps={this.props}
+                                />
+                                <Route component={() => {
+                                    if (user.role !== Status.NOT_AUTH)
+                                        return <Redirect to={Path.DASHBOARD}/>;
+                                    return <Route path={Path.ROOT}/>
+                                }} exact/>
+                            </Switch>
                         </div>
                 }
 

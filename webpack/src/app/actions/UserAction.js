@@ -21,3 +21,10 @@ export function fetchUserData() {
         promise: api(API_USER_FETCH, Methods.POST)
     }
 }
+
+export function logout() {
+    return {
+        type: Types.API_CALL,
+        actions: Types.LOGOUT_USER
+    }
+}
