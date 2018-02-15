@@ -6,7 +6,7 @@ import {Link} from "react-router-dom";
 const profileMenu = (logout) => (
     <Menu>
         <Menu.Item key="0">
-            <a><Icon type="idcard"/> Профиль</a>
+            <Link to={RoutePath}><Icon type="idcard"/> Профиль</Link>
         </Menu.Item>
         <Menu.Item key="1">
             <a><Icon type="setting"/> Настройки</a>

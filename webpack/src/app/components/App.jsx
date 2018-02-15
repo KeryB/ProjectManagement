@@ -10,7 +10,7 @@ import * as userActions from '../actions/UserAction';
 import {bindActionCreators} from "redux";
 import * as Status from "../utils/AuthStatus";
 import {Spin, Icon} from 'antd';
-import DashBoard from "./deshboard/Dashboard";
+import DashBoard from "./deshboard/navigation/Dashboard";
 import PropTypes from 'prop-types';
 
 const LoginRoute = ({component: Component, predicate, redirectTo, componentProps, ...rest}) => (
