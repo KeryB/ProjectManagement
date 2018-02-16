@@ -25,7 +25,7 @@ export const api = (path, method, data = null) => (successHandler, errorHandler)
     }
 
     let role;
-    console.log(config);
+    console.log(config, path);
 
     fetch(path, config).then((response)=>{
         console.log(response);

@@ -10,7 +10,7 @@ import * as userActions from '../actions/UserAction';
 import {bindActionCreators} from "redux";
 import * as Status from "../utils/AuthStatus";
 import {Spin, Icon} from 'antd';
-import DashBoard from "./deshboard/navigation/Dashboard";
+import DashBoardInternal from "./deshboard/DashboardInternal";
 import PropTypes from 'prop-types';
 
 const LoginRoute = ({component: Component, predicate, redirectTo, componentProps, ...rest}) => (
@@ -39,9 +39,9 @@ class App extends React.Component {
 
     componentWillMount() {
         const {userData: {isFetched}, userActions} = this.props;
-        console.log("componentWillMount");
 
         if (!isFetched && getToken()) {
+            console.log("componentWillMount");
             userActions.fetchUserData();
         }
 
@@ -61,7 +61,6 @@ class App extends React.Component {
 
     render() {
         const {userData: {user, isLoading, projectPermissions, tokenStatus}, location, history} = this.props;
-        console.log(this.props);
 
         return (
             <div>
@@ -81,7 +80,7 @@ class App extends React.Component {
                                 />
 
                                 <DashboardRoute path={Path.DASHBOARD}
-                                                component={DashBoard}
+                                                component={DashBoardInternal}
                                                 user={user}
                                                 predicate={() => user.role !== Roles.NOT_AUTH || getToken()}
                                                 redirectTo={Path.DASHBOARD}

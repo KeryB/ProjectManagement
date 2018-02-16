@@ -2,11 +2,12 @@ import PropTypes from "prop-types";
 import Navbar from "../Navbar";
 import {Menu, Icon, Avatar, Dropdown} from 'antd';
 import {Link} from "react-router-dom";
+import * as Path from '../../../utils/RoutePath'
 
 const profileMenu = (logout) => (
     <Menu>
         <Menu.Item key="0">
-            <Link to={RoutePath}><Icon type="idcard"/> Профиль</Link>
+            <Link to={Path.PROFILE}><Icon type="idcard"/> Профиль</Link>
         </Menu.Item>
         <Menu.Item key="1">
             <a><Icon type="setting"/> Настройки</a>
@@ -35,16 +36,16 @@ const projectMenu = (project) => (
         </Menu.Item>
         <Menu.Divider/>
         <Menu.Item>
-            <a><Icon type="bars" /> Показать все</a>
+            <Link to={{pathname: Path.PROJECTS, state: {fromDashboard: true}}}><Icon type="bars"/> Показать все</Link>
         </Menu.Item>
         <Menu.Divider/>
         {
             project
                 ? project.map((item, index) => {
-                    return <Menu.Item key={index}>
-                        <Link to='#'><Avatar size='small'/> {item.project.shortTitle}</Link>
-                    </Menu.Item>
-                })
+                return <Menu.Item key={index}>
+                    <Link to='#'><Avatar size='small'/> {item.project.shortTitle}</Link>
+                </Menu.Item>
+            })
                 : <div> У вас нет проектов</div>
         }
     </Menu>

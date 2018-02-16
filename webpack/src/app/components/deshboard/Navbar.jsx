@@ -4,7 +4,7 @@ import {Link} from "react-router-dom";
 import * as Path from '../../utils/RoutePath'
 import * as Status from '../../utils/AuthStatus';
 import PropTypes from 'prop-types';
-import {removeToken} from "../../utils/token/TokenManager";
+import {getToken, removeToken} from "../../utils/token/TokenManager";
 import {bindActionCreators} from "redux";
 import AuthHeader from "./header/AuthHeader";
 
@@ -43,7 +43,7 @@ class Navbar extends React.Component {
                         <div className='top_home_logo'>
                         </div>
                     </Link>
-                    {(user.tokenStatus === Status.NOT_AUTH) ?
+                    {(user.tokenStatus === Status.NOT_AUTH && !getToken()) ?
                         notAuthComponent(location)
                         :
                         <div>
