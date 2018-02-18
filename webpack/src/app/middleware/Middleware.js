@@ -48,18 +48,27 @@ const middleware = store => next => action => {
             }
             console.log(error);
 
-            switch (error.status){
+            switch (error.status) {
                 case HttpStatus.INVALID_TOKEN_HEADER:
                     removeToken();
                     break;
                 case HttpStatus.SERVER_ERROR:
-                    const header = 'Внутрення ошибка сервера';
-                    const body = <div>
-                        <h3>Пожалуйста, перезагрузите страницу</h3>
-                    </div>;
-                    Modal.error({title: header, content: body})
+                    const object = popupContent("Внутрення ошибка сервера", "Пожалуйста, перезагрузите страницу");
+                    Modal.error({title: object.header, content: object.body});
+                    break;
+                case HttpStatus.ETHERNET_PROBLEM:
+                    const warning = popupContent("Осутствует интернет соединение", "Пожалуйста, проверьте интернет соединение");
+                    Modal.warning({title: warning.header, content: warning.body})
             }
-        })
+        });
+
+    const popupContent = (header, body) => {
+        const title = header;
+        const content = <div>
+            <h3>{body}</h3>
+        </div>;
+        return {title, content}
+    }
 
 
     //todo если получен некорректный токе, то удалять токен, ошибка 16

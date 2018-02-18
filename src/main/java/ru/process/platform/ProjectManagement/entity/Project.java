@@ -7,7 +7,8 @@ import lombok.NoArgsConstructor;
 import ru.process.platform.ProjectManagement.utils.JpaUtils;
 
 import javax.persistence.*;
-import java.util.Date;
+import javax.validation.constraints.NotNull;
+import java.sql.Date;
 
 @Entity
 @Data
@@ -23,9 +24,14 @@ public class Project {
 
     private String title;
 
+    @NotNull
     private String shortTitle;
 
     private String description;
 
+    @NotNull
     private Date creationDate;
+
+    @NotNull
+    private String projectType;
 }

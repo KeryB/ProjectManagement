@@ -9,8 +9,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import ru.process.platform.ProjectManagement.dto.AuthenticationRequestDto;
-import ru.process.platform.ProjectManagement.dto.RegistrationDto;
+import ru.process.platform.ProjectManagement.dto.request.AuthenticationRequestDto;
+import ru.process.platform.ProjectManagement.dto.request.RegistrationRequestDto;
 import ru.process.platform.ProjectManagement.entity.RestResponse;
 import ru.process.platform.ProjectManagement.entity.jwt.Token;
 import ru.process.platform.ProjectManagement.entity.user.User;
@@ -61,12 +61,12 @@ public class AuthenticationRestController {
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public RestResponse register(@RequestBody @Valid RegistrationDto registrationDto, HttpServletResponse response) {
+    public RestResponse register(@RequestBody @Valid RegistrationRequestDto registrationRequestDto, HttpServletResponse response) {
 
-        if (userService.findByEmail(registrationDto.getEmail()) != null) {
+        if (userService.findByEmail(registrationRequestDto.getEmail()) != null) {
             return RestResponse.error(ErrorStatus.EMAIL_NOT_UNIQUE, ErrorMessage.EMAIL_NOT_UNIQUE);
         }
-        User user = userService.registerUser(registrationDto);
+        User user = userService.registerUser(registrationRequestDto);
         String token = jwtService.buildJwtToken(user);
         response.addHeader(roleHeader, user.getRole().name());
         return RestResponse.ok(token);

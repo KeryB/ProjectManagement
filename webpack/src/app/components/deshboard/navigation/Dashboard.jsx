@@ -7,17 +7,13 @@ class DashBoard extends React.Component {
 
 
     render() {
-
         const {children} = this.props;
-        console.log(this.props);
-
         const {userData: {projectPermissions}} = this.props;
-        console.log(projectPermissions);
 
         return (
             <div className='dashboard'>
                 <Row gutter={48} style={{padding: '10px', margin: '0px'}}>
-                    <LeftBar/>
+                    <LeftBar projectPermissions={projectPermissions}/>
                     <div className="container-inner">
                         {children}
                     </div>

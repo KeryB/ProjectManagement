@@ -1,4 +1,4 @@
-import {getToken} from "../../utils/token/TokenManager";
+import {getStorageItem} from "../../utils/token/TokenManager";
 import * as HttpMethods from "../../const/http/HttpMethods";
 import * as HttpStatus from "../../const/http/HttpStatus";
 
@@ -10,7 +10,7 @@ export const api = (path, method, data = null) => (successHandler, errorHandler)
     let headers = {};
     headers['Content-Type'] = 'application/json';
 
-    const token = getToken();
+    const token = getStorageItem();
     if (token) {
         headers[tokenHeader] = token;
     }

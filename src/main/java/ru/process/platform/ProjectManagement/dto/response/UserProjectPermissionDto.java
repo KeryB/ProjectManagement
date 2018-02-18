@@ -1,4 +1,4 @@
-package ru.process.platform.ProjectManagement.dto;
+package ru.process.platform.ProjectManagement.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,7 +14,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserDataDto {
+public class UserProjectPermissionDto {
 
     @Getter
     @Setter
@@ -25,4 +25,10 @@ public class UserDataDto {
 
     private User user;
     private List<ProjectPermission> projectPermissions;
+
+    public void addUserPermission(ProjectPermission projectPermission){
+        if(projectPermission != null){
+            projectPermissions.add(projectPermission);
+        }
+    }
 }

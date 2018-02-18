@@ -5,7 +5,7 @@ import * as Path from '../utils/RoutePath';
 import Login from './forms/AuthProvider';
 import {Redirect, Route, Switch} from "react-router-dom";
 import * as Roles from "../utils/Roles";
-import {getToken} from "../utils/token/TokenManager";
+import {getStorageItem} from "../utils/token/TokenManager";
 import * as userActions from '../actions/UserAction';
 import {bindActionCreators} from "redux";
 import * as Status from "../utils/AuthStatus";
@@ -40,7 +40,7 @@ class App extends React.Component {
     componentWillMount() {
         const {userData: {isFetched}, userActions} = this.props;
 
-        if (!isFetched && getToken()) {
+        if (!isFetched && getStorageItem()) {
             console.log("componentWillMount");
             userActions.fetchUserData();
         }
@@ -62,6 +62,7 @@ class App extends React.Component {
     render() {
         const {userData: {user, isLoading, projectPermissions, tokenStatus}, location, history} = this.props;
 
+        console.log(this.props);
         return (
             <div>
                 {
@@ -74,7 +75,7 @@ class App extends React.Component {
                             <Switch>
                                 <LoginRoute path={Path.LOGIN}
                                             component={Login}
-                                            predicate={() => user.role === Roles.NOT_AUTH || !getToken()}
+                                            predicate={() => user.role === Roles.NOT_AUTH || !getStorageItem()}
                                             redirectTo={Path.DASHBOARD}
                                             componentProps={this.props}
                                 />
@@ -82,7 +83,7 @@ class App extends React.Component {
                                 <DashboardRoute path={Path.DASHBOARD}
                                                 component={DashBoardInternal}
                                                 user={user}
-                                                predicate={() => user.role !== Roles.NOT_AUTH || getToken()}
+                                                predicate={() => user.role !== Roles.NOT_AUTH || getStorageItem()}
                                                 redirectTo={Path.DASHBOARD}
                                                 componentProps={this.props}
                                 />
@@ -94,7 +95,6 @@ class App extends React.Component {
                             </Switch>
                         </div>
                 }
-
             </div>
         )
     }

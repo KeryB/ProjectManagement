@@ -7,6 +7,7 @@ import {BrowserRouter as Router} from 'react-router-dom';
 import {AppContainer} from 'react-hot-loader';
 import 'antd/dist/antd.less';
 import './resources/index.less';
+import './resources/less/project-list.less'
 
 const store = configureStore();
 

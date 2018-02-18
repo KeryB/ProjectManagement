@@ -35,15 +35,15 @@ public class User {
     @DateTimeFormat(pattern = "MM/dd/yyyy")
     private Date creationDate;
 
-    @Size(min = 3,max = 64)
+    @Size(min = 3, max = 64)
     @Pattern(regexp = "([А-аЯ-я]|[A-aZ-z]|\\d)+")
     private String firstName;
 
-    @Size(min = 3,max = 64)
+    @Size(min = 3, max = 64)
     @Pattern(regexp = "([А-аЯ-я]|[A-aZ-z]|\\d)+")
     private String secondName;
 
-    @Size(min = 3,max = 64)
+    @Size(min = 3, max = 64)
     @Pattern(regexp = "([А-аЯ-я]|[A-aZ-z]|\\d)+")
     private String nickname;
 
@@ -51,9 +51,8 @@ public class User {
     private UserRole role;
 
     @JsonIgnore
-    private  String googleId;
+    private String googleId;
 
-//    @JsonIgnore
-//    @OneToMany(cascade = CascadeType.ALL, mappedBy = "primaryUser")
-//    private List<UserProject> userProjects;
+//    @Value("${config.boolean}")
+//    private boolean isLead;
 }

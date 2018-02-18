@@ -10,7 +10,8 @@ const initialState = {
     user: {
         role: Roles.NOT_AUTH,
         tokenStatus: Status.NOT_AUTH
-    }
+    },
+    chosenProject:{}
 };
 export default (state = initialState, action = {}) => {
     switch (action.type) {
@@ -48,6 +49,7 @@ export default (state = initialState, action = {}) => {
                     ...action.payload[0].user,
                     tokenStatus: Status.VALID,
                     role: action.role}
+
             };
         default:
             return state;

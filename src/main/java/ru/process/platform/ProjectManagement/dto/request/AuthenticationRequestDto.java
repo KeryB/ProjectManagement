@@ -1,4 +1,4 @@
-package ru.process.platform.ProjectManagement.dto;
+package ru.process.platform.ProjectManagement.dto.request;
 
 
 import lombok.Getter;

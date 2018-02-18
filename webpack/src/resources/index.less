@@ -26,7 +26,7 @@ body {
       top: 51px;
     }
 
-    .notification{
+    .notification {
       float: right;
       font-size: 20px;
     }
@@ -271,7 +271,7 @@ body {
     }
 
     .left-bar {
-      width: 250px;
+      width: 190px;
     }
 
     .timeline {
@@ -297,5 +297,35 @@ body {
     box-shadow: none;
     background-image: none;
     background: white;
+  }
+
+  .ant-col-18 {
+    position: absolute;
+  }
+
+  .preloader {
+    height: 30px;
+    width: 30px;
+    margin: 40vh auto;
+    border: 5px solid rgba(60, 60, 180, 0.45);
+    border-top: 5px solid rgb(60, 60, 180);
+    border-radius: 30px;
+    animation: rotate 1s infinite linear;
+  }
+
+  @keyframes rotate {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  .ant-table-wrapper {
+    margin-top: 5px;
+  }
+  .ant-col-offset-5{
+    margin-left: 190px;
   }
 }

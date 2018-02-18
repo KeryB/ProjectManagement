@@ -1,4 +1,4 @@
-package ru.process.platform.ProjectManagement.dto;
+package ru.process.platform.ProjectManagement.dto.request;
 
 
 import lombok.*;
@@ -12,7 +12,7 @@ import javax.validation.constraints.Size;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class RegistrationDto {
+public class RegistrationRequestDto {
 
     @Size(min = 2, max = 64, message = ErrorMessage.FIELD_CONSTRAINT)
     @NotNull

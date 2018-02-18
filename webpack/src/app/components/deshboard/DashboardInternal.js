@@ -9,15 +9,14 @@ import Projects from "./component/Projects";
 class DashboardInternal extends React.Component {
 
     render() {
-        const{userData:{projectPermissions}} = this.props;
+        const{userData:{isLoading}} = this.props;
 
-        console.log(projectPermissions);
-
+        //todo сделать 404 ошибку
         return (
             <DashBoard
                 {...this.props}>
                 <Switch>
-                    <Route path={Path.PROJECTS} render={(props)=>(<Projects projects={projectPermissions}/>)} />
+                    <Route path={Path.PROJECTS} render={()=>(<Projects isLoadingUserData={isLoading}/>)} />
                     <Route path={Path.PROFILE} component={Profile}/>
                 </Switch>
             </DashBoard>
