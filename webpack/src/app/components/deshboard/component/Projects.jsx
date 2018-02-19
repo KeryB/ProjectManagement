@@ -7,7 +7,8 @@ import * as projectAction from '../../../actions/ProjectAction';
 import {getStorageItem} from "../../../utils/token/TokenManager";
 import * as Status from "../../../utils/AuthStatus";
 import {Link} from "react-router-dom";
-import * as Path from '../../../utils/RoutePath'
+import * as Path from '../../../utils/RoutePath';
+import {tokenHeader} from "../../../actions/api/Api";
 
 const Search = Input.Search;
 
@@ -64,7 +65,7 @@ class Projects extends React.Component {
 
     componentWillMount() {
         const {projectData: {isFetched}, projectActions} = this.props;
-        if (!isFetched && getStorageItem()) {
+        if (!isFetched && getStorageItem(tokenHeader)) {
             projectActions.fetchProjectData();
         }
     }
@@ -80,7 +81,7 @@ class Projects extends React.Component {
     handleChange = (e) => {
 
         console.log( e.target.value);
-    }
+    };
 
     render() {
         const {projectData: {isLoading, projects}} = this.props;

@@ -12,6 +12,7 @@ import * as Status from "../utils/AuthStatus";
 import {Spin, Icon} from 'antd';
 import DashBoardInternal from "./deshboard/DashboardInternal";
 import PropTypes from 'prop-types';
+import {tokenHeader} from "../actions/api/Api";
 
 const LoginRoute = ({component: Component, predicate, redirectTo, componentProps, ...rest}) => (
     <div>
@@ -40,7 +41,7 @@ class App extends React.Component {
     componentWillMount() {
         const {userData: {isFetched}, userActions} = this.props;
 
-        if (!isFetched && getStorageItem()) {
+        if (!isFetched && getStorageItem(tokenHeader)) {
             console.log("componentWillMount");
             userActions.fetchUserData();
         }
@@ -75,7 +76,7 @@ class App extends React.Component {
                             <Switch>
                                 <LoginRoute path={Path.LOGIN}
                                             component={Login}
-                                            predicate={() => user.role === Roles.NOT_AUTH || !getStorageItem()}
+                                            predicate={() => user.role === Roles.NOT_AUTH || !getStorageItem(tokenHeader)}
                                             redirectTo={Path.DASHBOARD}
                                             componentProps={this.props}
                                 />
@@ -83,7 +84,7 @@ class App extends React.Component {
                                 <DashboardRoute path={Path.DASHBOARD}
                                                 component={DashBoardInternal}
                                                 user={user}
-                                                predicate={() => user.role !== Roles.NOT_AUTH || getStorageItem()}
+                                                predicate={() => user.role !== Roles.NOT_AUTH || getStorageItem(tokenHeader)}
                                                 redirectTo={Path.DASHBOARD}
                                                 componentProps={this.props}
                                 />

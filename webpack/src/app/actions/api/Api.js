@@ -10,7 +10,7 @@ export const api = (path, method, data = null) => (successHandler, errorHandler)
     let headers = {};
     headers['Content-Type'] = 'application/json';
 
-    const token = getStorageItem();
+    const token = getStorageItem(tokenHeader);
     if (token) {
         headers[tokenHeader] = token;
     }

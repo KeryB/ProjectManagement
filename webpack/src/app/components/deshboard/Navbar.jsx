@@ -6,6 +6,7 @@ import * as Status from '../../utils/AuthStatus';
 import PropTypes from 'prop-types';
 import {getStorageItem, removeToken} from "../../utils/token/TokenManager";
 import AuthHeader from "./header/AuthHeader";
+import {tokenHeader} from "../../actions/api/Api";
 
 const SubMenu = Menu.SubMenu;
 const MenuItemGroup = Menu.ItemGroup;
@@ -28,7 +29,7 @@ const notAuthComponent = (location) => (
 class Navbar extends React.Component {
 
     logout = () => {
-        removeToken();
+        removeToken(tokenHeader);
         window.location.href = '/';
     };
 
@@ -42,7 +43,7 @@ class Navbar extends React.Component {
                         <div className='top_home_logo'>
                         </div>
                     </Link>
-                    {(user.tokenStatus === Status.NOT_AUTH && !getStorageItem()) ?
+                    {(user.tokenStatus === Status.NOT_AUTH) ?
                         notAuthComponent(location)
                         :
                         <div>

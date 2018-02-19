@@ -1,13 +1,11 @@
-import {tokenHeader} from "../../actions/api/Api";
-
-export const getStorageItem = () => {
-    return window.localStorage.getItem(tokenHeader);
+export const getStorageItem = (key) => {
+    return window.localStorage.getItem(key);
 };
 
-export const putToken = (token) => {
-    return window.localStorage.setItem(tokenHeader, token);
+export const putStorageItem = (key, item) => {
+    return window.localStorage.setItem(key, item);
 };
 
-export const removeToken = (token) => {
-    return window.localStorage.removeItem(tokenHeader);
+export const removeToken = (key) => {
+    return window.localStorage.removeItem(key);
 };
