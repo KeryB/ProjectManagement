@@ -53,6 +53,5 @@ public class User {
     @JsonIgnore
     private String googleId;
 
-//    @Value("${config.boolean}")
-//    private boolean isLead;
+//    private boolean isLead = false;
 }

@@ -9,6 +9,7 @@ import * as Status from "../../../utils/AuthStatus";
 import {Link} from "react-router-dom";
 import * as Path from '../../../utils/RoutePath';
 import {tokenHeader} from "../../../actions/api/Api";
+import FetchSearch from "../commoncomponents/FetchSearch";
 
 const Search = Input.Search;
 
@@ -59,7 +60,12 @@ const setData = (projects) => {
 
 class Projects extends React.Component {
 
-    state={
+    constructor(props) {
+        super(props);
+        this.changeableConunt = null;
+    }
+
+    state = {
 
     };
 
@@ -79,8 +85,13 @@ class Projects extends React.Component {
 
     //todo сделать фильтр
     handleChange = (e) => {
+        this.state.name = e.target.value;
+        const autoSubmitTimer = setTimeout(() => {
+            clearTimeout(autoSubmitTimer);
+            console.log(this.state)
+        }, 600);
 
-        console.log( e.target.value);
+        console.log(autoSubmitTimer);
     };
 
     render() {
@@ -92,12 +103,7 @@ class Projects extends React.Component {
             <div className="project-list">
                 <Col span={18} offset={5}>
                     <Card title='Все проекты' style={{fontSize: "25px"}}>
-                        <Search
-                            placeholder="Поиск"
-                            onSearch={value => console.log(value)}
-                            onChange={this.handleChange}
-                            style={{width: 200}}
-                        />
+                       <FetchSearch autoTimeout={500} placeHolder="Поиск" onChange={this.handleChange}/>
                         {isLoading ? <div className='preloader'/>
                             : <Table columns={columns} dataSource={setData(projects)}/>}
                     </Card>

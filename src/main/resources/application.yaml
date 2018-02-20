@@ -13,7 +13,6 @@ spring:
   jackson:
     serialization:
       fail-on-empty-beans: false
-
 jwt:
   header: X-Auth-Token
   secret: da7ca69f41dce5179752a7546dfa0959
