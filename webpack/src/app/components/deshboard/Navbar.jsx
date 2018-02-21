@@ -4,7 +4,7 @@ import {Link} from "react-router-dom";
 import * as Path from '../../utils/RoutePath'
 import * as Status from '../../utils/AuthStatus';
 import PropTypes from 'prop-types';
-import {getStorageItem, removeToken} from "../../utils/token/TokenManager";
+import {getStorageItem, removeStorageItem} from "../../utils/token/TokenManager";
 import AuthHeader from "./header/AuthHeader";
 import {tokenHeader} from "../../actions/api/Api";
 
@@ -29,7 +29,7 @@ const notAuthComponent = (location) => (
 class Navbar extends React.Component {
 
     logout = () => {
-        removeToken(tokenHeader);
+        removeStorageItem(tokenHeader);
         window.location.href = '/';
     };
 

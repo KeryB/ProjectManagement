@@ -1,7 +1,7 @@
 import * as Roles from '../utils/Roles';
 import * as Status from '../utils/AuthStatus';
 import * as Types from "../const/ActionTypes";
-import {putStorageItem} from "../utils/token/TokenManager";
+import {putStorageItem, removeStorageItem} from "../utils/token/TokenManager";
 import {tokenHeader} from '../actions/api/Api';
 
 const initialState = {
@@ -12,7 +12,7 @@ const initialState = {
         role: Roles.NOT_AUTH,
         tokenStatus: Status.NOT_AUTH
     },
-    chosenProject:{}
+    chosenProject: {}
 };
 export default (state = initialState, action = {}) => {
     switch (action.type) {
@@ -34,6 +34,13 @@ export default (state = initialState, action = {}) => {
                 isLoading: true,
             };
         case Types.FETCH_USER_DATA_FAILED:
+            if (action.payload.status === 19) {
+                return {
+                    ...state,
+                    user: {tokenStatus: Status.REFRESH_TOKEN_REQUIRED},
+                    isLoading: false,
+                }
+            }
             return {
                 ...state,
                 isLoading: false,
@@ -43,15 +50,33 @@ export default (state = initialState, action = {}) => {
                 ...state,
                 isLoading: false,
                 isFetched: true,
-                projectPermissions:[
+                projectPermissions: [
                     ...action.payload[0].projectPermissions
                 ],
                 user: {
                     ...action.payload[0].user,
                     tokenStatus: Status.VALID,
-                    role: action.role}
+                    role: action.role
+                }
 
             };
+        case Types.UPDATE_TOKEN_REQUEST:
+            return {
+                ...state,
+                isLoading: true
+            };
+        case Types.UPDATE_TOKEN_SUCCESS:
+            putStorageItem(tokenHeader, action.payload[0]);
+            return {
+                ...state,
+                isLoading: false,
+                user:{
+                    tokenStatus:Status.NOT_AUTH
+                }
+            };
+        case Types.UPDATE_TOKEN_FAILED:
+            removeStorageItem(tokenHeader);
+            break;
         default:
             return state;
     }

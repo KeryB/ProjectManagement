@@ -1,7 +1,7 @@
 import * as Types from "../const/ActionTypes";
 import * as HttpStatus from '../const/http/HttpStatus';
 import {message, Modal} from 'antd';
-import {removeToken} from "../utils/token/TokenManager";
+import {removeStorageItem} from "../utils/token/TokenManager";
 import {tokenHeader} from '../actions/api/Api';
 
 const middleware = store => next => action => {
@@ -51,7 +51,7 @@ const middleware = store => next => action => {
 
             switch (error.status) {
                 case HttpStatus.INVALID_TOKEN_HEADER:
-                    removeToken(tokenHeader);
+                    removeStorageItem(tokenHeader);
                     break;
                 case HttpStatus.SERVER_ERROR:
                     const object = popupContent("Внутрення ошибка сервера", "Пожалуйста, перезагрузите страницу");

@@ -1,6 +1,5 @@
 package ru.process.platform.ProjectManagement.service.security;
 
-import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import ru.process.platform.ProjectManagement.entity.jwt.Token;
@@ -38,7 +37,7 @@ public class JwtService {
     }
 
     public boolean validateToken(Token token) {
-        return !isTokenExpired(token.getExpiration()) && (token.getExpiration() != null
+        return isTokenExpired(token.getExpiration()) && (token.getExpiration() != null
                 || token.getCreationDate() != null);
     }
 }
