@@ -53,9 +53,9 @@ class App extends React.Component {
         console.log(isFetched, isLoading, user);
 
         console.log("componentWillReceiveProps");
-        if (user.tokenStatus === Status.REFRESH_TOKEN_REQUIRED && !isLoading) {
-            userActions.refreshToken();
-        } else if (!isFetched && !isLoading && user.tokenStatus === Status.VALID) {
+        // if (user.tokenStatus === Status.REFRESH_TOKEN_REQUIRED && !isLoading) {
+        //     userActions.refreshToken();
+       if (!isFetched && !isLoading && user.tokenStatus === Status.VALID) {
             userActions.fetchUserData();
         }
     }

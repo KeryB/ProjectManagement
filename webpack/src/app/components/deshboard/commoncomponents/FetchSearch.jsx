@@ -2,7 +2,6 @@ import * as React from "react";
 import {Input} from 'antd';
 import PropTypes from 'prop-types';
 
-const Search = Input.Search;
 
 const field = ( {autoSubmit, input: {onChange, ...rest}, label}) => (
     <Input.Search {...{...rest}} onChange={e => {
@@ -23,29 +22,30 @@ class FetchSearch extends React.Component {
         this._autoTimer = null;
     }
 
+    state ={
+
+    }
+
     componentWillUnmount() {
         clearTimeout(this._autoTimer);
     }
 
-    _handleChange = (autoTimeout) => {
-        console.log(autoTimeout);
-        if (autoTimeout > 0) {
+    _handleChange = (e) => {
+
+        console.log(e);
             this._autoTimer = setTimeout(() => {
                 clearTimeout(this._autoTimer);
-            }, autoTimeout);
-        }
+                this.state.name=e.target.value;
+                console.log(this.state)
+            }, 500);
+
     };
 
     render() {
         const {autoTimeout, placeHolder, onChange} = this.props;
 
         return (
-            <field>
-                <Search
-                    autoSubmit={this._handleChange}
-                    label={placeHolder}
-                />
-            </field>
+            <Input.Search onChange={this._handleChange}/>
         )
     }
 

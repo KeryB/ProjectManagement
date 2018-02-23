@@ -103,7 +103,7 @@ class Projects extends React.Component {
             <div className="project-list">
                 <Col span={18} offset={5}>
                     <Card title='Все проекты' style={{fontSize: "25px"}}>
-                       <FetchSearch autoTimeout={500} placeHolder="Поиск" onChange={this.handleChange}/>
+                       <FetchSearch autoTimeout={500} placeHolder="Поиск"/>
                         {isLoading ? <div className='preloader'/>
                             : <Table columns={columns} dataSource={setData(projects)}/>}
                     </Card>

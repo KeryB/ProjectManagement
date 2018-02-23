@@ -37,7 +37,6 @@ public class JwtService {
     }
 
     public boolean validateToken(Token token) {
-        return isTokenExpired(token.getExpiration()) && (token.getExpiration() != null
-                || token.getCreationDate() != null);
+        return token.getExpiration() != null || token.getCreationDate() != null;
     }
 }

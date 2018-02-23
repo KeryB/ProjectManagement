@@ -53,7 +53,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
                 HttpUtils.writeError(response, ErrorStatus.TOKEN_SHOULD_BE_REFRESHED, ErrorMessage.REFRESH_TOKEN_REQUIRED_MESSAGE);
                 return;
             }
-            if(jwtService.validateToken(token)){
+            if(jwtService.validateToken(token) && !jwtService.isTokenExpired(token.getExpiration())){
                 UserDetails userDetails = JwtWrapper.wrap(user);
                 UsernamePasswordAuthenticationToken authentication =
                         new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
