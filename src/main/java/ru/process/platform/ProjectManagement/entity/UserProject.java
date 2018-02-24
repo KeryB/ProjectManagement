@@ -25,11 +25,11 @@ public class UserProject {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = JpaUtils.USER_PRIMARY_KEY)
     private User primaryUser;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = JpaUtils.PROJECT_PRIMARY_KEY)
     private Project primaryProject;
 

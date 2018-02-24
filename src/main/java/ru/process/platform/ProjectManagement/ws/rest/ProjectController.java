@@ -3,9 +3,11 @@ package ru.process.platform.ProjectManagement.ws.rest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import ru.process.platform.ProjectManagement.dto.filter.ProjectFilterRequestDto;
 import ru.process.platform.ProjectManagement.dto.response.UserProjectPermissionDto;
 import ru.process.platform.ProjectManagement.entity.RestResponse;
 import ru.process.platform.ProjectManagement.entity.jwt.Token;
@@ -16,7 +18,6 @@ import ru.process.platform.ProjectManagement.utils.error.ErrorMessage;
 import ru.process.platform.ProjectManagement.utils.error.ErrorStatus;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/project",consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -39,13 +40,14 @@ public class ProjectController {
     }
 
     @RequestMapping(value = "/fetchProjectData", method = RequestMethod.POST)
-    public RestResponse fetchProjectData(HttpServletRequest request){
+    public RestResponse fetchProjectData(HttpServletRequest request, @RequestBody ProjectFilterRequestDto filterRequestDto){
         String header = request.getHeader(tokenHeader);
         Token token = jwtService.getClaimsFromToken(header);
         if(token ==null){
             return RestResponse.error(ErrorStatus.INVALID_TOKEN_HEADER, ErrorMessage.INVALID_TOKEN_HEADER);
         }
-        List<UserProjectPermissionDto.ProjectPermission> projectPermission = projectService.getProjectPermission(token.getId());
+        UserProjectPermissionDto projectPermission = projectService.getProjectPermission(token.getId(), filterRequestDto);
+
         return RestResponse.ok(projectPermission);
     }
 }

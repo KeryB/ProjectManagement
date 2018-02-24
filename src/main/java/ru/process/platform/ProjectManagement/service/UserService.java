@@ -1,8 +1,11 @@
 package ru.process.platform.ProjectManagement.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.process.platform.ProjectManagement.dto.request.RegistrationRequestDto;
 import ru.process.platform.ProjectManagement.dto.response.UserProjectPermissionDto;
 import ru.process.platform.ProjectManagement.entity.user.User;
@@ -12,7 +15,6 @@ import ru.process.platform.ProjectManagement.repository.UserRepository;
 
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -52,29 +54,21 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    @Transactional
     public UserProjectPermissionDto getUserData(int userId) {
         UserProjectPermissionDto userProjectPermissionDto = new UserProjectPermissionDto();
         User user = userRepository.findOne(userId);
-//        userProjectPermissionDto.setUser(user);
-//        userProjectRepository.findByUserId(userId, new PageRequest(0, 10))
-//                .map((UserProject, UserProjectPermissionDto)->{
-//                    UserProjectPermissionDto.ProjectPermission projectPermission = new UserProjectPermissionDto.ProjectPermission();
-//                    UserProjectPermissionDto userProjectPermissionDto = new UserProjectPermissionDto();
-//                    projectPermission.setPermission(UserProject.getPermission());
-//                    projectPermission.setProject(UserProject.getPrimaryProject());
-//                });
+
         if (user != null) {
             userProjectPermissionDto.setUser(user);
-            List<UserProjectPermissionDto.ProjectPermission> projectPermissions = userProjectRepository.findByUserId(user.getId())
-                    .stream()
+            Page<UserProjectPermissionDto.ProjectPermission> mappedUserProjects = userProjectRepository.findByUserId(userId, new PageRequest(0, 10))
                     .map(userProject -> {
                         UserProjectPermissionDto.ProjectPermission projectPermission = new UserProjectPermissionDto.ProjectPermission();
-                        projectPermission.setPermission(userProject.getPermission());
                         projectPermission.setProject(userProject.getPrimaryProject());
+                        projectPermission.setPermission(userProject.getPermission());
                         return projectPermission;
-                    })
-                    .collect(Collectors.toList());
-            userProjectPermissionDto.setProjectPermissions(projectPermissions);
+                    });
+            userProjectPermissionDto.setProjectPermissions(mappedUserProjects.getContent());
         }
         return userProjectPermissionDto;
     }

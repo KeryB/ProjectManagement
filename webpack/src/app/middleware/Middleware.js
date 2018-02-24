@@ -58,9 +58,9 @@ const middleware = store => next => action => {
                     console.log(object);
                     Modal.error({title: object.title, content: object.content});
                     break;
-                // case HttpStatus.ETHERNET_PROBLEM:
-                //     const warning = popupContent("Осутствует интернет соединение", "Пожалуйста, проверьте интернет соединение");
-                //     Modal.warning({title: warning.title, content: warning.content})
+                case HttpStatus.ETHERNET_PROBLEM:
+                    const warning = popupContent("Осутствует интернет соединение", "Пожалуйста, проверьте интернет соединение");
+                    Modal.warning({title: warning.title, content: warning.content})
             }
         });
 

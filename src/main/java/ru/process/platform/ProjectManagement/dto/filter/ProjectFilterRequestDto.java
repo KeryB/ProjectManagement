@@ -9,6 +9,7 @@ import lombok.*;
 @AllArgsConstructor
 public class ProjectFilterRequestDto {
 
-    private int pageNumber;
+    private int current;
+    private int pageSize;
     private String projectName;
 }

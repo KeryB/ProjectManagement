@@ -25,9 +25,10 @@ public class UserProjectPermissionDto {
 
     private User user;
     private List<ProjectPermission> projectPermissions;
+    private int totalPages;
 
-    public void addUserPermission(ProjectPermission projectPermission){
-        if(projectPermission != null){
+    public void addUserPermission(ProjectPermission projectPermission) {
+        if (projectPermission != null) {
             projectPermissions.add(projectPermission);
         }
     }

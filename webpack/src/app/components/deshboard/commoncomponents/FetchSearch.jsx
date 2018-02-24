@@ -1,53 +1,60 @@
 import * as React from "react";
-import {Input} from 'antd';
+import {Icon, Input} from 'antd';
 import PropTypes from 'prop-types';
 
 
-const field = ( {autoSubmit, input: {onChange, ...rest}, label}) => (
-    <Input.Search {...{...rest}} onChange={e => {
-        onChange(e);
-    }} placeholder={label}/>
+const FetchSearchComponent = ({label, onChange, isLoading}) => (
+    <span>
+        <Input placeholder={label} onChange={onChange} style={{width: '200px'}}/>
+        {isLoading ? <Icon type="loading" />: <Icon type="search" />}
+    </span>
 );
 
 class FetchSearch extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            value: '',
+            isLoading: false
+        };
+    }
 
     static propTypes = {
         placeHolder: PropTypes.string.isRequired,
         onChange: PropTypes.func,
-        autoTimeout: PropTypes.number
     };
 
-    constructor(props) {
-        super(props);
-        this._autoTimer = null;
+
+    componentWillMount() {
+        this.timer = null;
     }
 
-    state ={
+    handleChange = (e) => {
+        clearTimeout(this.state.timer);
+        this.setState({
+            value: e.target.value,
+            isLoading: true
+        });
+        this.state.timer = setTimeout(this.triggerChange, 500);
+    };
 
-    }
-
-    componentWillUnmount() {
-        clearTimeout(this._autoTimer);
-    }
-
-    _handleChange = (e) => {
-
-        console.log(e);
-            this._autoTimer = setTimeout(() => {
-                clearTimeout(this._autoTimer);
-                this.state.name=e.target.value;
-                console.log(this.state)
-            }, 500);
-
+    triggerChange = () => {
+        const {value} = this.state;
+        this.setState({
+            isLoading: false
+        });
+        this.props.onChange(value);
     };
 
     render() {
-        const {autoTimeout, placeHolder, onChange} = this.props;
-
+        const {autoTimeout, placeHolder} = this.props;
+        const {isLoading} = this.state;
         return (
-            <Input.Search onChange={this._handleChange}/>
+            <FetchSearchComponent label={placeHolder} onChange={this.handleChange} isLoading={isLoading}/>
         )
     }
 
 }
+
 export default FetchSearch;

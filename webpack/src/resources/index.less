@@ -303,15 +303,15 @@ body {
     position: absolute;
   }
 
-  .preloader {
-    height: 30px;
-    width: 30px;
-    margin: 40vh auto;
-    border: 5px solid rgba(60, 60, 180, 0.45);
-    border-top: 5px solid rgb(60, 60, 180);
-    border-radius: 30px;
-    animation: rotate 1s infinite linear;
-  }
+  //.preloader {
+  //  height: 30px;
+  //  width: 30px;
+  //  margin: 40vh auto;
+  //  border: 5px solid rgba(60, 60, 180, 0.45);
+  //  border-top: 5px solid rgb(60, 60, 180);
+  //  border-radius: 30px;
+  //  animation: rotate 1s infinite linear;
+  //}
 
   @keyframes rotate {
     0% {
@@ -325,7 +325,25 @@ body {
   .ant-table-wrapper {
     margin-top: 5px;
   }
-  .ant-col-offset-5{
+  .ant-col-offset-5 {
     margin-left: 190px;
+  }
+
+  .filter-panel {
+
+    .anticon-loading {
+      position: absolute;
+      left: 200px;
+      margin: 12px -5px;
+      font-size: 20px;
+      color: black;
+    }
+
+    .anticon-search{
+      position: absolute;
+      left: 200px;
+      margin: 16px -5px;
+      font-size: 15px;
+    }
   }
 }

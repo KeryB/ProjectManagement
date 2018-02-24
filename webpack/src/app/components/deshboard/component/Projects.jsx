@@ -1,6 +1,6 @@
 import * as React from "react";
 import PropTypes from 'prop-types';
-import {Table, Icon, Divider, Col, Card, Avatar, Input} from 'antd';
+import {Table, Icon, Divider, Col, Card, Avatar, Input, Spin} from 'antd';
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
 import * as projectAction from '../../../actions/ProjectAction';
@@ -32,11 +32,11 @@ const columns = [
         dataIndex: 'projectType',
         key: 'projectType',
     }, {
-        title: 'Роль',
+        title: 'Ваша роль в проекте',
         dataIndex: 'role',
         key: 'role',
     }, {
-        title: 'Project lead',
+        title: 'Руководитель проекта',
         dataIndex: 'projectLead',
         key: 'projectLead',
     }];
@@ -48,7 +48,7 @@ const setData = (projects) => {
         data.push({
             key: index,
             creationDate: project.creationDate,
-            projectName: project.shortTitle,
+            projectName: project.title,
             projectType: project.projectType,
             role: item.permission,
             projectLead: index
@@ -66,46 +66,62 @@ class Projects extends React.Component {
     }
 
     state = {
-
+        current: 1,
+        pageSize: 20
     };
 
     componentWillMount() {
         const {projectData: {isFetched}, projectActions} = this.props;
         if (!isFetched && getStorageItem(tokenHeader)) {
-            projectActions.fetchProjectData();
+            projectActions.fetchProjectData(this.state);
         }
     }
 
     componentWillReceiveProps(props) {
         const {projectData: {isFetched, isLoading, user}, projectActions, isLoadingUserData} = props;
         if (!isFetched && !isLoading && user.tokenStatus === Status.VALID) {
-            projectActions.fetchProjectData();
+            projectActions.fetchProjectData(this.state);
         }
     }
 
-    //todo сделать фильтр
-    handleChange = (e) => {
-        this.state.name = e.target.value;
-        const autoSubmitTimer = setTimeout(() => {
-            clearTimeout(autoSubmitTimer);
-            console.log(this.state)
-        }, 600);
+    handleSearchChange = (value) => {
+        const {projectActions} = this.props;
+        this.state.projectName = value;
+        projectActions.fetchProjectData(this.state);
+    };
 
-        console.log(autoSubmitTimer);
+    handlePaginationChange = (pageable) => {
+        const {current, pageSize} = pageable;
+        const {projectActions} = this.props;
+
+        this.state.current = current;
+        this.state.pageSize = pageSize;
+        projectActions.fetchProjectData(this.state);
     };
 
     render() {
-        const {projectData: {isLoading, projects}} = this.props;
-
+        const {projectData: {isLoading, projects, totalPages}} = this.props;
+        const {pageSize, current} = this.state;
         console.log(this.props);
 
         return (
             <div className="project-list">
                 <Col span={18} offset={5}>
                     <Card title='Все проекты' style={{fontSize: "25px"}}>
-                       <FetchSearch autoTimeout={500} placeHolder="Поиск"/>
-                        {isLoading ? <div className='preloader'/>
-                            : <Table columns={columns} dataSource={setData(projects)}/>}
+                        <div className='filter-panel'>
+                            <FetchSearch placeHolder="Поиск" onChange={this.handleSearchChange}/>
+                        </div>
+                        {isLoading ? <Spin tip="Loading...">
+                                <Table columns={columns}
+                                       dataSource={setData(projects)}
+                                       onChange={this.handlePaginationChange}
+                                       pagination={{pageSize: pageSize, total: totalPages, defaultCurrent: current}}/>
+                            </Spin> :
+                            <Table columns={columns}
+                                   dataSource={setData(projects)}
+                                   onChange={this.handlePaginationChange}
+                                   pagination={{pageSize: pageSize, total: totalPages, defaultCurrent: current}}/>
+                        }
                     </Card>
                 </Col>
             </div>
@@ -119,6 +135,7 @@ Projects.propTypes = {
 };
 
 function mapStateToProps(state) {
+    console.log(state);
     return {
         projectData: state.project
     }

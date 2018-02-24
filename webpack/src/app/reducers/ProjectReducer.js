@@ -20,7 +20,8 @@ export default (state = initialState, action = {}) => {
                 ...state,
                 isLoading: false,
                 isFetched: true,
-                projects: [...action.payload]
+                projects: [...action.payload[0].projectPermissions],
+                totalPages: action.payload[0].totalPages
             };
         case Types.FETCH_USER_DATA_FAILED:
             return {
