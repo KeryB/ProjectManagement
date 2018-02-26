@@ -19,3 +19,5 @@ jwt:
   expiration: 259200 #3days
 role:
   header: X-Role-Header
+project:
+  header: Chosen-Project

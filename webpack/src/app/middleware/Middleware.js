@@ -1,10 +1,18 @@
 import * as Types from "../const/ActionTypes";
 import * as HttpStatus from '../const/http/HttpStatus';
 import {message, Modal} from 'antd';
-import {removeStorageItem} from "../utils/token/TokenManager";
+import {removeStorageItem} from "../utils/token/LocalStorage";
 import {tokenHeader} from '../actions/api/Api';
 
 const middleware = store => next => action => {
+
+    if(action.type === Types.METHODS_CALL){
+        console.log(action);
+        store.dispatch({
+            type: action.action,
+            payload: action.object
+        })
+    }
 
     if (action.type !== Types.API_CALL) return next(action);
 
@@ -60,7 +68,10 @@ const middleware = store => next => action => {
                     break;
                 case HttpStatus.ETHERNET_PROBLEM:
                     const warning = popupContent("Осутствует интернет соединение", "Пожалуйста, проверьте интернет соединение");
-                    Modal.warning({title: warning.title, content: warning.content})
+                    Modal.warning({title: warning.title, content: warning.content});
+                case HttpStatus.INVALID_PROJECT_ID:
+                    const invalidProjectId = popupContent("Внимание", "Нет доступа к проекту или такого проекта нет!");
+                    Modal.error({title: invalidProjectId.title, content: invalidProjectId.content});
             }
         });
 

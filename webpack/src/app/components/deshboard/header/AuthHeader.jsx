@@ -21,36 +21,6 @@ const profileMenu = (logout) => (
     </Menu>
 );
 
-const projectMenu = (project) => (
-    <Menu>
-        <Menu.Item>
-            <a className='current-projects'>
-                Текущие проекты
-            </a>
-        </Menu.Item>
-        <Menu.Divider/>
-        <Menu.Item>
-            <a>
-                <Icon type="right-circle-o"/> Создать проект
-            </a>
-        </Menu.Item>
-        <Menu.Divider/>
-        <Menu.Item>
-            <Link to={{pathname: Path.PROJECTS, state: {fromDashboard: true}}}><Icon type="bars"/> Показать все</Link>
-        </Menu.Item>
-        <Menu.Divider/>
-        {
-            project
-                ? project.map((item, index) => {
-                return <Menu.Item key={index}>
-                    <Link to='#'><Avatar size='small'/> {item.project.shortTitle}</Link>
-                </Menu.Item>
-            })
-                : <div> У вас нет проектов</div>
-        }
-    </Menu>
-);
-
 const notification = () => (
     <Menu>
         <Menu.Item key='0'>
@@ -75,13 +45,6 @@ class AuthHeader extends React.Component {
                     </a>
                 </Dropdown>
 
-                <Dropdown overlay={projectMenu(project)}>
-                    <a className="a-btn projects" href="#">
-                        <Icon type="folder"/>
-                        <span> Проекты</span>
-                        <Icon type="down"/>
-                    </a>
-                </Dropdown>
 
                 <Dropdown overlay={notification()} trigger={['click']}>
                     <a className="notification" href="#">

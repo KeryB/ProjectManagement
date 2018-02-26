@@ -2,6 +2,7 @@ import {api} from './api/Api';
 import * as Types from "../const/ActionTypes";
 import * as Methods from "../const/http/HttpMethods";
 import {API_AUTH_UPDATE_TOKEN, API_USER_FETCH} from "../const/ApiPath";
+import {METHODS_CALL} from "../const/ActionTypes";
 
 export function makeAuth(path, data, successCallback, errorCallback) {
     return {
@@ -34,5 +35,13 @@ export function logout() {
     return {
         type: Types.API_CALL,
         actions: Types.LOGOUT_USER
+    }
+}
+
+export function chooseProject(data) {
+    return {
+        type: METHODS_CALL,
+        action: Types.CHOSEN_PROJECT,
+        object: data
     }
 }

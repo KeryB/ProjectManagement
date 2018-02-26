@@ -1,9 +1,10 @@
-import {getStorageItem} from "../../utils/token/TokenManager";
+import {getStorageItem} from "../../utils/token/LocalStorage";
 import * as HttpMethods from "../../const/http/HttpMethods";
 import * as HttpStatus from "../../const/http/HttpStatus";
 
 export const tokenHeader = "X-Auth-Token";
 export const roleHeader = "X-Role-Header";
+export const chosenProject="Chosen-Project";
 
 export const api = (path, method, data = null) => (successHandler, errorHandler) => {
 
@@ -13,6 +14,11 @@ export const api = (path, method, data = null) => (successHandler, errorHandler)
     const token = getStorageItem(tokenHeader);
     if (token) {
         headers[tokenHeader] = token;
+    }
+
+    const projectId = getStorageItem(chosenProject);
+    if(projectId){
+        headers[chosenProject] = projectId;
     }
 
     const config = ({

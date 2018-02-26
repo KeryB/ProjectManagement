@@ -1,7 +1,7 @@
 import * as Roles from '../utils/Roles';
 import * as Status from '../utils/AuthStatus';
 import * as Types from "../const/ActionTypes";
-import {putStorageItem, removeStorageItem} from "../utils/token/TokenManager";
+import {getStorageItem, putStorageItem, removeStorageItem} from "../utils/token/LocalStorage";
 import {tokenHeader} from '../actions/api/Api';
 
 const initialState = {
@@ -34,12 +34,13 @@ export default (state = initialState, action = {}) => {
                 isLoading: true,
             };
         case Types.FETCH_USER_DATA_FAILED:
+            // if(getStorageItem(tokenHeader)){
+            //     const {user} = state;
+            //     user.tokenStatus = Status.VALID
+            // }
             if (action.payload.status === 19) {
-                return {
-                    ...state,
-                    user: {tokenStatus: Status.REFRESH_TOKEN_REQUIRED},
-                    isLoading: false,
-                }
+                const {user} = state;
+                user.tokenStatus = Status.REFRESH_TOKEN_REQUIRED;
             }
             return {
                 ...state,
@@ -57,8 +58,8 @@ export default (state = initialState, action = {}) => {
                     ...action.payload[0].user,
                     tokenStatus: Status.VALID,
                     role: action.role
-                }
-
+                },
+                chosenProject: {...action.payload[0].chosenProject}
             };
         case Types.UPDATE_TOKEN_REQUEST:
             return {
@@ -77,6 +78,14 @@ export default (state = initialState, action = {}) => {
         case Types.UPDATE_TOKEN_FAILED:
             removeStorageItem(tokenHeader);
             break;
+
+        case Types.CHOSEN_PROJECT:
+            console.log(action);
+
+            return {
+                ...state,
+                chosenProject: action.payload
+            };
         default:
             return state;
     }

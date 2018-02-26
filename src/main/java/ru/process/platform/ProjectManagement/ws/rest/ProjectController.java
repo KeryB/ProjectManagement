@@ -43,6 +43,7 @@ public class ProjectController {
     public RestResponse fetchProjectData(HttpServletRequest request, @RequestBody ProjectFilterRequestDto filterRequestDto){
         String header = request.getHeader(tokenHeader);
         Token token = jwtService.getClaimsFromToken(header);
+
         if(token ==null){
             return RestResponse.error(ErrorStatus.INVALID_TOKEN_HEADER, ErrorMessage.INVALID_TOKEN_HEADER);
         }

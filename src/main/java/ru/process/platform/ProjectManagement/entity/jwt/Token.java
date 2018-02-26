@@ -10,7 +10,7 @@ import java.util.Date;
 @AllArgsConstructor
 public class Token {
 
-    private int id;
+    private Integer id;
     private Date expiration;
     private Date creationDate;
 }

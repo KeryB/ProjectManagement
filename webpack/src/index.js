@@ -8,6 +8,7 @@ import {AppContainer} from 'react-hot-loader';
 import 'antd/dist/antd.less';
 import './resources/index.less';
 import './resources/less/project-list.less'
+import './resources/less/System.less'
 
 const store = configureStore();
 

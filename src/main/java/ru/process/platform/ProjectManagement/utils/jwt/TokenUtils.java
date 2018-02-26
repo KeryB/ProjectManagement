@@ -13,7 +13,6 @@ import java.util.Map;
 public class TokenUtils {
 
     private static final String CLAIM_KEY_ID = "sub";
-    private static final String CLAIM_KEY_ROLE = "role";
     private static final String CLAIM_KEY_CREATION_DATE = "cr";
     private static final String CLAIM_KEY_EXPIRATION_DATE = "ex";
 
@@ -44,6 +43,6 @@ public class TokenUtils {
         }
         int id = (Integer) claims.get(CLAIM_KEY_ID);
         Date creationDate = new Date((Long) claims.get(CLAIM_KEY_CREATION_DATE));
-        return new Token(id ,claims.getExpiration(),creationDate);
+        return new Token(id , claims.getExpiration(),creationDate);
     }
 }

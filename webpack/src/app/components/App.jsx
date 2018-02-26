@@ -5,7 +5,7 @@ import * as Path from '../utils/RoutePath';
 import Login from './forms/AuthProvider';
 import {Redirect, Route, Switch} from "react-router-dom";
 import * as Roles from "../utils/Roles";
-import {getStorageItem} from "../utils/token/TokenManager";
+import {getStorageItem} from "../utils/token/LocalStorage";
 import * as userActions from '../actions/UserAction';
 import {bindActionCreators} from "redux";
 import * as Status from "../utils/AuthStatus";

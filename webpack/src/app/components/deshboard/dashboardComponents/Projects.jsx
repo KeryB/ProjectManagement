@@ -1,45 +1,16 @@
 import * as React from "react";
 import PropTypes from 'prop-types';
-import {Table, Icon, Divider, Col, Card, Avatar, Input, Spin} from 'antd';
+import {Table, Icon, Divider, Col, Card, Avatar, Input, Spin, Button} from 'antd';
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
 import * as projectAction from '../../../actions/ProjectAction';
-import {getStorageItem} from "../../../utils/token/TokenManager";
+import {getStorageItem, putStorageItem} from "../../../utils/token/LocalStorage";
 import * as Status from "../../../utils/AuthStatus";
 import {Link} from "react-router-dom";
 import * as Path from '../../../utils/RoutePath';
-import {tokenHeader} from "../../../actions/api/Api";
+import {chosenProject, tokenHeader} from "../../../actions/api/Api";
 import FetchSearch from "../commoncomponents/FetchSearch";
-
-const Search = Input.Search;
-
-const columns = [
-    {
-        dataIndex: 'avatar',
-        key: 'avatar',
-        render: () => <Link to={Path.DASHBOARD} href='#'><Avatar size='large'/></Link>
-    }, {
-        title: 'Название',
-        dataIndex: 'projectName',
-        key: 'projectName',
-        render: name => <a href="#">{name}</a>
-    }, {
-        title: 'Дата создания',
-        dataIndex: 'creationDate',
-        key: 'creationDate',
-    }, {
-        title: 'Тип проекта',
-        dataIndex: 'projectType',
-        key: 'projectType',
-    }, {
-        title: 'Ваша роль в проекте',
-        dataIndex: 'role',
-        key: 'role',
-    }, {
-        title: 'Руководитель проекта',
-        dataIndex: 'projectLead',
-        key: 'projectLead',
-    }];
+import {parseToken} from "../../../utils/token/JwtToken";
 
 const setData = (projects) => {
     const data = [];
@@ -47,11 +18,12 @@ const setData = (projects) => {
         const {project} = item;
         data.push({
             key: index,
+            projectId: project.id,
             creationDate: project.creationDate,
             projectName: project.title,
             projectType: project.projectType,
             role: item.permission,
-            projectLead: index
+            projectLead: 'ХЗ'
         })
     });
 
@@ -69,6 +41,47 @@ class Projects extends React.Component {
         current: 1,
         pageSize: 20
     };
+
+    columns = [
+        {
+            dataIndex: 'avatar',
+            key: 'avatar',
+            render: (text, record) => <Link to={Path.DASHBOARD} onClick={() => {
+                const {userActions, projectData: {projects}} = this.props;
+                const project = projects.find((element, index, array) => {
+                    const {project} = element;
+                    if (project.id === record.projectId) {
+                        putStorageItem(chosenProject, project.id);
+                        return project;
+                    }
+                });
+
+                userActions.chooseProject(project);
+            }}>
+                <Avatar size='large'/></Link>
+        }, {
+            title: 'Название',
+            dataIndex: 'projectName',
+            key: 'projectName',
+            render: name => <a href="#">{name}</a>
+        }, {
+            title: 'Дата создания',
+            dataIndex: 'creationDate',
+            key: 'creationDate',
+        }, {
+            title: 'Тип проекта',
+            dataIndex: 'projectType',
+            key: 'projectType',
+        }, {
+            title: 'Ваша роль в проекте',
+            dataIndex: 'role',
+            key: 'role',
+        }, {
+            title: 'Руководитель проекта',
+            dataIndex: 'projectLead',
+            key: 'projectLead',
+        }
+    ];
 
     componentWillMount() {
         const {projectData: {isFetched}, projectActions} = this.props;
@@ -102,28 +115,30 @@ class Projects extends React.Component {
     render() {
         const {projectData: {isLoading, projects, totalPages}} = this.props;
         const {pageSize, current} = this.state;
-        console.log(this.props);
 
         return (
             <div className="project-list">
-                <Col span={18} offset={5}>
+                {/*<Col span={18} offset={5}>*/}
                     <Card title='Все проекты' style={{fontSize: "25px"}}>
                         <div className='filter-panel'>
                             <FetchSearch placeHolder="Поиск" onChange={this.handleSearchChange}/>
+                            <Button type="primary" style={{float:"right"}} href={Path.CREATE_PROJECT}>Создать проект</Button>
                         </div>
                         {isLoading ? <Spin tip="Loading...">
-                                <Table columns={columns}
+                                <Table columns={this.columns}
                                        dataSource={setData(projects)}
                                        onChange={this.handlePaginationChange}
-                                       pagination={{pageSize: pageSize, total: totalPages, defaultCurrent: current}}/>
+                                       pagination={{pageSize: pageSize, total: totalPages, defaultCurrent: current}}
+                                />
                             </Spin> :
-                            <Table columns={columns}
+                            <Table columns={this.columns}
                                    dataSource={setData(projects)}
                                    onChange={this.handlePaginationChange}
-                                   pagination={{pageSize: pageSize, total: totalPages, defaultCurrent: current}}/>
+                                   pagination={{pageSize: pageSize, total: totalPages, defaultCurrent: current}}
+                            />
                         }
                     </Card>
-                </Col>
+                {/*</Col>*/}
             </div>
         )
     }
@@ -132,6 +147,7 @@ class Projects extends React.Component {
 Projects.propTypes = {
     projectData: PropTypes.object.isRequired,
     isLoadingUserData: PropTypes.bool.isRequired,
+    userActions: PropTypes.object
 };
 
 function mapStateToProps(state) {

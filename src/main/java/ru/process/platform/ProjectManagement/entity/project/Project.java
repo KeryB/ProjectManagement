@@ -1,4 +1,4 @@
-package ru.process.platform.ProjectManagement.entity;
+package ru.process.platform.ProjectManagement.entity.project;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import lombok.AllArgsConstructor;
@@ -22,10 +22,8 @@ public class Project {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
-    private String title;
-
     @NotNull
-    private String shortTitle;
+    private String title;
 
     private String description;
 
@@ -34,4 +32,7 @@ public class Project {
 
     @NotNull
     private String projectType;
+
+    @OneToOne(mappedBy = "primaryProject")
+    private ProjectSettings projectSettings;
 }

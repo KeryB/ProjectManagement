@@ -19,4 +19,6 @@ public interface UserProjectRepository extends JpaRepository<UserProject, Intege
     Page<UserProject> findByPrimaryProjectTitle(String title, Pageable pageable);
 
     Page<UserProject> findAll (Pageable pageable);
+
+    UserProject findByPrimaryProject_Id (int projectId);
 }

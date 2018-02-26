@@ -4,7 +4,7 @@ import {Link} from "react-router-dom";
 import * as Path from '../../utils/RoutePath'
 import * as Status from '../../utils/AuthStatus';
 import PropTypes from 'prop-types';
-import {getStorageItem, removeStorageItem} from "../../utils/token/TokenManager";
+import {getStorageItem, removeStorageItem} from "../../utils/token/LocalStorage";
 import AuthHeader from "./header/AuthHeader";
 import {tokenHeader} from "../../actions/api/Api";
 

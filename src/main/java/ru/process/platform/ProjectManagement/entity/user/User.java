@@ -53,5 +53,8 @@ public class User {
     @JsonIgnore
     private String googleId;
 
-//    private boolean isLead = false;
+    private boolean isLead = false;
+
+//    @Lob
+//    private byte[] image;
 }

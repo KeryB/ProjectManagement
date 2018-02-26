@@ -1,12 +1,15 @@
 import * as React from "react";
 import {Icon, Input} from 'antd';
 import PropTypes from 'prop-types';
+import {isEmpty} from "lodash";
 
 
-const FetchSearchComponent = ({label, onChange, isLoading}) => (
+const FetchSearchComponent = ({label, onChange, isLoading, suffix}) => (
     <span>
         <Input placeholder={label} onChange={onChange} style={{width: '200px'}}/>
-        {isLoading ? <Icon type="loading" />: <Icon type="search" />}
+        {isLoading ? <Icon type="loading"/> :
+            <span>{suffix}</span>
+        }
     </span>
 );
 
@@ -47,11 +50,22 @@ class FetchSearch extends React.Component {
         this.props.onChange(value);
     };
 
+    handleChangeState=()=>{
+        this.setState({value: ''});
+
+    };
+
     render() {
         const {autoTimeout, placeHolder} = this.props;
-        const {isLoading} = this.state;
+        const {isLoading, value} = this.state;
+        const suffix = value ? <Icon type="close-circle" onClick={this.handleChange}/> :
+            <Icon type="search"/>;
         return (
-            <FetchSearchComponent label={placeHolder} onChange={this.handleChange} isLoading={isLoading}/>
+            <FetchSearchComponent
+                label={placeHolder}
+                onChange={this.handleChange}
+                isLoading={isLoading}
+                suffix={suffix}/>
         )
     }
 

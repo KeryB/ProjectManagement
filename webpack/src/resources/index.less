@@ -272,6 +272,25 @@ body {
 
     .left-bar {
       width: 190px;
+
+      .project-avatar {
+        margin-bottom: 5px;
+      }
+      .project-dropdown {
+        height: 50px;
+        a {
+          margin-top: 5px;
+
+          .anticon-down {
+            float: right;
+            margin-top: 15px;
+            font-size: 14px;
+          }
+        }
+      }
+      li:hover{
+        background: #e6f7ff;
+      }
     }
 
     .timeline {
@@ -283,67 +302,6 @@ body {
           padding: 5px;
         }
       }
-    }
-  }
-
-  //system
-
-  .a-btn {
-    border-radius: 0 !important;
-    text-shadow: none;
-    padding: 5px 10px;
-    border: 1px solid #e3e3e3;
-    font-size: 13px;
-    box-shadow: none;
-    background-image: none;
-    background: white;
-  }
-
-  .ant-col-18 {
-    position: absolute;
-  }
-
-  //.preloader {
-  //  height: 30px;
-  //  width: 30px;
-  //  margin: 40vh auto;
-  //  border: 5px solid rgba(60, 60, 180, 0.45);
-  //  border-top: 5px solid rgb(60, 60, 180);
-  //  border-radius: 30px;
-  //  animation: rotate 1s infinite linear;
-  //}
-
-  @keyframes rotate {
-    0% {
-      transform: rotate(0deg);
-    }
-    100% {
-      transform: rotate(360deg);
-    }
-  }
-
-  .ant-table-wrapper {
-    margin-top: 5px;
-  }
-  .ant-col-offset-5 {
-    margin-left: 190px;
-  }
-
-  .filter-panel {
-
-    .anticon-loading {
-      position: absolute;
-      left: 200px;
-      margin: 12px -5px;
-      font-size: 20px;
-      color: black;
-    }
-
-    .anticon-search{
-      position: absolute;
-      left: 200px;
-      margin: 16px -5px;
-      font-size: 15px;
     }
   }
 }

@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.process.platform.ProjectManagement.dto.filter.ProjectFilterRequestDto;
 import ru.process.platform.ProjectManagement.dto.response.UserProjectPermissionDto;
+import ru.process.platform.ProjectManagement.entity.project.Project;
+import ru.process.platform.ProjectManagement.entity.UserProject;
 import ru.process.platform.ProjectManagement.entity.user.User;
 import ru.process.platform.ProjectManagement.repository.ProjectRepository;
 import ru.process.platform.ProjectManagement.repository.UserProjectRepository;
@@ -66,4 +68,18 @@ public class ProjectService {
         return userProjectPermissionDto;
     }
 
+    public Project findOne(int id) {
+        return projectRepository.findOne(id);
+    }
+
+    public UserProjectPermissionDto.ProjectPermission findUserProjectByProjectId(int projectId) {
+        UserProject userProject = userProjectRepository.findByPrimaryProject_Id(projectId);
+        if(userProject == null){
+            return null;
+        }
+        UserProjectPermissionDto.ProjectPermission chosenProject = new UserProjectPermissionDto.ProjectPermission();
+        chosenProject.setPermission(userProject.getPermission());
+        chosenProject.setProject(userProject.getPrimaryProject());
+        return chosenProject;
+    }
 }

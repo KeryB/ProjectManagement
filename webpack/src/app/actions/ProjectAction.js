@@ -3,6 +3,7 @@ import * as Methods from "../const/http/HttpMethods";
 import {API_PROJECT_FETCH} from "../const/ApiPath";
 import {API_CALL} from "../const/ActionTypes";
 import {api} from "./api/Api";
+import {METHODS_CALL} from "../const/ActionTypes";
 
 export function fetchProjectData(data) {
     return {
