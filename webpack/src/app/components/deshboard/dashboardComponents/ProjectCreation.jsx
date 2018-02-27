@@ -20,7 +20,7 @@ function handleFocus() {
 class ProjectCreation extends React.Component {
 
     state = {
-        isLoading: false
+        isLoading: false,
     };
 
     handleChangeState = (value) => {
@@ -32,6 +32,7 @@ class ProjectCreation extends React.Component {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
+
                 console.log('Received values of form: ', values);
             }
         });

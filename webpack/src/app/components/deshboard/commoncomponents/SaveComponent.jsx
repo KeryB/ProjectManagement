@@ -1,7 +1,10 @@
 import * as React from "react";
 import PropTypes from "prop-types";
 import {Button, Icon} from "antd";
-
+import * as crudAction from "../../../actions/reduxCrud/crudActions";
+import {bindActionCreators} from "redux/index";
+import {connect} from "react-redux";
+import {isEmpty} from "lodash";
 
 class SaveComponent extends React.Component {
 
@@ -9,25 +12,41 @@ class SaveComponent extends React.Component {
         buttonText: PropTypes.string.isRequired,
         iconType: PropTypes.string.isRequired,
         onSubmit: PropTypes.func.isRequired,
+        crudAction
     };
 
     state = {
-        loading: false
+        loading: false,
+        data:{}
     };
 
-    onClick = (e) => {
-        console.log(e);
-        this.setState({ loading: true });
+    handleClick = () => {
+        const {data} = this.state;
+        const {crudAction} = this.props;
+        if(!isEmpty(data)){
+
+        }
     };
 
     render() {
         const {buttonText, iconType, onSubmit} = this.props;
         return (
-            <Button type="primary" htmlType="submit" loading={this.state.loading} onClick={this.onClick}>
+            <Button type="primary" htmlType="submit" loading={this.state.loading} onClick={this.handleClick}>
                 <Icon type={this.state.loading ? undefined : iconType}/>{buttonText}
             </Button>
         )
     }
 }
 
-export default SaveComponent;
+function mapDispatchToProps(dispatch) {
+    return {
+        userActions: bindActionCreators(crudAction, dispatch),
+    }
+}
+
+function mapStateToProps(state) {
+    return {
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(SaveComponent);

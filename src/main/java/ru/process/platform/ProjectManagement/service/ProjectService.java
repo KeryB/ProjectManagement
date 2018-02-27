@@ -82,4 +82,8 @@ public class ProjectService {
         chosenProject.setProject(userProject.getPrimaryProject());
         return chosenProject;
     }
+
+    public Project saveProject(Project project) {
+        return projectRepository.save(project);
+    }
 }

@@ -11,6 +11,7 @@ import ru.process.platform.ProjectManagement.dto.filter.ProjectFilterRequestDto;
 import ru.process.platform.ProjectManagement.dto.response.UserProjectPermissionDto;
 import ru.process.platform.ProjectManagement.entity.RestResponse;
 import ru.process.platform.ProjectManagement.entity.jwt.Token;
+import ru.process.platform.ProjectManagement.entity.project.Project;
 import ru.process.platform.ProjectManagement.service.ProjectService;
 import ru.process.platform.ProjectManagement.service.UserService;
 import ru.process.platform.ProjectManagement.service.security.JwtService;
@@ -39,16 +40,23 @@ public class ProjectController {
         this.jwtService = jwtService;
     }
 
+    //todo преобразовать токен в юзера
     @RequestMapping(value = "/fetchProjectData", method = RequestMethod.POST)
-    public RestResponse fetchProjectData(HttpServletRequest request, @RequestBody ProjectFilterRequestDto filterRequestDto){
+    public RestResponse fetchProjectData(HttpServletRequest request, @RequestBody ProjectFilterRequestDto filterRequestDto) {
         String header = request.getHeader(tokenHeader);
         Token token = jwtService.getClaimsFromToken(header);
 
-        if(token ==null){
+        if (token == null) {
             return RestResponse.error(ErrorStatus.INVALID_TOKEN_HEADER, ErrorMessage.INVALID_TOKEN_HEADER);
         }
         UserProjectPermissionDto projectPermission = projectService.getProjectPermission(token.getId(), filterRequestDto);
 
         return RestResponse.ok(projectPermission);
     }
+
+    @RequestMapping(value = "/saveProject", method = RequestMethod.POST)
+    public RestResponse saveProject(@RequestBody Project project) {
+        return RestResponse.ok(projectService.saveProject(project));
+    }
 }
+
