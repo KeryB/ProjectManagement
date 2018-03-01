@@ -3,14 +3,13 @@ import PropTypes from 'prop-types';
 import {Table, Icon, Divider, Col, Card, Avatar, Input, Spin, Button} from 'antd';
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
-import * as projectAction from '../../../actions/ProjectAction';
+import * as projectAction from '../../../actions/project/ProjectAction';
 import {getStorageItem, putStorageItem} from "../../../utils/token/LocalStorage";
 import * as Status from "../../../utils/AuthStatus";
 import {Link} from "react-router-dom";
 import * as Path from '../../../utils/RoutePath';
 import {chosenProject, tokenHeader} from "../../../actions/api/Api";
 import FetchSearch from "../commoncomponents/FetchSearch";
-import {parseToken} from "../../../utils/token/JwtToken";
 
 const setData = (projects) => {
     const data = [];

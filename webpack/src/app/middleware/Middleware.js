@@ -6,7 +6,7 @@ import {tokenHeader} from '../actions/api/Api';
 
 const middleware = store => next => action => {
 
-    if(action.type === Types.METHODS_CALL){
+    if (action.type === Types.METHODS_CALL) {
         console.log(action);
         store.dispatch({
             type: action.action,
@@ -69,9 +69,11 @@ const middleware = store => next => action => {
                 case HttpStatus.ETHERNET_PROBLEM:
                     const warning = popupContent("Осутствует интернет соединение", "Пожалуйста, проверьте интернет соединение");
                     Modal.warning({title: warning.title, content: warning.content});
+                    break;
                 case HttpStatus.INVALID_PROJECT_ID:
                     const invalidProjectId = popupContent("Внимание", "Нет доступа к проекту или такого проекта нет!");
                     Modal.error({title: invalidProjectId.title, content: invalidProjectId.content});
+                    break;
             }
         });
 

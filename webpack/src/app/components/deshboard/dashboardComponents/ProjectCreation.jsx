@@ -2,6 +2,7 @@ import * as React from "react";
 import {Card, Row, Col, Input, Form, Select, Button, Avatar, Icon} from 'antd';
 import UploadAvatar from "../commoncomponents/UploadAvatar";
 import SaveComponent from "../commoncomponents/SaveComponent";
+import * as projectAction from "../../../actions/project/ProjectAction";
 
 const FormItem = Form.Item;
 
@@ -21,6 +22,7 @@ class ProjectCreation extends React.Component {
 
     state = {
         isLoading: false,
+        fieldValues: {}
     };
 
     handleChangeState = (value) => {
@@ -30,12 +32,19 @@ class ProjectCreation extends React.Component {
 
     handleSubmit = (e) => {
         e.preventDefault();
+
         this.props.form.validateFields((err, values) => {
             if (!err) {
-
-                console.log('Received values of form: ', values);
+                this.state.fieldValues = values;
+                console.log(this.props);
+                console.log(this.state)
+                this.handleCallback(this.state);
             }
         });
+
+    };
+
+    handleCallback = (values)=>{
     };
 
     render() {
@@ -101,7 +110,15 @@ class ProjectCreation extends React.Component {
                                 <FormItem
                                     wrapperCol={{span: 12, offset: 10}}
                                 >
-                                    <SaveComponent buttonText='Создать проект' iconType='save' onSubmit={this.handleSubmit}/>
+
+                                    <SaveComponent
+                                        buttonText='Создать проект'
+                                        iconType='save'
+                                        dataCallback={this.state.fieldValues}
+                                        form={this.props.form}
+                                        activeAction={projectAction}
+                                    />
+
                                 </FormItem>
                             </Form>
                         </Card>

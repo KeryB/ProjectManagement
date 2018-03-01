@@ -2,8 +2,6 @@ import * as React from "react";
 import {Upload, Icon, message} from 'antd';
 import PropTypes from "prop-types";
 
-;
-
 function getBase64(img, callback) {
     const reader = new FileReader();
     reader.addEventListener('load', () => callback(reader.result));

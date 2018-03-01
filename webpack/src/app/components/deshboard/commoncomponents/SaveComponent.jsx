@@ -2,17 +2,16 @@ import * as React from "react";
 import PropTypes from "prop-types";
 import {Button, Icon} from "antd";
 import * as crudAction from "../../../actions/reduxCrud/crudActions";
-import {bindActionCreators} from "redux/index";
-import {connect} from "react-redux";
 import {isEmpty} from "lodash";
+import {connect} from "react-redux";
 
 class SaveComponent extends React.Component {
 
     static propTypes = {
         buttonText: PropTypes.string.isRequired,
         iconType: PropTypes.string.isRequired,
-        onSubmit: PropTypes.func.isRequired,
-        crudAction
+        dataCallback: PropTypes.object.isRequired,
+        form: PropTypes.object.isRequired,
     };
 
     state = {
@@ -21,17 +20,32 @@ class SaveComponent extends React.Component {
     };
 
     handleClick = () => {
-        const {data} = this.state;
-        const {crudAction} = this.props;
-        if(!isEmpty(data)){
+        const {dataCallback} = this.props;
 
+
+        console.log(dataCallback);
+        if(!isEmpty(dataCallback)){
+            console.log(dataCallback);
         }
     };
 
+    onSubmit =() =>{
+        const {onSubmit} = this.props;
+
+        this.props.form.validateFields((err, values) => {
+            if (!err) {
+                this.state.fieldValues = values;
+                console.log(this.props);
+                console.log(this.state)
+            }
+        });
+    };
+
     render() {
-        const {buttonText, iconType, onSubmit} = this.props;
+        const {buttonText, iconType,form} = this.props;
+
         return (
-            <Button type="primary" htmlType="submit" loading={this.state.loading} onClick={this.handleClick}>
+            <Button type="primary" htmlType="submit" loading={this.state.loading} onClick={this.onSubmit}>
                 <Icon type={this.state.loading ? undefined : iconType}/>{buttonText}
             </Button>
         )
@@ -40,7 +54,7 @@ class SaveComponent extends React.Component {
 
 function mapDispatchToProps(dispatch) {
     return {
-        userActions: bindActionCreators(crudAction, dispatch),
+
     }
 }
 
@@ -49,4 +63,4 @@ function mapStateToProps(state) {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(SaveComponent);
+export default SaveComponent;
