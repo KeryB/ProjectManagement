@@ -8,14 +8,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.process.platform.ProjectManagement.dto.filter.ProjectFilterRequestDto;
 import ru.process.platform.ProjectManagement.dto.response.UserProjectPermissionDto;
-import ru.process.platform.ProjectManagement.entity.project.Project;
 import ru.process.platform.ProjectManagement.entity.UserProject;
+import ru.process.platform.ProjectManagement.entity.project.Project;
 import ru.process.platform.ProjectManagement.entity.user.User;
 import ru.process.platform.ProjectManagement.repository.ProjectRepository;
 import ru.process.platform.ProjectManagement.repository.UserProjectRepository;
 import ru.process.platform.ProjectManagement.repository.UserRepository;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -84,6 +85,7 @@ public class ProjectService {
     }
 
     public Project saveProject(Project project) {
+        project.setCreationDate(new Date());
         return projectRepository.save(project);
     }
 }

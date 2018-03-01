@@ -16,7 +16,6 @@ export function fetchProjectData(data) {
     }
 }
 
-export function saveProject(data) {
-    saveAction(SAVE_PROJECT_PREFIX,
-        "/api/project/saveProject",)
+export function saveProject(data, successCallback, errorCallback) {
+   saveAction(SAVE_PROJECT_PREFIX, "/api/project/saveProject",{data, successCallback, errorCallback})
 }

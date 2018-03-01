@@ -4,14 +4,16 @@ import {Button, Icon} from "antd";
 import * as crudAction from "../../../actions/reduxCrud/crudActions";
 import {isEmpty} from "lodash";
 import {connect} from "react-redux";
+import {bindActionCreators} from "redux";
+import * as projectAction from "../../../actions/project/ProjectAction";
 
 class SaveComponent extends React.Component {
 
     static propTypes = {
         buttonText: PropTypes.string.isRequired,
         iconType: PropTypes.string.isRequired,
-        dataCallback: PropTypes.object.isRequired,
         form: PropTypes.object.isRequired,
+        activeAction: PropTypes.object.isRequired
     };
 
     state = {
@@ -19,31 +21,25 @@ class SaveComponent extends React.Component {
         data:{}
     };
 
-    handleClick = () => {
-        const {dataCallback} = this.props;
-
-
-        console.log(dataCallback);
-        if(!isEmpty(dataCallback)){
-            console.log(dataCallback);
-        }
-    };
-
     onSubmit =() =>{
-        const {onSubmit} = this.props;
+        const {saveAction} = this.props;
+        const {data} = this.state;
 
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                this.state.fieldValues = values;
-                console.log(this.props);
-                console.log(this.state)
+                saveAction.saveProject(data, ()=> {
+
+                }, (error) =>{
+
+                })
             }
         });
     };
 
     render() {
-        const {buttonText, iconType,form} = this.props;
+        const {buttonText, iconType,form, activeAction} = this.props;
 
+        console.log(activeAction);
         return (
             <Button type="primary" htmlType="submit" loading={this.state.loading} onClick={this.onSubmit}>
                 <Icon type={this.state.loading ? undefined : iconType}/>{buttonText}
@@ -54,13 +50,8 @@ class SaveComponent extends React.Component {
 
 function mapDispatchToProps(dispatch) {
     return {
-
+        saveAction: bindActionCreators(projectAction, dispatch)
     }
 }
 
-function mapStateToProps(state) {
-    return {
-    }
-}
-
-export default SaveComponent;
+export default connect(null, mapDispatchToProps)(SaveComponent);

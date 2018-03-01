@@ -150,7 +150,6 @@ Projects.propTypes = {
 };
 
 function mapStateToProps(state) {
-    console.log(state);
     return {
         projectData: state.project
     }

@@ -8,7 +8,7 @@ import ru.process.platform.ProjectManagement.utils.JpaUtils;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.sql.Date;
+import java.util.Date;
 
 @Entity
 @Data

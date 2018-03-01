@@ -4,9 +4,9 @@ import PropTypes from 'prop-types';
 import {isEmpty} from "lodash";
 
 
-const FetchSearchComponent = ({label, onChange, isLoading, suffix}) => (
+const FetchSearchComponent = ({label, onChange, isLoading, value, suffix}) => (
     <span>
-        <Input placeholder={label} onChange={onChange} style={{width: '200px'}}/>
+        <Input placeholder={label} onChange={onChange} value={value} style={{width: '200px'}}/>
         {isLoading ? <Icon type="loading"/> :
             <span>{suffix}</span>
         }
@@ -65,6 +65,7 @@ class FetchSearch extends React.Component {
                 label={placeHolder}
                 onChange={this.handleChange}
                 isLoading={isLoading}
+                value={this.state.value}
                 suffix={suffix}/>
         )
     }

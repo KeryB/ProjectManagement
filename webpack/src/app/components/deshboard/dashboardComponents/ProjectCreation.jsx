@@ -10,41 +10,15 @@ function handleChange(value) {
     console.log(`selected ${value}`);
 }
 
-function handleBlur() {
-    console.log('blur');
-}
-
-function handleFocus() {
-    console.log('focus');
-}
-
 class ProjectCreation extends React.Component {
 
     state = {
         isLoading: false,
-        fieldValues: {}
     };
 
     handleChangeState = (value) => {
         this.setState(value);
         console.log(this.state)
-    };
-
-    handleSubmit = (e) => {
-        e.preventDefault();
-
-        this.props.form.validateFields((err, values) => {
-            if (!err) {
-                this.state.fieldValues = values;
-                console.log(this.props);
-                console.log(this.state)
-                this.handleCallback(this.state);
-            }
-        });
-
-    };
-
-    handleCallback = (values)=>{
     };
 
     render() {
@@ -88,8 +62,6 @@ class ProjectCreation extends React.Component {
                                             placeholder="Тип проекта"
                                             optionFilterProp="children"
                                             onChange={handleChange}
-                                            onFocus={handleFocus}
-                                            onBlur={handleBlur}
                                             notFoundContent="Не найдено"
                                             filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                                         >
@@ -105,7 +77,10 @@ class ProjectCreation extends React.Component {
                                     labelCol={{span: 7}}
                                     wrapperCol={{span: 12}}
                                 >
-                                    <Input.TextArea/>
+                                    {getFieldDecorator('description', {})
+                                    (
+                                        <Input.TextArea rows={4}/>
+                                    )}
                                 </FormItem>
                                 <FormItem
                                     wrapperCol={{span: 12, offset: 10}}
@@ -114,7 +89,6 @@ class ProjectCreation extends React.Component {
                                     <SaveComponent
                                         buttonText='Создать проект'
                                         iconType='save'
-                                        dataCallback={this.state.fieldValues}
                                         form={this.props.form}
                                         activeAction={projectAction}
                                     />
