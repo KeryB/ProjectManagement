@@ -6,3 +6,4 @@ export const DASHBOARD = '/dashboard';
 export const CREATE_PROJECT = DASHBOARD + '/createproject';
 export const PROFILE= DASHBOARD + '/profile';
 export const PROJECTS = DASHBOARD + '/projects';
+export const ADD_PROJECT = DASHBOARD + '/addProject';

@@ -15,8 +15,8 @@ public interface UserProjectRepository extends JpaRepository<UserProject, Intege
     @Query("select us from UserProject us where us.primaryUser.id=:userId ")
     Page<UserProject> findByUserId(@Param("userId") int userId, Pageable pageable);
 
-    @Query("select us from UserProject us where us.primaryProject.title like CONCAT(?1,'%')")
-    Page<UserProject> findByPrimaryProjectTitle(String title, Pageable pageable);
+//    @Query("select us from UserProject us where us.primaryProject.title like CONCAT(?1,'%%')")
+    Page<UserProject> findByPrimaryProjectTitleContaining(String title, Pageable pageable);
 
     Page<UserProject> findAll (Pageable pageable);
 

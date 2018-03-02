@@ -18,8 +18,7 @@ public class UserProject {
 
     public enum Permission {
         CUSTOMER,
-        MANAGER,
-        PROGRAMMER
+        MANAGER
     }
 
     @Id

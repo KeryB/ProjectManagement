@@ -51,7 +51,7 @@ class UploadAvatar extends React.Component {
         const uploadButton = (
             <div>
                 <Icon type={this.state.isLoading ? 'loading' : 'plus'}/>
-                <div className="ant-upload-text">Загрузите аватар</div>
+                <div className="ant-upload-text">Загрузите изображение</div>
             </div>
         );
 

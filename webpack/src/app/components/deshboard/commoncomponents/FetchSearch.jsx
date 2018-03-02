@@ -39,7 +39,7 @@ class FetchSearch extends React.Component {
             value: e.target.value,
             isLoading: true
         });
-        this.state.timer = setTimeout(this.triggerChange, 500);
+        this.state.timer = setTimeout(this.triggerChange, 200);
     };
 
     triggerChange = () => {

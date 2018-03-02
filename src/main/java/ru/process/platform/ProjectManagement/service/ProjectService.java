@@ -44,7 +44,7 @@ public class ProjectService {
 
             if(filter.getProjectName() != null){
 
-                Page<UserProjectPermissionDto.ProjectPermission> filterProjectPermissions= userProjectRepository.findByPrimaryProjectTitle(filter.getProjectName(), pageRequest)
+                Page<UserProjectPermissionDto.ProjectPermission> filterProjectPermissions= userProjectRepository.findByPrimaryProjectTitleContaining(filter.getProjectName(), pageRequest)
                         .map(userProject -> {
                             UserProjectPermissionDto.ProjectPermission projectPermission = new UserProjectPermissionDto.ProjectPermission();
                             projectPermission.setProject(userProject.getPrimaryProject());
@@ -84,8 +84,16 @@ public class ProjectService {
         return chosenProject;
     }
 
-    public Project saveProject(Project project) {
+    public UserProject saveProject(Project project, User user) {
+
+        user.setLead(true);
         project.setCreationDate(new Date());
-        return projectRepository.save(project);
+        Project savedProject = projectRepository.save(project);
+
+        UserProject userProject = new UserProject();
+        userProject.setPermission(UserProject.Permission.MANAGER);
+        userProject.setPrimaryProject(savedProject);
+        userProject.setPrimaryUser(user);
+        return userProjectRepository.save(userProject);
     }
 }

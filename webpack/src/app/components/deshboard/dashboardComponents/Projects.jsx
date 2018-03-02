@@ -10,6 +10,7 @@ import {Link} from "react-router-dom";
 import * as Path from '../../../utils/RoutePath';
 import {chosenProject, tokenHeader} from "../../../actions/api/Api";
 import FetchSearch from "../commoncomponents/FetchSearch";
+import moment from "moment";
 
 const setData = (projects) => {
     const data = [];
@@ -18,7 +19,7 @@ const setData = (projects) => {
         data.push({
             key: index,
             projectId: project.id,
-            creationDate: project.creationDate,
+            creationDate: moment(project.creationDate).format('MMMM Do YYYY'),
             projectName: project.title,
             projectType: project.projectType,
             role: item.permission,

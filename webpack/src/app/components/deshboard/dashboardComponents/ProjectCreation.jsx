@@ -14,6 +14,7 @@ class ProjectCreation extends React.Component {
 
     state = {
         isLoading: false,
+        projectType: ''
     };
 
     handleChangeState = (value) => {
@@ -22,9 +23,10 @@ class ProjectCreation extends React.Component {
     };
 
     render() {
-        const {getFieldDecorator} = this.props.form;
+        const {form :{getFieldDecorator}, history} = this.props;
 
-        console.log(this.state);
+        const {projectType} = this.state;
+
         return (
             <div>
                 <div className='header'>
@@ -65,9 +67,9 @@ class ProjectCreation extends React.Component {
                                             notFoundContent="Не найдено"
                                             filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                                         >
-                                            <Select.Option value="jack">{<span><Avatar size='small'/> хз</span>}</Select.Option>
-                                            <Select.Option value="lucy">{<span><Avatar size='small'/> хз</span>}</Select.Option>
-                                            <Select.Option value="tom">{<span><Avatar size='small'/> хз</span>}</Select.Option>
+                                            <Select.Option value='1'>{<span><Avatar size='small'/> хз</span>}</Select.Option>
+                                            <Select.Option value='2'>{<span><Avatar size='small'/> хз</span>}</Select.Option>
+                                            <Select.Option value='3'>{<span><Avatar size='small'/> хз</span>}</Select.Option>
                                         </Select>
                                     )}
                                 </FormItem>
@@ -91,6 +93,7 @@ class ProjectCreation extends React.Component {
                                         iconType='save'
                                         form={this.props.form}
                                         activeAction={projectAction}
+                                        history={history}
                                     />
 
                                 </FormItem>

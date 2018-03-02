@@ -12,6 +12,7 @@ import ru.process.platform.ProjectManagement.dto.response.UserProjectPermissionD
 import ru.process.platform.ProjectManagement.entity.RestResponse;
 import ru.process.platform.ProjectManagement.entity.jwt.Token;
 import ru.process.platform.ProjectManagement.entity.project.Project;
+import ru.process.platform.ProjectManagement.entity.user.User;
 import ru.process.platform.ProjectManagement.service.ProjectService;
 import ru.process.platform.ProjectManagement.service.UserService;
 import ru.process.platform.ProjectManagement.service.security.JwtService;
@@ -55,8 +56,16 @@ public class ProjectController {
     }
 
     @RequestMapping(value = "/saveProject", method = RequestMethod.POST)
-    public RestResponse saveProject(@RequestBody Project project) {
-        return RestResponse.ok(projectService.saveProject(project));
+    public RestResponse saveProject(HttpServletRequest request, @RequestBody Project project) {
+        String header = request.getHeader(tokenHeader);
+        Token token = jwtService.getClaimsFromToken(header);
+
+        if (token == null) {
+            return RestResponse.error(ErrorStatus.INVALID_TOKEN_HEADER, ErrorMessage.INVALID_TOKEN_HEADER);
+        }
+        User user = userService.findById(token.getId());
+
+        return RestResponse.ok(projectService.saveProject(project, user));
     }
 }
 

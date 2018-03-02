@@ -47,7 +47,6 @@ const handleProject = () => (
 //     </span>
 // );
 const projectMenuItemGroup = ({project}) => (
-    <span>
         <Dropdown overlay={menu} trigger={['click']}>
             <a className="ant-dropdown-link">
                 <Badge dot> <Avatar shape="square" size='large' className='project-avatar'/></Badge>
@@ -57,7 +56,7 @@ const projectMenuItemGroup = ({project}) => (
                 <Icon type="down"/>
             </a>
         </Dropdown>
-    </span>
+
 
 );
 
@@ -74,6 +73,9 @@ const menu = (
             <Link to={Path.PROJECTS}><Icon type="bars"/> Показать все</Link>
         </Menu.Item>
         <Menu.Divider/>
+        <Menu.Item>
+            <Link to={Path.ADD_PROJECT}><Icon type="user-add"/> Пригласить в проект</Link>
+        </Menu.Item>
     </Menu>
 );
 
