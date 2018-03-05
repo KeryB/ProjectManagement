@@ -9,6 +9,7 @@ import 'antd/dist/antd.less';
 import './resources/index.less';
 import './resources/less/project-list.less'
 import './resources/less/System.less'
+import './resources/less/Dashboard.less'
 
 const store = configureStore();
 

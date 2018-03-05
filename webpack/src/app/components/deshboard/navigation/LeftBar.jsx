@@ -1,5 +1,5 @@
 import * as React from "react";
-import {Menu, Icon, Row, Col, Avatar, Timeline, Dropdown, Badge} from 'antd';
+import {Menu, Icon, Col, Avatar, Dropdown, Badge} from 'antd';
 import PropTypes from "prop-types";
 import * as Path from "../../../utils/RoutePath";
 import {Link} from "react-router-dom";
@@ -8,73 +8,40 @@ import {isEmpty} from "lodash";
 const MenuItemGroup = Menu.ItemGroup;
 const SubMenu = Menu.SubMenu;
 
-const handleProject = () => (
-    <Menu>
-        <Menu.Item>
-            <div className='current-projects'>
-                Текущие проекты
-            </div>
-        </Menu.Item>
-        <Menu.Divider/>
-        <Menu.Item>
-            <Link to={Path.CREATE_PROJECT}>
-                <Icon type="right-circle-o"/> Создать проект
-            </Link>
-        </Menu.Item>
-        <Menu.Divider/>
-        <Menu.Item>
-            <Link to={Path.PROJECTS}><Icon type="bars"/> Показать все</Link>
-        </Menu.Item>
-        <Menu.Divider/>
-    </Menu>
-);
-
-// const projectMenuItemGroup = (chosenProject) => (
-//     <span style={{borderColor: 'black'}}>
-//         {isEmpty(chosenProject) ? "Проект не выбран" :
-//             <div>
-//                 <Dropdown overlay={menu} trigger={['click']}>
-//                     <a className=    "ant-dropdown-link" href="#">
-//                         <Avatar size='large'/>
-//                         <span className='span5-left'>
-//                             {chosenProject.project.title}
-//                         </span>
-//                     </a>
-//                 </Dropdown>
-//             </div>
-//
-//         }
-//     </span>
-// );
-const projectMenuItemGroup = ({project}) => (
-        <Dropdown overlay={menu} trigger={['click']}>
-            <a className="ant-dropdown-link">
-                <Badge dot> <Avatar shape="square" size='large' className='project-avatar'/></Badge>
-                <span className='span5-left'>
+const projectMenuItemGroup = ({project}, countProjects) => (
+    <Dropdown overlay={menu(countProjects)} trigger={['click']}>
+        <a className="ant-dropdown-link">
+            <Badge dot> <Avatar shape="square" size='large' className='project-avatar'/></Badge>
+            <span className='span5-left'>
                 {isEmpty(project) ? <span>Проект не выбран</span> : <span>{project.title}</span>}
             </span>
-                <Icon type="down"/>
-            </a>
-        </Dropdown>
+            <Icon type="down"/>
+        </a>
+    </Dropdown>
 
 
 );
 
-
-const menu = (
+const menu =(countProjects)=> (
     <Menu>
         <Menu.Item>
             <Link to={Path.CREATE_PROJECT}>
-                <Icon type="right-circle-o"/> Создать проект
+                <Icon type="right-circle-o"/> Создать новый проект
             </Link>
         </Menu.Item>
         <Menu.Divider/>
         <Menu.Item>
-            <Link to={Path.PROJECTS}><Icon type="bars"/> Показать все</Link>
+            <Link to={Path.PROJECTS} className = 'show-all-projects'>
+                <Icon type="bars"/> Показать все проекты
+                <Badge count={countProjects}/>
+            </Link>
         </Menu.Item>
         <Menu.Divider/>
         <Menu.Item>
             <Link to={Path.ADD_PROJECT}><Icon type="user-add"/> Пригласить в проект</Link>
+        </Menu.Item>
+        <Menu.Item>
+            <Link to={Path.ADD_PROJECT}><Icon type="area-chart" /> Посмотреть статистику</Link>
         </Menu.Item>
     </Menu>
 );
@@ -87,7 +54,7 @@ class LeftBar extends React.Component {
 
     render() {
 
-        const {chosenProject} = this.props;
+        const {chosenProject, projectData:{countProjects}} = this.props;
 
         return (
             <Col span={4} className='left-bar'>
@@ -98,7 +65,7 @@ class LeftBar extends React.Component {
                     mode="vertical"
                 >
                     <Menu.Item className='project-dropdown'>
-                        {projectMenuItemGroup(chosenProject)}
+                        {projectMenuItemGroup(chosenProject, countProjects)}
                     </Menu.Item>
                     <Menu.Divider/>
                     <Menu.Item key="1">
@@ -145,6 +112,7 @@ class LeftBar extends React.Component {
 }
 
 LeftBar.propTypes = {
-    chosenProject: PropTypes.object.isRequired
+    chosenProject: PropTypes.object.isRequired,
+    projectData:PropTypes.object.isRequired
 };
 export default LeftBar;

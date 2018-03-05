@@ -96,4 +96,12 @@ public class ProjectService {
         userProject.setPrimaryUser(user);
         return userProjectRepository.save(userProject);
     }
+
+    public List<Project> findProjects(int userId, ProjectFilterRequestDto filterRequestDto) {
+
+        Page<Project> projects = userProjectRepository.findByUserId(userId, new PageRequest(filterRequestDto.getCurrent(), filterRequestDto.getPageSize()))
+                .map(UserProject::getPrimaryProject);
+
+        return projects.getContent();
+    }
 }

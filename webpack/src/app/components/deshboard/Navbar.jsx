@@ -34,8 +34,8 @@ class Navbar extends React.Component {
     };
 
     render() {
-        const {location, user, project} = this.props;
-        console.log(project);
+        const {location, user} = this.props;
+
         return (
             <Layout className="layout">
                 <div className='ant-layout-header ant-menu-horizontal'>
@@ -47,7 +47,7 @@ class Navbar extends React.Component {
                         notAuthComponent(location)
                         :
                         <div>
-                            <AuthHeader user={user} project={project} logout={this.logout}/>
+                            <AuthHeader user={user} logout={this.logout}/>
                         </div>
                     }
                 </div>
@@ -59,7 +59,6 @@ class Navbar extends React.Component {
 Navbar.propTypes = {
     location: PropTypes.object.isRequired,
     user: PropTypes.object.isRequired,
-    project: PropTypes.array.isRequired,
 };
 
 export default Navbar;

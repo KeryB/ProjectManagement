@@ -35,7 +35,7 @@ class AuthHeader extends React.Component {
 
 
     render() {
-        const {user, project, logout} = this.props;
+        const {user, logout} = this.props;
         return (
             <div>
                 <Dropdown overlay={profileMenu(logout)} trigger={['click']}>
@@ -58,7 +58,6 @@ class AuthHeader extends React.Component {
 
 AuthHeader.propTypes = {
     user: PropTypes.object.isRequired,
-    project: PropTypes.array.isRequired,
     logout: PropTypes.func.isRequired,
 };
 

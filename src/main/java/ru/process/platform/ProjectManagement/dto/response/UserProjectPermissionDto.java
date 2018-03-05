@@ -25,6 +25,7 @@ public class UserProjectPermissionDto {
 
     private User user;
     private List<ProjectPermission> projectPermissions;
+    private int countProjects;
     private int totalPages;
     private ProjectPermission chosenProject;
 }

@@ -72,7 +72,7 @@ class App extends React.Component {
                             <Icon type="loading" className='spinner-large' spin/>
                         </div> :
                         <div>
-                            <Navbar location={location} user={user} project={projectPermissions}/>
+                            <Navbar location={location} user={user} />
                             <Switch>
                                 <LoginRoute path={Path.LOGIN}
                                             component={Login}

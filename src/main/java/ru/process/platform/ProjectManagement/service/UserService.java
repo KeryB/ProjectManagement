@@ -1,8 +1,6 @@
 package ru.process.platform.ProjectManagement.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -61,14 +59,7 @@ public class UserService {
 
         if (user != null) {
             userProjectPermissionDto.setUser(user);
-            Page<UserProjectPermissionDto.ProjectPermission> mappedUserProjects = userProjectRepository.findByUserId(userId, new PageRequest(0, 10))
-                    .map(userProject -> {
-                        UserProjectPermissionDto.ProjectPermission projectPermission = new UserProjectPermissionDto.ProjectPermission();
-                        projectPermission.setProject(userProject.getPrimaryProject());
-                        projectPermission.setPermission(userProject.getPermission());
-                        return projectPermission;
-                    });
-            userProjectPermissionDto.setProjectPermissions(mappedUserProjects.getContent());
+            userProjectPermissionDto.setCountProjects(userProjectRepository.countAllByPrimaryUserId(userId));
         }
         return userProjectPermissionDto;
     }

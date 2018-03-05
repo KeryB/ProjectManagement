@@ -1,25 +1,30 @@
 import * as React from "react";
 import PropTypes from 'prop-types';
-import {Table, Icon, Divider, Col, Card, Avatar, Input, Spin, Button} from 'antd';
+import {
+    Table, Icon, Divider, Col, Card, Avatar, Input, Spin, Button, Tabs, Dropdown, Menu, Progress,
+    Badge
+} from 'antd';
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
-import * as projectAction from '../../../actions/project/ProjectAction';
-import {getStorageItem, putStorageItem} from "../../../utils/token/LocalStorage";
-import * as Status from "../../../utils/AuthStatus";
+import * as projectAction from '../../../../actions/project/ProjectAction';
+import {getStorageItem, putStorageItem} from "../../../../utils/token/LocalStorage";
+import * as Status from "../../../../utils/AuthStatus";
 import {Link} from "react-router-dom";
-import * as Path from '../../../utils/RoutePath';
-import {chosenProject, tokenHeader} from "../../../actions/api/Api";
-import FetchSearch from "../commoncomponents/FetchSearch";
+import * as Path from '../../../../utils/RoutePath';
+import {chosenProject, tokenHeader} from "../../../../actions/api/Api";
+import FetchSearch from "../../commoncomponents/FetchSearch";
 import moment from "moment";
 
 const setData = (projects) => {
     const data = [];
     projects.map((item, index) => {
         const {project} = item;
+
+        console.log(projects);
         data.push({
             key: index,
             projectId: project.id,
-            creationDate: moment(project.creationDate).format('MMMM Do YYYY'),
+            creationDate: moment(project.creationDate).format('DD/MM/YYYY'),
             projectName: project.title,
             projectType: project.projectType,
             role: item.permission,
@@ -41,6 +46,22 @@ class Projects extends React.Component {
         current: 1,
         pageSize: 20
     };
+
+    menu = (
+        <Menu>
+            <Menu.Item key="0">
+                <a href="http://www.alipay.com/">Добавить в проект</a>
+            </Menu.Item>
+            <Menu.Divider />
+            <Menu.Item key="1">
+                <a href="http://www.taobao.com/">Назначить руководителем</a>
+            </Menu.Item>
+            <Menu.Divider />
+            <Menu.Item key="3">Перейти в настройки</Menu.Item>
+            <Menu.Divider />
+            <Menu.Item key="4">Завершить проект</Menu.Item>
+        </Menu>
+    );
 
     columns = [
         {
@@ -80,6 +101,23 @@ class Projects extends React.Component {
             title: 'Руководитель проекта',
             dataIndex: 'projectLead',
             key: 'projectLead',
+        },{
+            title: 'Статус проекта',
+            dataIndex: 'projectStatus',
+            render:()=>(
+                <span><Badge status="processing" />В разработке </span>
+            )
+        }, {
+            dataIndex: 'actions',
+            key: 'actions',
+            render: (text, record) => (
+
+                <Dropdown overlay={this.menu}  trigger={['click']}>
+                    <Button style={{ marginLeft: 8 }}>
+                        <Icon type="down" />
+                    </Button>
+                </Dropdown>
+            )
         }
     ];
 
@@ -118,27 +156,32 @@ class Projects extends React.Component {
 
         return (
             <div className="project-list">
-                {/*<Col span={18} offset={5}>*/}
-                    <Card title='Все проекты' style={{fontSize: "25px"}}>
-                        <div className='filter-panel'>
-                            <FetchSearch placeHolder="Поиск" onChange={this.handleSearchChange}/>
-                            <Button type="primary" style={{float:"right"}} href={Path.CREATE_PROJECT}>Создать проект</Button>
-                        </div>
-                        {isLoading ? <Spin tip="Loading...">
+
+                <Card title='Проекты' style={{fontSize: "25px"}}>
+                    <div className='filter-panel'>
+                        <FetchSearch placeHolder="Поиск" onChange={this.handleSearchChange}/>
+                    </div>
+                    <Tabs tabPosition='right'>
+                        <Tabs.TabPane tab="Доступные проекты" key="1">
+                            {isLoading ? <Spin tip="Loading...">
+                                    <Table columns={this.columns}
+                                           dataSource={setData(projects)}
+                                           onChange={this.handlePaginationChange}
+                                           pagination={{pageSize: pageSize, total: totalPages, defaultCurrent: current}}
+                                    />
+                                </Spin> :
                                 <Table columns={this.columns}
                                        dataSource={setData(projects)}
                                        onChange={this.handlePaginationChange}
                                        pagination={{pageSize: pageSize, total: totalPages, defaultCurrent: current}}
+
                                 />
-                            </Spin> :
-                            <Table columns={this.columns}
-                                   dataSource={setData(projects)}
-                                   onChange={this.handlePaginationChange}
-                                   pagination={{pageSize: pageSize, total: totalPages, defaultCurrent: current}}
-                            />
-                        }
-                    </Card>
-                {/*</Col>*/}
+                            }
+                        </Tabs.TabPane>
+                        <Tabs.TabPane tab="Архивные" key="2">Content of Tab Pane 2</Tabs.TabPane>
+                        <Tabs.TabPane tab="Мои" key="3">Content of Tab Pane 3</Tabs.TabPane>
+                    </Tabs>
+                </Card>
             </div>
         )
     }

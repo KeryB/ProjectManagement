@@ -7,7 +7,9 @@ import {tokenHeader} from '../actions/api/Api';
 const initialState = {
     isFetched: false,
     isLoading: false,
-    projectPermissions: [],
+    projectData: {
+        countProjects: 0
+    },
     user: {
         role: Roles.NOT_AUTH,
         tokenStatus: Status.NOT_AUTH
@@ -47,13 +49,14 @@ export default (state = initialState, action = {}) => {
                 isLoading: false,
             };
         case Types.FETCH_USER_DATA_SUCCESS:
+            console.log(action);
             return {
                 ...state,
                 isLoading: false,
                 isFetched: true,
-                projectPermissions: [
-                    ...action.payload[0].projectPermissions
-                ],
+                projectData: {
+                    countProjects: action.payload[0].countProjects
+                },
                 user: {
                     ...action.payload[0].user,
                     tokenStatus: Status.VALID,
@@ -80,8 +83,6 @@ export default (state = initialState, action = {}) => {
             break;
 
         case Types.CHOSEN_PROJECT:
-            console.log(action);
-
             return {
                 ...state,
                 chosenProject: action.payload

@@ -20,6 +20,7 @@ import ru.process.platform.ProjectManagement.utils.error.ErrorMessage;
 import ru.process.platform.ProjectManagement.utils.error.ErrorStatus;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/project",consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -67,5 +68,20 @@ public class ProjectController {
 
         return RestResponse.ok(projectService.saveProject(project, user));
     }
+
+    @RequestMapping(value = "/fetchProjects", method = RequestMethod.POST)
+    public RestResponse fetchProjects(HttpServletRequest request, @RequestBody ProjectFilterRequestDto filterRequestDto) {
+        String header = request.getHeader(tokenHeader);
+        Token token = jwtService.getClaimsFromToken(header);
+
+        if (token == null) {
+            return RestResponse.error(ErrorStatus.INVALID_TOKEN_HEADER, ErrorMessage.INVALID_TOKEN_HEADER);
+        }
+
+        User user = userService.findById(token.getId());
+        List<Project> projects = projectService.findProjects(user.getId(), filterRequestDto);
+        return RestResponse.ok(projects);
+    }
+
 }
 

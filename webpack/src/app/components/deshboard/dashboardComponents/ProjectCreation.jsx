@@ -28,12 +28,12 @@ class ProjectCreation extends React.Component {
         const {projectType} = this.state;
 
         return (
-            <div>
+            <div className='project-creation'>
                 <div className='header'>
                     <h2>Создание проекта</h2>
                 </div>
-                <Row gutter={16}>
-                    <Col span={4}>
+                <Row gutter={16} className='project-creation-row'>
+                    <Col span={4} >
                         <UploadAvatar onChange={this.handleChangeState}/>
                     </Col>
                     <Col span={16}>
