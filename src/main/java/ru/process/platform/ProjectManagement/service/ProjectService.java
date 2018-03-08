@@ -22,14 +22,18 @@ import java.util.List;
 @Service
 public class ProjectService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+
+    private final ProjectRepository projectRepository;
+
+    private final UserProjectRepository userProjectRepository;
 
     @Autowired
-    private ProjectRepository projectRepository;
-
-    @Autowired
-    private UserProjectRepository userProjectRepository;
+    public ProjectService(UserRepository userRepository, ProjectRepository projectRepository, UserProjectRepository userProjectRepository) {
+        this.userRepository = userRepository;
+        this.projectRepository = projectRepository;
+        this.userProjectRepository = userProjectRepository;
+    }
 
 
     @Transactional
@@ -38,33 +42,23 @@ public class ProjectService {
 
         UserProjectPermissionDto userProjectPermissionDto = new UserProjectPermissionDto();
 
-        List<UserProjectPermissionDto.ProjectPermission> projectPermissions = new ArrayList<>();
         if(user != null){
             Pageable pageRequest = new PageRequest(filter.getCurrent() - 1, filter.getPageSize());
 
             if(filter.getProjectName() != null){
 
-                Page<UserProjectPermissionDto.ProjectPermission> filterProjectPermissions= userProjectRepository.findByPrimaryProjectTitleContaining(filter.getProjectName(), pageRequest)
-                        .map(userProject -> {
-                            UserProjectPermissionDto.ProjectPermission projectPermission = new UserProjectPermissionDto.ProjectPermission();
-                            projectPermission.setProject(userProject.getPrimaryProject());
-                            projectPermission.setPermission(userProject.getPermission());
-                            return projectPermission;
-                        });
-                projectPermissions = filterProjectPermissions.getContent();
-                userProjectPermissionDto.setTotalPages(filterProjectPermissions.getTotalPages());
+                Page<UserProject> pageProjects = userProjectRepository.findByPrimaryProjectTitleContaining(filter.getProjectName(), pageRequest);
+                List<UserProject> userProjects = pageProjects.getContent();
+
+                userProjectPermissionDto.setUserProjects(userProjects);
+                userProjectPermissionDto.setTotalPages(pageProjects.getTotalPages());
             } else {
-                Page<UserProjectPermissionDto.ProjectPermission> allProjectPermissions = userProjectRepository.findAll(pageRequest)
-                        .map(userProject -> {
-                            UserProjectPermissionDto.ProjectPermission projectPermission = new UserProjectPermissionDto.ProjectPermission();
-                            projectPermission.setProject(userProject.getPrimaryProject());
-                            projectPermission.setPermission(userProject.getPermission());
-                            return projectPermission;
-                        });
-                projectPermissions = allProjectPermissions.getContent();
-                userProjectPermissionDto.setTotalPages(allProjectPermissions.getTotalPages());
+                Page<UserProject> pageProjects = userProjectRepository.findAll(pageRequest);
+                List<UserProject> userProjects = pageProjects.getContent();
+
+                userProjectPermissionDto.setUserProjects(userProjects);
+                userProjectPermissionDto.setTotalPages(pageProjects.getTotalPages());
             }
-            userProjectPermissionDto.setProjectPermissions(projectPermissions);
         }
         return userProjectPermissionDto;
     }

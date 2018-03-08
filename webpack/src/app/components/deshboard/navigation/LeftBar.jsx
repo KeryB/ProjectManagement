@@ -33,7 +33,7 @@ const menu =(countProjects)=> (
         <Menu.Item>
             <Link to={Path.PROJECTS} className = 'show-all-projects'>
                 <Icon type="bars"/> Показать все проекты
-                <Badge count={countProjects}/>
+                <Badge style={{marginLeft:'10px'}} count={countProjects}/>
             </Link>
         </Menu.Item>
         <Menu.Divider/>

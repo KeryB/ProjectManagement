@@ -75,7 +75,7 @@ export default (state = initialState, action = {}) => {
                 ...state,
                 isLoading: false,
                 user:{
-                    tokenStatus:Status.NOT_AUTH
+                    tokenStatus:Status.VALID
                 }
             };
         case Types.UPDATE_TOKEN_FAILED:

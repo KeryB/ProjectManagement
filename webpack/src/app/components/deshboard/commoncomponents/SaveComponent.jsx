@@ -38,10 +38,12 @@ class SaveComponent extends React.Component {
             if (!err) {
                 data = values;
                 loading = true;
-                saveAction.saveProject(values, ()=> {
+                saveAction.saveProject(values, (cuccessCallback)=> {
                     loading = false;
                     console.log(history);
                     history.push(Path.ROOT);
+                    console.log(cuccessCallback);
+
                     openNotificationWithIcon('success', 'Успешно', 'Проект сохранен');
                 }, () =>{
                     openNotificationWithIcon('error', 'Ошибка', 'Что-то пошло не так..');

@@ -16,16 +16,9 @@ import java.util.List;
 @NoArgsConstructor
 public class UserProjectPermissionDto {
 
-    @Getter
-    @Setter
-    public static class ProjectPermission {
-        private Project project;
-        private UserProject.Permission permission;
-    }
-
     private User user;
-    private List<ProjectPermission> projectPermissions;
+    private List<UserProject> userProjects;
     private int countProjects;
     private int totalPages;
-    private ProjectPermission chosenProject;
+    private UserProject chosenProject;
 }

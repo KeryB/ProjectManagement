@@ -30,6 +30,9 @@ const setData = (projects) => {
             role: item.permission,
             projectLead: 'ХЗ'
         })
+
+
+
     });
 
     return data;
@@ -44,7 +47,8 @@ class Projects extends React.Component {
 
     state = {
         current: 1,
-        pageSize: 20
+        pageSize: 20,
+        idFetched: false
     };
 
     menu = (
