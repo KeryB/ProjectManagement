@@ -1,7 +1,8 @@
 import * as React from "react";
 import PropTypes from "prop-types";
-import {Button, Icon, notification } from "antd";
+import {Button, Icon, notification} from "antd";
 import * as crudAction from "../../../actions/reduxCrud/crudActions";
+import * as saveActions from "../../../actions/reduxCrud/SaveActions";
 import {isEmpty} from "lodash";
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
@@ -19,46 +20,47 @@ class SaveComponent extends React.Component {
 
     static propTypes = {
         buttonText: PropTypes.string.isRequired,
-        iconType: PropTypes.string.isRequired,
         form: PropTypes.object.isRequired,
-        activeAction: PropTypes.object.isRequired,
+        affix: PropTypes.func.isRequired,
         history: PropTypes.object.isRequired,
     };
 
     state = {
         loading: false,
-        data:{}
+        data: {}
     };
 
-    onSubmit =() =>{
-        const {saveAction, history} = this.props;
-        console.log(this.props);
-        let {loading, data} = this.state;
+    onSubmit = () => {
+        const {affix, history, saveActions} = this.props;
+        let {data} = this.state;
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 data = values;
-                loading = true;
-                saveAction.saveProject(values, (cuccessCallback)=> {
-                    loading = false;
-                    console.log(history);
+                this.state.loading = true;
+
+                saveActions.saveProject(values, () => {
+                    this.state.loading = false;
                     history.push(Path.ROOT);
-                    console.log(cuccessCallback);
 
                     openNotificationWithIcon('success', 'Успешно', 'Проект сохранен');
-                }, () =>{
+                }, () => {
                     openNotificationWithIcon('error', 'Ошибка', 'Что-то пошло не так..');
-                    loading = false;
+                    this.state.loading = false;
                 })
             }
         });
     };
 
     render() {
-        const {buttonText, iconType} = this.props;
-
+        const {buttonText} = this.props;
+        const {loading} = this.state;
         return (
-            <Button type="primary" htmlType="submit" onClick={this.onSubmit}>
-                <Icon type={this.state.loading ? 'loading' : iconType}/>{buttonText}
+            <Button
+                type='primary'
+                loading={loading}
+                onClick={this.onSubmit}
+                htmlType='submit'>
+                {!loading ? <Icon type="save"/> : undefined}{buttonText}
             </Button>
         )
     }
@@ -66,7 +68,7 @@ class SaveComponent extends React.Component {
 
 function mapDispatchToProps(dispatch) {
     return {
-        saveAction: bindActionCreators(projectAction, dispatch)
+        saveActions: bindActionCreators(saveActions, dispatch)
     }
 }
 

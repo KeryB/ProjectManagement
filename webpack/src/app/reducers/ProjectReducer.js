@@ -1,9 +1,6 @@
 import * as Status from '../utils/AuthStatus';
 import * as Types from "../const/ActionTypes";
-import {
-    FETCH_PROJECTS_FAILED, FETCH_PROJECTS_REQUEST,
-    FETCH_PROJECTS_SUCCESS
-} from "../actions/project/ProjectAction";
+import {SAVE_PROJECT_PREFIX} from "../actions/project/ProjectAction";
 
 const initialState = {
     isFetched: false,
@@ -20,11 +17,12 @@ export default (state = initialState, action = {}) => {
                 isLoading: true
             };
         case Types.FETCH_PROJECT_DATA_SUCCESS:
+            console.log(action)
             return {
                 ...state,
                 isLoading: false,
                 isFetched: true,
-                projects: [...action.payload[0].projectPermissions],
+                projects: [...action.payload[0].userProjects],
                 totalPages: action.payload[0].totalPages
             };
         case Types.FETCH_USER_DATA_FAILED:
@@ -32,23 +30,10 @@ export default (state = initialState, action = {}) => {
                 ...state,
                 isLoading: false,
             };
-
-        case FETCH_PROJECTS_REQUEST:
+        case SAVE_PROJECT_PREFIX + '_SAVE_SUCCESS':
+            state.projects.unshift(action.payload[0]);
             return {
-                ...state,
-                isLoading: true
-            };
-        case FETCH_PROJECTS_SUCCESS:
-            return {
-                ...state,
-                isLoading: false,
-                isFetched: true,
-                projects:[...action.payload]
-            };
-        case FETCH_PROJECTS_FAILED:
-            return {
-                ...state,
-                isLoading: false,
+                ...state
             };
         default:
             return state;

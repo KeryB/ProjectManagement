@@ -10,7 +10,7 @@ class DashBoard extends React.Component {
     render() {
         const {children} = this.props;
         const {userData: {chosenProject, projectData}} = this.props;
-
+        console.log(this.props);
         return (
             <div className='dashboard'>
                 <Row gutter={48} style={{padding: '10px', margin: '0px'}}>

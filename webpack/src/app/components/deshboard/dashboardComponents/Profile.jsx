@@ -4,12 +4,11 @@ import {Avatar, Card, Col, Divider, Form, Icon, Row, Spin, Tabs} from "antd";
 import {isEmpty} from "lodash";
 import moment from "moment";
 import {connect} from "react-redux";
-import {getStorageItem} from "../../../utils/token/LocalStorage";
-import {tokenHeader} from "../../../actions/api/Api";
-import * as Status from "../../../utils/AuthStatus";
-import * as projectAction from "../../../actions/project/ProjectAction";
 import {bindActionCreators} from "redux";
 import FetchList from "../commoncomponents/FetchList";
+import * as Path from '../../../utils/RoutePath';
+import {Link} from "react-router-dom";
+import {fetchUserProfile, toProfileUser} from "../../../actions/UserAction";
 
 const formItemLayout = {
     labelCol: {span: 3},
@@ -19,55 +18,62 @@ const formItemLayout = {
 const showProjects = (projects) => (
     projects.map((item, index) => (
         <Card
-            cover={<Avatar shape="square"  />}
+            cover={<Avatar shape="square"/>}
             hoverable
-            style={{marginRight:'5px',height:'40px',width:'40px'}}
+            style={{marginRight: '5px', height: '40px', width: '40px'}}
         >
         </Card>
-))
+    ))
 );
 
 class Profile extends React.Component {
 
     static propTypes = {
         userData: PropTypes.object.isRequired,
-        projectData: PropTypes.object.isRequired,
     };
 
     state = {
         current: 0,
-        pageSize: 8
+        pageSize: 8,
+        userId: 0
     };
 
-    componentWillMount() {
-        const {projectData: {isFetched}, projectActions} = this.props;
-        if (!isFetched && getStorageItem(tokenHeader)) {
-            projectActions.fetchProjects(this.state);
+    componentDidMount() {
+        const {userData: {user}, fetchUserProfile, toProfileUser, match: {params}} = this.props;
+        const userId = parseInt(params.id);
+
+        if (this.checkOnEnemy(user, params)) {
+            this.state.userId = userId;
+            fetchUserProfile(this.state);
+        } else {
+            toProfileUser(user);
         }
     }
 
     componentWillReceiveProps(props) {
-        const {projectData: {isFetched, isLoading}, projectActions, userData: {tokenStatus}} = props;
-
-        if (!isFetched && !isLoading && tokenStatus === Status.VALID) {
-            projectActions.fetchProjects();
-        }
     }
 
-    profileComponent = (user, projectData) => (
+    checkOnEnemy = (user, params) => {
+        const userId = parseInt(params.id);
+        return userId !== user.id;
+    };
+
+
+    profileComponent = (user, projectDat, isEnemy) => (
 
         <Row>
             <Col span={9}>
                 <Card
                     hoverable
-                    style={{width: 209}}
-                    cover={<img alt="example" src="../../../../resources/images/profile.jpeg"/>}
+                    style={{width: 200}}
+                    cover={<Link to={Path.Settings}><img style={{width: 200}} alt="example"
+                                                         src="../../../../resources/images/profile.jpeg"/></Link>}
                 >
                 </Card>
             </Col>
             <Col span={14} className='contact-information'>
-                <h3 style={{display:'inline-block'}}>Информация:</h3>
-                <a><Icon type="edit" style={{float: 'right'}}/></a>
+                <h3 style={{display: 'inline-block'}}>Информация:</h3>
+                {isEnemy ? undefined : <Link to={Path.Settings}><Icon type="edit" style={{float: 'right'}}/></Link>}
                 <Divider type="horizontal"/>
                 <Form>
                     <Form.Item
@@ -96,44 +102,52 @@ class Profile extends React.Component {
                         <span className="ant-form-text">{moment(user.creationDate).format('LL')}</span>
                     </Form.Item>
                 </Form>
-
-                <Divider type="horizontal"/>
-                <p><h3>Доступные проекты:</h3></p>
-                <Tabs defaultActiveKey="1">
-                    <Tabs.TabPane tab="Tab 1" key="1">
-                        <div className='project-list'>
-                            <FetchList/>
-                        </div>
-                    </Tabs.TabPane>
-                    <Tabs.TabPane tab="Tab 2" key="2">Content of Tab Pane 2</Tabs.TabPane>
-                    <Tabs.TabPane tab="Tab 3" key="3">Content of Tab Pane 3</Tabs.TabPane>
-                </Tabs>
             </Col>
+            <Divider type="horizontal"/>
+            <h3>Проекты:</h3>
+            <Tabs defaultActiveKey="1">
+                <Tabs.TabPane tab="Доступные проекты" key="1">
+                    <div className='project-list'>
+                        <FetchList pageable={this.state}/>
+                    </div>
+                </Tabs.TabPane>
+                <Tabs.TabPane tab="Мои" key="2">Мои</Tabs.TabPane>
+                <Tabs.TabPane tab="Завершенные" key="3">Завершенные</Tabs.TabPane>
+            </Tabs>
         </Row>
     );
 
     render() {
-        const {userData: {user}, projectData} = this.props;
+        const {profileData, projectData, userData, match:{params}} = this.props;
+        let user = null;
+        if (profileData.user == null) {
+            user = userData.user;
+        } else {
+            user = profileData.user;
+        }
+
+        const isEnemy = this.checkOnEnemy(userData.user, params);
+        const name = user.firstName + ' ' + user.secondName;
 
         return (
             <div className='profile'>
                 <div className='header-profile'>
                     <h2>
-                        Профиль: {user.firstName + ' ' + user.secondName}
+                        Профиль: {name}
                     </h2>
                 </div>
 
-                    <Row gutter={16} style={{paddingTop: '20px'}}>
-                        <Col span={16}>
-                            <Card>
-                                {this.profileComponent(user, projectData)}
-                            </Card>
-                        </Col>
-                        <Col span={8}>
-                            <Card title="Моя активность" extra={<a href="#"><Icon type="setting"/></a>}>Card
-                                content</Card>
-                        </Col>
-                    </Row>
+                <Row gutter={16} style={{paddingTop: '20px'}}>
+                    <Col span={16}>
+                        <Card>
+                            {this.profileComponent(user, projectData, isEnemy)}
+                        </Card>
+                    </Col>
+                    <Col span={8}>
+                        <Card title={(isEnemy ? name : 'Моя') + ' активность'} extra={<a href="#"><Icon type="setting"/></a>}>Card
+                            content</Card>
+                    </Col>
+                </Row>
             </div>
         )
     }
@@ -141,13 +155,14 @@ class Profile extends React.Component {
 
 function mapStateToProps(state) {
     return {
-        projectData: state.project
+        profileData: state.profile,
     }
 }
 
 function mapDispatchToState(dispatch) {
     return {
-        projectActions: bindActionCreators(projectAction, dispatch)
+        fetchUserProfile: bindActionCreators(fetchUserProfile, dispatch),
+        toProfileUser: bindActionCreators(toProfileUser, dispatch)
     }
 }
 

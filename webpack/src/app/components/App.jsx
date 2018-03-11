@@ -9,7 +9,7 @@ import {getStorageItem} from "../utils/token/LocalStorage";
 import * as userActions from '../actions/UserAction';
 import {bindActionCreators} from "redux";
 import * as Status from "../utils/AuthStatus";
-import {Spin, Icon} from 'antd';
+import {Spin, Icon, Alert, Breadcrumb} from 'antd';
 import DashBoardInternal from "./deshboard/DashboardInternal";
 import PropTypes from 'prop-types';
 import {tokenHeader} from "../actions/api/Api";
@@ -27,7 +27,7 @@ const LoginRoute = ({component: Component, predicate, redirectTo, componentProps
 const DashboardRoute = ({component: Component, user, predicate, redirectTo, componentProps, ...rest}) => (
 
     <div>
-        <Route {...rest} render={props =>
+        <Route breadcrumbName="dashboard" {...rest} render={props =>
             predicate()
                 ? <Component {...componentProps}/>
                 : (<Redirect
@@ -50,15 +50,14 @@ class App extends React.Component {
 
     componentWillReceiveProps(props) {
         const {userData: {isFetched, isLoading, user}, userActions} = props;
-        console.log(isFetched, isLoading, user);
 
-        console.log("componentWillReceiveProps");
         if (user.tokenStatus === Status.REFRESH_TOKEN_REQUIRED && !isLoading) {
             userActions.refreshToken();
         } else if (!isFetched && !isLoading && user.tokenStatus === Status.VALID) {
             userActions.fetchUserData();
         }
     }
+
 
     render() {
         const {userData: {user, isLoading, projectPermissions, tokenStatus}, location, history} = this.props;

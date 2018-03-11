@@ -18,6 +18,12 @@ import java.util.Date;
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class Project {
 
+    public enum ProjectStatus {
+        processing,
+        finished,
+        supporting
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
@@ -32,6 +38,9 @@ public class Project {
 
     @NotNull
     private String projectType;
+
+    @Enumerated(EnumType.STRING)
+    private ProjectStatus projectStatus;
 
     @OneToOne(mappedBy = "primaryProject")
     private ProjectSettings projectSettings;

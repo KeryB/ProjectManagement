@@ -10,17 +10,23 @@ import './resources/index.less';
 import './resources/less/project-list.less'
 import './resources/less/System.less'
 import './resources/less/Dashboard.less'
+import { LocaleProvider } from 'antd';
+import ru from 'antd/lib/locale-provider/ru_RU';
+import 'moment/locale/fr';
+
 
 const store = configureStore();
 
 const renderApp = App => {
     render(
         <Provider store={store}>
+            <LocaleProvider locale={ru}>
             <Router>
                 <AppContainer>
                     {App}
                 </AppContainer>
             </Router>
+            </LocaleProvider>
         </Provider>,
         document.getElementById('root'),
     )

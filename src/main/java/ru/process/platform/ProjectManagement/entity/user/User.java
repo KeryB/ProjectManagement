@@ -47,13 +47,14 @@ public class User {
     @Pattern(regexp = "([А-аЯ-я]|[A-aZ-z]|\\d)+")
     private String nickname;
 
+    private Date birthDay;
+
     @JsonIgnore
     private UserRole role;
 
     @JsonIgnore
     private String googleId;
 
-    private boolean isLead = false;
 
 //    @Lob
 //    private byte[] image;

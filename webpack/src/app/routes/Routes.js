@@ -7,7 +7,7 @@ export const routes = (
     <div>
         <main>
             <switch>
-                <Route path='/' component={App}/>
+                <Route path='/' component={App} />
                 {/*<Route path='/login' component={AuthProvider}/>*/}
             </switch>
         </main>

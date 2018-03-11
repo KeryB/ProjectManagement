@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.process.platform.ProjectManagement.dto.filter.ProjectFilterRequestDto;
@@ -12,53 +13,49 @@ import ru.process.platform.ProjectManagement.entity.UserProject;
 import ru.process.platform.ProjectManagement.entity.project.Project;
 import ru.process.platform.ProjectManagement.entity.user.User;
 import ru.process.platform.ProjectManagement.repository.ProjectRepository;
-import ru.process.platform.ProjectManagement.repository.UserProjectRepository;
+import ru.process.platform.ProjectManagement.repository.UserProject.UserProjectRepository;
 import ru.process.platform.ProjectManagement.repository.UserRepository;
+import ru.process.platform.ProjectManagement.repository.jdbcTemplate.Paging;
+import ru.process.platform.ProjectManagement.service.predicates.SpecificationService;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 @Service
 public class ProjectService {
 
-    private final UserRepository userRepository;
-
-    private final ProjectRepository projectRepository;
-
-    private final UserProjectRepository userProjectRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
-    public ProjectService(UserRepository userRepository, ProjectRepository projectRepository, UserProjectRepository userProjectRepository) {
-        this.userRepository = userRepository;
-        this.projectRepository = projectRepository;
-        this.userProjectRepository = userProjectRepository;
-    }
+    private ProjectRepository projectRepository;
 
+    @Autowired
+    private UserProjectRepository userProjectRepository;
 
-    @Transactional
+    @Autowired
+    private SpecificationService specificationService;
+
     public UserProjectPermissionDto getProjectPermission(int userId, ProjectFilterRequestDto filter) {
         User user = userRepository.findOne(userId);
 
         UserProjectPermissionDto userProjectPermissionDto = new UserProjectPermissionDto();
 
-        if(user != null){
+        if (user != null) {
             Pageable pageRequest = new PageRequest(filter.getCurrent() - 1, filter.getPageSize());
 
-            if(filter.getProjectName() != null){
+            Specification<UserProject> specification = specificationService.getProjectSpecification(userId, filter);
+            Page<UserProject> userProjects = userProjectRepository.findAll(specification, pageRequest);
 
-                Page<UserProject> pageProjects = userProjectRepository.findByPrimaryProjectTitleContaining(filter.getProjectName(), pageRequest);
-                List<UserProject> userProjects = pageProjects.getContent();
+            userProjects.forEach(userProject -> {
+                Project primaryProject = userProject.getPrimaryProject();
+                Specification<UserProject> projectLeadSpecification = specificationService.getProjectLeadSpecification(primaryProject.getId());
+                UserProject userLead = userProjectRepository.findOne(projectLeadSpecification);
+                userProject.setPrimaryUser(userLead.getPrimaryUser());
+            });
 
-                userProjectPermissionDto.setUserProjects(userProjects);
-                userProjectPermissionDto.setTotalPages(pageProjects.getTotalPages());
-            } else {
-                Page<UserProject> pageProjects = userProjectRepository.findAll(pageRequest);
-                List<UserProject> userProjects = pageProjects.getContent();
-
-                userProjectPermissionDto.setUserProjects(userProjects);
-                userProjectPermissionDto.setTotalPages(pageProjects.getTotalPages());
-            }
+            userProjectPermissionDto.setUserProjects(userProjects.getContent());
+            userProjectPermissionDto.setPaging(new Paging<>(pageRequest, userProjects));
         }
         return userProjectPermissionDto;
     }
@@ -67,33 +64,35 @@ public class ProjectService {
         return projectRepository.findOne(id);
     }
 
-    public UserProjectPermissionDto.ProjectPermission findUserProjectByProjectId(int projectId) {
-        UserProject userProject = userProjectRepository.findByPrimaryProject_Id(projectId);
-        if(userProject == null){
+    public UserProject findUserProjectByProjectId(Integer projectId, int userId) {
+        UserProject userProject = userProjectRepository.findByPrimaryProjectIdAndPrimaryUserId(projectId, userId);
+        if (userProject == null) {
             return null;
         }
-        UserProjectPermissionDto.ProjectPermission chosenProject = new UserProjectPermissionDto.ProjectPermission();
-        chosenProject.setPermission(userProject.getPermission());
-        chosenProject.setProject(userProject.getPrimaryProject());
-        return chosenProject;
+
+        return userProject;
     }
 
+    @Transactional
     public UserProject saveProject(Project project, User user) {
 
-        user.setLead(true);
         project.setCreationDate(new Date());
+        project.setProjectStatus(Project.ProjectStatus.processing);
         Project savedProject = projectRepository.save(project);
 
         UserProject userProject = new UserProject();
         userProject.setPermission(UserProject.Permission.MANAGER);
+        userProject.setLead(true);
+        userProject.setOwner(true);
         userProject.setPrimaryProject(savedProject);
         userProject.setPrimaryUser(user);
         return userProjectRepository.save(userProject);
     }
 
+    @Transactional
     public List<Project> findProjects(int userId, ProjectFilterRequestDto filterRequestDto) {
 
-        Page<Project> projects = userProjectRepository.findByUserId(userId, new PageRequest(filterRequestDto.getCurrent(), filterRequestDto.getPageSize()))
+        Page<Project> projects = userProjectRepository.findByPrimaryUserIdOrderByPrimaryProjectCreationDateDesc(userId, new PageRequest(filterRequestDto.getCurrent(), filterRequestDto.getPageSize()))
                 .map(UserProject::getPrimaryProject);
 
         return projects.getContent();

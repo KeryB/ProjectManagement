@@ -1,15 +1,21 @@
 package ru.process.platform.ProjectManagement.service;
 
+import javafx.util.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.process.platform.ProjectManagement.dto.request.RegistrationRequestDto;
 import ru.process.platform.ProjectManagement.dto.response.UserProjectPermissionDto;
+import ru.process.platform.ProjectManagement.entity.project.Project;
 import ru.process.platform.ProjectManagement.entity.user.User;
 import ru.process.platform.ProjectManagement.entity.user.UserRole;
-import ru.process.platform.ProjectManagement.repository.UserProjectRepository;
+import ru.process.platform.ProjectManagement.repository.ProjectRepository;
+import ru.process.platform.ProjectManagement.repository.UserProject.UserProjectRepository;
 import ru.process.platform.ProjectManagement.repository.UserRepository;
+import ru.process.platform.ProjectManagement.repository.jdbcTemplate.Paging;
+import ru.process.platform.ProjectManagement.utils.error.ErrorMessage;
+import ru.process.platform.ProjectManagement.utils.error.ErrorStatus;
 
 import java.util.Date;
 import java.util.List;
@@ -20,12 +26,14 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final UserProjectRepository userProjectRepository;
+    private final ProjectRepository projectRepository;
 
     @Autowired
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, UserProjectRepository userProjectRepository) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, UserProjectRepository userProjectRepository, ProjectRepository projectRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.userProjectRepository = userProjectRepository;
+        this.projectRepository = projectRepository;
     }
 
     public User findById(int id) {
@@ -40,6 +48,7 @@ public class UserService {
         return userRepository.findByEmail(email);
     }
 
+    @Transactional
     public User registerUser(RegistrationRequestDto registrationRequestDto) {
         User user = new User();
         user.setEmail(registrationRequestDto.getEmail());
@@ -59,9 +68,43 @@ public class UserService {
 
         if (user != null) {
             userProjectPermissionDto.setUser(user);
-            userProjectPermissionDto.setCountProjects(userProjectRepository.countAllByPrimaryUserId(userId));
+            userProjectPermissionDto.setPaging(new Paging(userProjectRepository.countAllByPrimaryUserId(userId)));
         }
         return userProjectPermissionDto;
     }
 
+    public Pair<Integer, String> validateProject(User userRequest, int projectId) {
+        Project project = projectRepository.findOne(projectId);
+        if (project == null) {
+            return new Pair<>(ErrorStatus.INVALID_PROJECT_ID, ErrorMessage.INVALID_PROJECT_ID);
+        }
+        return null;
+    }
+
+    @Transactional
+    public User addUserToProject(User userRequest, int projectId) {
+//        UserProject userProject = userProjectRepository.findByPrimaryProject_Id(projectId);
+
+//        userProject.setLead(false);
+//        userProject.setOwner(false);
+
+        return null;
+    }
+
+
+    @Transactional
+    public User saveUser(int id, User userRequest) {
+        User newUser = userRepository.findOne(id);
+        newUser.setEmail(userRequest.getEmail());
+        newUser.setFirstName(userRequest.getFirstName());
+        newUser.setSecondName(userRequest.getSecondName());
+        newUser.setBirthDay(userRequest.getBirthDay());
+        return userRepository.save(newUser);
+    }
+
+    public User getUserProfile(int userId) {
+
+        User user = userRepository.findOne(userId);
+        return user;
+    }
 }

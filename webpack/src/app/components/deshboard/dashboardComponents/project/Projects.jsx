@@ -1,8 +1,8 @@
 import * as React from "react";
 import PropTypes from 'prop-types';
 import {
-    Table, Icon, Divider, Col, Card, Avatar, Input, Spin, Button, Tabs, Dropdown, Menu, Progress,
-    Badge
+    Table, Icon, Card, Avatar, Button, Tabs, Dropdown, Menu,
+    Badge, message
 } from 'antd';
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
@@ -14,25 +14,28 @@ import * as Path from '../../../../utils/RoutePath';
 import {chosenProject, tokenHeader} from "../../../../actions/api/Api";
 import FetchSearch from "../../commoncomponents/FetchSearch";
 import moment from "moment";
+import {chooseProject} from '../../../../actions/UserAction';
 
 const setData = (projects) => {
     const data = [];
     projects.map((item, index) => {
-        const {project} = item;
-
-        console.log(projects);
+        const {primaryProject, primaryUser} = item;
+        let projectLeadId;
+        if (item.lead) {
+            projectLeadId = primaryUser.id
+        }
         data.push({
             key: index,
-            projectId: project.id,
-            creationDate: moment(project.creationDate).format('DD/MM/YYYY'),
-            projectName: project.title,
-            projectType: project.projectType,
+            projectId: primaryProject.id,
+            creationDate: moment(primaryProject.creationDate).format('DD/MM/YYYY'),
+            projectName: primaryProject.title,
+            projectType: primaryProject.projectType,
             role: item.permission,
-            projectLead: 'ХЗ'
+            projectLead: {
+                name: primaryUser.firstName + ' ' + primaryUser.secondName,
+                id: primaryUser.id
+            }
         })
-
-
-
     });
 
     return data;
@@ -51,18 +54,24 @@ class Projects extends React.Component {
         idFetched: false
     };
 
+    fetchTableType = {
+        "available": 0,
+        "mine": 1,
+        "finished": 2
+    };
+
     menu = (
         <Menu>
             <Menu.Item key="0">
                 <a href="http://www.alipay.com/">Добавить в проект</a>
             </Menu.Item>
-            <Menu.Divider />
+            <Menu.Divider/>
             <Menu.Item key="1">
                 <a href="http://www.taobao.com/">Назначить руководителем</a>
             </Menu.Item>
-            <Menu.Divider />
+            <Menu.Divider/>
             <Menu.Item key="3">Перейти в настройки</Menu.Item>
-            <Menu.Divider />
+            <Menu.Divider/>
             <Menu.Item key="4">Завершить проект</Menu.Item>
         </Menu>
     );
@@ -71,19 +80,20 @@ class Projects extends React.Component {
         {
             dataIndex: 'avatar',
             key: 'avatar',
-            render: (text, record) => <Link to={Path.DASHBOARD} onClick={() => {
-                const {userActions, projectData: {projects}} = this.props;
-                const project = projects.find((element, index, array) => {
-                    const {project} = element;
-                    if (project.id === record.projectId) {
-                        putStorageItem(chosenProject, project.id);
-                        return project;
+            render: (text, record) => <Link to={`/dashboard/project/id=${record.projectId}?title=${record.projectName}`} onClick={() => {
+                const {chooseProject, projectData: {projects}} = this.props;
+                const primaryProject = projects.find((element, index, array) => {
+                    const {primaryProject} = element;
+                    if (primaryProject.id === record.projectId) {
+                        putStorageItem(chosenProject, primaryProject.id);
+                        return primaryProject;
                     }
                 });
 
-                userActions.chooseProject(project);
+                message.info('Вы выбрали проект ' + record.projectName);
+                chooseProject(primaryProject);
             }}>
-                <Avatar size='large'/></Link>
+                <Avatar size='large' shape='square'/></Link>
         }, {
             title: 'Название',
             dataIndex: 'projectName',
@@ -105,20 +115,26 @@ class Projects extends React.Component {
             title: 'Руководитель проекта',
             dataIndex: 'projectLead',
             key: 'projectLead',
-        },{
+            render: (text, record) => (
+                <span>
+                    <Link to={`/dashboard/profile/${record.projectLead.id}`}
+                          onClick={this.handleProfileChange}><Avatar size='small'/> {record.projectLead.name}
+                    </Link>
+                </span>
+            )
+        }, {
             title: 'Статус проекта',
             dataIndex: 'projectStatus',
-            render:()=>(
-                <span><Badge status="processing" />В разработке </span>
+            render: () => (
+                <span><Badge status="processing"/>В разработке </span>
             )
         }, {
             dataIndex: 'actions',
             key: 'actions',
             render: (text, record) => (
-
-                <Dropdown overlay={this.menu}  trigger={['click']}>
-                    <Button style={{ marginLeft: 8 }}>
-                        <Icon type="down" />
+                <Dropdown overlay={this.menu} trigger={['click']}>
+                    <Button style={{marginLeft: 8}}>
+                        <Icon type="down"/>
                     </Button>
                 </Dropdown>
             )
@@ -126,15 +142,9 @@ class Projects extends React.Component {
     ];
 
     componentWillMount() {
-        const {projectData: {isFetched}, projectActions} = this.props;
-        if (!isFetched && getStorageItem(tokenHeader)) {
-            projectActions.fetchProjectData(this.state);
-        }
-    }
-
-    componentWillReceiveProps(props) {
-        const {projectData: {isFetched, isLoading, user}, projectActions, isLoadingUserData} = props;
-        if (!isFetched && !isLoading && user.tokenStatus === Status.VALID) {
+        const {projectData: {isFetched, isLoading}, projectActions} = this.props;
+        if (!isFetched && !isLoading && getStorageItem(tokenHeader)) {
+            this.state.fetchTableType = this.fetchTableType.available;
             projectActions.fetchProjectData(this.state);
         }
     }
@@ -154,10 +164,42 @@ class Projects extends React.Component {
         projectActions.fetchProjectData(this.state);
     };
 
+    handleTabChange = (key) => {
+
+        console.log(key);
+        const {projectActions} = this.props;
+        if (parseInt(key) === 0) {
+            this.state.fetchTableType = this.fetchTableType.available;
+            projectActions.fetchProjectData(this.state);
+        }
+        if (parseInt(key) === 1) {
+            this.state.fetchTableType = this.fetchTableType.mine;
+            projectActions.fetchProjectData(this.state);
+        }
+        if (parseInt(key) === 2) {
+            this.state.fetchTableType = this.fetchTableType.finished;
+            projectActions.fetchProjectData(this.state);
+        }
+    };
+
+    handleProfileChange = () => {
+
+    }
+
+    renderTable = (projects, totalPages, isLoading, {pageSize, current}) => (
+        <Table columns={this.columns}
+               dataSource={setData(projects)}
+               onChange={this.handlePaginationChange}
+               pagination={{pageSize: pageSize, total: totalPages, defaultCurrent: current}}
+               loading={isLoading}
+        />
+    );
+
+
     render() {
         const {projectData: {isLoading, projects, totalPages}} = this.props;
-        const {pageSize, current} = this.state;
 
+        console.log(projects);
         return (
             <div className="project-list">
 
@@ -165,25 +207,15 @@ class Projects extends React.Component {
                     <div className='filter-panel'>
                         <FetchSearch placeHolder="Поиск" onChange={this.handleSearchChange}/>
                     </div>
-                    <Tabs tabPosition='right'>
-                        <Tabs.TabPane tab="Доступные проекты" key="1">
-                            {isLoading ? <Spin tip="Loading...">
-                                    <Table columns={this.columns}
-                                           dataSource={setData(projects)}
-                                           onChange={this.handlePaginationChange}
-                                           pagination={{pageSize: pageSize, total: totalPages, defaultCurrent: current}}
-                                    />
-                                </Spin> :
-                                <Table columns={this.columns}
-                                       dataSource={setData(projects)}
-                                       onChange={this.handlePaginationChange}
-                                       pagination={{pageSize: pageSize, total: totalPages, defaultCurrent: current}}
-
-                                />
-                            }
+                    <Tabs tabPosition='right' onChange={this.handleTabChange}>
+                        <Tabs.TabPane tab="Доступные проекты" key="0">
+                            {this.renderTable(projects, totalPages, isLoading, this.state)}
                         </Tabs.TabPane>
-                        <Tabs.TabPane tab="Архивные" key="2">Content of Tab Pane 2</Tabs.TabPane>
-                        <Tabs.TabPane tab="Мои" key="3">Content of Tab Pane 3</Tabs.TabPane>
+                        <Tabs.TabPane tab="Мои" key="1">
+                            {this.renderTable(projects, totalPages, isLoading, this.state)}
+                        </Tabs.TabPane>
+                        <Tabs.TabPane tab="Завершенные"
+                                      key="2">{this.renderTable(projects, totalPages, isLoading, this.state)}</Tabs.TabPane>
                     </Tabs>
                 </Card>
             </div>
@@ -193,7 +225,6 @@ class Projects extends React.Component {
 
 Projects.propTypes = {
     projectData: PropTypes.object.isRequired,
-    isLoadingUserData: PropTypes.bool.isRequired,
     userActions: PropTypes.object
 };
 
@@ -205,7 +236,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        projectActions: bindActionCreators(projectAction, dispatch)
+        projectActions: bindActionCreators(projectAction, dispatch),
+        chooseProject: bindActionCreators(chooseProject, dispatch)
     }
 }
 

@@ -3,6 +3,7 @@ import {Card, Row, Col, Input, Form, Select, Button, Avatar, Icon} from 'antd';
 import UploadAvatar from "../commoncomponents/UploadAvatar";
 import SaveComponent from "../commoncomponents/SaveComponent";
 import * as projectAction from "../../../actions/project/ProjectAction";
+import {saveProject} from "../../../actions/reduxCrud/SaveActions";
 
 const FormItem = Form.Item;
 
@@ -90,9 +91,8 @@ class ProjectCreation extends React.Component {
 
                                     <SaveComponent
                                         buttonText='Создать проект'
-                                        iconType='save'
                                         form={this.props.form}
-                                        activeAction={projectAction}
+                                        affix={saveProject}
                                         history={history}
                                     />
 

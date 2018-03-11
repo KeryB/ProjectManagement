@@ -8,13 +8,13 @@ const initialState = {
     isFetched: false,
     isLoading: false,
     projectData: {
-        countProjects: 0
+        countProjects: 0,
+        chosenProject: null
     },
     user: {
         role: Roles.NOT_AUTH,
         tokenStatus: Status.NOT_AUTH
     },
-    chosenProject: {}
 };
 export default (state = initialState, action = {}) => {
     switch (action.type) {
@@ -36,10 +36,6 @@ export default (state = initialState, action = {}) => {
                 isLoading: true,
             };
         case Types.FETCH_USER_DATA_FAILED:
-            // if(getStorageItem(tokenHeader)){
-            //     const {user} = state;
-            //     user.tokenStatus = Status.VALID
-            // }
             if (action.payload.status === 19) {
                 const {user} = state;
                 user.tokenStatus = Status.REFRESH_TOKEN_REQUIRED;
@@ -49,20 +45,21 @@ export default (state = initialState, action = {}) => {
                 isLoading: false,
             };
         case Types.FETCH_USER_DATA_SUCCESS:
-            console.log(action);
+            console.log(action)
+            const payload = action.payload[0];
             return {
                 ...state,
                 isLoading: false,
                 isFetched: true,
                 projectData: {
-                    countProjects: action.payload[0].countProjects
+                    countProjects: payload.paging.totalElements,
+                    chosenProject: payload.chosenProject
                 },
                 user: {
                     ...action.payload[0].user,
                     tokenStatus: Status.VALID,
                     role: action.role
                 },
-                chosenProject: {...action.payload[0].chosenProject}
             };
         case Types.UPDATE_TOKEN_REQUEST:
             return {
@@ -85,7 +82,9 @@ export default (state = initialState, action = {}) => {
         case Types.CHOSEN_PROJECT:
             return {
                 ...state,
-                chosenProject: action.payload
+                projectData:{
+                    chosenProject:action.payload
+                }
             };
         default:
             return state;

@@ -8,21 +8,19 @@ import {isEmpty} from "lodash";
 const MenuItemGroup = Menu.ItemGroup;
 const SubMenu = Menu.SubMenu;
 
-const projectMenuItemGroup = ({project}, countProjects) => (
-    <Dropdown overlay={menu(countProjects)} trigger={['click']}>
-        <a className="ant-dropdown-link">
-            <Badge dot> <Avatar shape="square" size='large' className='project-avatar'/></Badge>
-            <span className='span5-left'>
-                {isEmpty(project) ? <span>Проект не выбран</span> : <span>{project.title}</span>}
-            </span>
-            <Icon type="down"/>
-        </a>
-    </Dropdown>
+const projectMenuItemGroup = (chosenProject) => (
 
+    <span>
+        <Badge dot> <Avatar shape="square" size='large' className='project-avatar'/></Badge>
+        <span className='span5-left'>
+            {chosenProject !== null ? <span>{chosenProject.primaryProject.title}</span> :
+                <span>Проект не выбран</span>}
+                    </span>
+    </span>
 
 );
 
-const menu =(countProjects)=> (
+const menu = (countProjects) => (
     <Menu>
         <Menu.Item>
             <Link to={Path.CREATE_PROJECT}>
@@ -31,17 +29,17 @@ const menu =(countProjects)=> (
         </Menu.Item>
         <Menu.Divider/>
         <Menu.Item>
-            <Link to={Path.PROJECTS} className = 'show-all-projects'>
+            <Link to={Path.PROJECTS} className='show-all-projects'>
                 <Icon type="bars"/> Показать все проекты
-                <Badge style={{marginLeft:'10px'}} count={countProjects}/>
+                <Badge style={{marginLeft: '10px'}} count={countProjects}/>
             </Link>
         </Menu.Item>
         <Menu.Divider/>
         <Menu.Item>
-            <Link to={Path.ADD_PROJECT}><Icon type="user-add"/> Пригласить в проект</Link>
+            <Link to={Path.ADD_PROJECT}><Icon type="user-add"/> Добавить в проект </Link>
         </Menu.Item>
         <Menu.Item>
-            <Link to={Path.ADD_PROJECT}><Icon type="area-chart" /> Посмотреть статистику</Link>
+            <Link to={Path.ADD_PROJECT}><Icon type="area-chart"/> Текущий проект</Link>
         </Menu.Item>
     </Menu>
 );
@@ -54,7 +52,8 @@ class LeftBar extends React.Component {
 
     render() {
 
-        const {chosenProject, projectData:{countProjects}} = this.props;
+        const {projectData: {countProjects, chosenProject}} = this.props;
+        console.log(this.props);
 
         return (
             <Col span={4} className='left-bar'>
@@ -62,11 +61,29 @@ class LeftBar extends React.Component {
                     onClick={this.handleClick}
                     defaultSelectedKeys={['1']}
                     defaultOpenKeys={['sub1']}
-                    mode="vertical"
+                    mode="inline"
                 >
-                    <Menu.Item className='project-dropdown'>
-                        {projectMenuItemGroup(chosenProject, countProjects)}
-                    </Menu.Item>
+                    <SubMenu key="sub1" title={projectMenuItemGroup(chosenProject, countProjects)} className='project-profile'>
+                        <Menu.Divider/>
+                        <Menu.Item>
+                            <Link to={Path.CREATE_PROJECT}>
+                                <Icon type="right-circle-o"/> Создать проект
+                            </Link>
+                        </Menu.Item>
+                        <Menu.Item>
+                            <Link to={Path.PROJECTS} className='show-all-projects'>
+                                <Icon type="bars"/> Показать все
+                                <Badge style={{marginLeft: '10px', backgroundColor: '#fff', color: '#999', boxShadow: '0 0 0 1px #d9d9d9 inset'}} count={countProjects}/>
+                            </Link>
+                        </Menu.Item>
+                        <Menu.Item>
+                            <Link to={Path.ADD_PROJECT}><Icon type="user-add"/> Добавить в проект </Link>
+                        </Menu.Item>
+                        {chosenProject != null ?
+                        <Menu.Item>
+                           <Link to={`/dashboard/project/id=${chosenProject.primaryProject.id}`}><Icon type="area-chart"/> Текущий проект</Link>
+                        </Menu.Item> : undefined}
+                    </SubMenu>
                     <Menu.Divider/>
                     <Menu.Item key="1">
                         <a href="#">
@@ -112,7 +129,6 @@ class LeftBar extends React.Component {
 }
 
 LeftBar.propTypes = {
-    chosenProject: PropTypes.object.isRequired,
-    projectData:PropTypes.object.isRequired
+    projectData: PropTypes.object.isRequired
 };
 export default LeftBar;

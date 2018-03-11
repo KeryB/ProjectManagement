@@ -1,65 +1,75 @@
 import * as React from "react";
-import {List, Avatar, Button, Spin} from 'antd';
+import {List, Avatar, Button, Spin, Badge} from 'antd';
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
 import * as projectAction from "../../../actions/project/ProjectAction";
 import PropTypes from "prop-types";
-
-const fakeDataUrl = 'https://randomuser.me/api/?results=5&inc=name,gender,email,nat&noinfo';
+import moment from "moment/moment";
+import {Link} from "react-router-dom";
+import * as Path from '../../../utils/RoutePath';
+import {isEmpty} from "lodash";
 
 class FetchList extends React.Component {
 
     static = {
-        projectData: PropTypes.object.isRequired
+        projectData: PropTypes.object.isRequired,
+        pageable: PropTypes.object.isRequired,
     };
 
     state = {
         loading: true,
         loadingMore: false,
         showLoadingMore: true,
+        pageable: {},
         data: [],
     }
 
     componentDidMount() {
-        console.log(this.props);
-        this.getData((res) => {
+        const {pageable} = this.props;
+        let {loading, data} = this.state;
+
+        this.state.pageable = pageable;
+        this.getData(pageable, (resp) => {
             this.setState({
                 loading: false,
-                data: res.results
-            });
+                data: resp
+            })
         });
     }
 
-    getData = (callback) => {
+    getData = (pageable, successCallback) => {
         const {projectActions} = this.props;
-        projectActions.fetchProjects(successCallback);
-    }
+        // this.state.pageable.userId = 5;
+        console.log(this.state.pageable);
+        projectActions.fetchProjects(pageable, successCallback)
+    };
+
     onLoadMore = () => {
+        let {pageable} = this.state;
         this.setState({
             loadingMore: true,
         });
-        this.getData((res) => {
-            const data = this.state.data.concat(res.results);
-            this.setState({
-                data,
-                loadingMore: false,
-            }, () => {
-                // Resetting window's offsetTop so as to display react-virtualized demo underfloor.
-                // In real scene, you can using public method of react-virtualized:
-                // https://stackoverflow.com/questions/46700726/how-to-use-public-method-updateposition-of-react-virtualized
-                window.dispatchEvent(new Event('resize'));
-            });
+        pageable.current++;
+        this.getData(pageable, (res) => {
+            const data = this.state.data.concat(res);
+
+            this.state.data = data;
+            this.state.loadingMore = false;
         });
     }
 
     render() {
         const {loading, loadingMore, showLoadingMore, data} = this.state;
+        const {projectData: {projects}} = this.props;
+
         const loadMore = showLoadingMore ? (
             <div style={{textAlign: 'center', marginTop: 12, height: 32, lineHeight: '32px'}}>
                 {loadingMore && <Spin/>}
-                {!loadingMore && <Button onClick={this.onLoadMore}>loading more</Button>}
+                {!loadingMore && !isEmpty(projects) ?
+                    <Button onClick={this.onLoadMore}>Загрузить еще</Button> : undefined}
             </div>
         ) : null;
+
         return (
             <List
                 className="demo-loadmore-list"
@@ -68,13 +78,13 @@ class FetchList extends React.Component {
                 loadMore={loadMore}
                 dataSource={data}
                 renderItem={item => (
-                    <List.Item actions={[<a>edit</a>, <a>more</a>]}>
+                    <List.Item actions={[<span>{moment(item.creationDate).format('DD/MM/YYYY')}</span>]}>
                         <List.Item.Meta
-                            avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"/>}
-                            title={<a href="https://ant.design">{item.name.last}</a>}
-                            description="Ant Design, a design language for background applications, is refined by Ant UED Team"
+                            avatar={<Link to={Path.ROOT}><Badge status="processing"
+                                                                text={<Avatar shape="square"/>}/></Link>}
+                            title={<a href="https://ant.design">{item.title}</a>}
+                            description={item.description}
                         />
-                        <div>content</div>
                     </List.Item>
                 )}
             />
@@ -84,7 +94,7 @@ class FetchList extends React.Component {
 
 function mapStateToProps(state) {
     return {
-        projectData: state.project
+        projectData: state.profile
     }
 }
 

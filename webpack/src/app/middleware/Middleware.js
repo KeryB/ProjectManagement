@@ -54,7 +54,6 @@ const middleware = store => next => action => {
             if (ignoreErrors) {
                 return;
             }
-            console.log(error);
 
             switch (error.status) {
                 case HttpStatus.INVALID_TOKEN_HEADER:

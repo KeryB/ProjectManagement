@@ -78,8 +78,7 @@ public class ProjectController {
             return RestResponse.error(ErrorStatus.INVALID_TOKEN_HEADER, ErrorMessage.INVALID_TOKEN_HEADER);
         }
 
-        User user = userService.findById(token.getId());
-        List<Project> projects = projectService.findProjects(user.getId(), filterRequestDto);
+        List<Project> projects = projectService.findProjects(filterRequestDto.getUserId(), filterRequestDto);
         return RestResponse.ok(projects);
     }
 

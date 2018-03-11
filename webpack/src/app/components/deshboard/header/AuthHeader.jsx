@@ -4,13 +4,13 @@ import {Menu, Icon, Avatar, Dropdown} from 'antd';
 import {Link} from "react-router-dom";
 import * as Path from '../../../utils/RoutePath'
 
-const profileMenu = (logout) => (
+const profileMenu = (logout, user) => (
     <Menu>
         <Menu.Item key="0">
-            <Link to={Path.PROFILE}><Icon type="idcard"/> Профиль</Link>
+            <Link to={`/dashboard/profile/${user.id}`}><Icon type="idcard"/> Профиль</Link>
         </Menu.Item>
         <Menu.Item key="1">
-            <a><Icon type="setting"/> Настройки</a>
+            <Link to={Path.Settings}><Icon type="setting"/> Настройки</Link>
         </Menu.Item>
         <Menu.Divider/>
         <Menu.Item key="2">
@@ -38,7 +38,7 @@ class AuthHeader extends React.Component {
         const {user, logout} = this.props;
         return (
             <div>
-                <Dropdown overlay={profileMenu(logout)} trigger={['click']}>
+                <Dropdown overlay={profileMenu(logout, user)} trigger={['click']}>
                     <a className='float-right'>
                         <Avatar size='large'/>
                         <span className='user-name'>{user.firstName + ' ' + user.secondName}</span>

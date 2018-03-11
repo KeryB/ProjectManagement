@@ -6,7 +6,7 @@ import {api} from "../api/Api";
 import {METHODS_CALL} from "../../const/ActionTypes";
 import {saveAction} from "../reduxCrud/crudActions";
 
-const SAVE_PROJECT_PREFIX = 'PROJECT';
+export const SAVE_PROJECT_PREFIX = 'PROJECT';
 
 export const FETCH_PROJECTS_REQUEST = 'FETCH_PROJECTS_REQUEST';
 export const FETCH_PROJECTS_SUCCESS = 'FETCH_PROJECTS_SUCCESS';
@@ -20,11 +20,12 @@ export function fetchProjectData(data) {
     }
 }
 
-export function fetchProjects(data) {
+export function fetchProjects(data, successCallback) {
     return {
         type: API_CALL,
         actions: [FETCH_PROJECTS_REQUEST, FETCH_PROJECTS_SUCCESS, FETCH_PROJECTS_FAILED],
-        promise: api('/api/project/fetchProjects', Methods.POST, data)
+        promise: api('/api/project/fetchProjects', Methods.POST, data),
+        successCallback
     }
 }
 

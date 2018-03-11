@@ -8,6 +8,7 @@ import ru.process.platform.ProjectManagement.entity.user.User;
 import ru.process.platform.ProjectManagement.utils.JpaUtils;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Data
@@ -25,14 +26,20 @@ public class UserProject {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = JpaUtils.USER_PRIMARY_KEY)
     private User primaryUser;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = JpaUtils.PROJECT_PRIMARY_KEY)
     private Project primaryProject;
 
     @Enumerated(value = EnumType.STRING)
     private Permission permission;
+
+    private Date invitationDate;
+
+    private boolean lead = false;
+
+    private boolean owner = false;
 }
