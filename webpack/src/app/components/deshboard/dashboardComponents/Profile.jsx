@@ -9,33 +9,26 @@ import FetchList from "../commoncomponents/FetchList";
 import * as Path from '../../../utils/RoutePath';
 import {Link} from "react-router-dom";
 import {fetchUserProfile, toProfileUser} from "../../../actions/UserAction";
+import {TableType} from "../../../utils/table/TableUtils";
 
 const formItemLayout = {
     labelCol: {span: 3},
     wrapperCol: {offset: 8},
 };
 
-const showProjects = (projects) => (
-    projects.map((item, index) => (
-        <Card
-            cover={<Avatar shape="square"/>}
-            hoverable
-            style={{marginRight: '5px', height: '40px', width: '40px'}}
-        >
-        </Card>
-    ))
-);
-
 class Profile extends React.Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            fetchTableType: 0,
+            userId: 0
+        };
+    }
+
 
     static propTypes = {
         userData: PropTypes.object.isRequired,
-    };
-
-    state = {
-        current: 0,
-        pageSize: 8,
-        userId: 0
     };
 
     componentDidMount() {
@@ -43,8 +36,11 @@ class Profile extends React.Component {
         const userId = parseInt(params.id);
 
         if (this.checkOnEnemy(user, params)) {
-            this.state.userId = userId;
-            fetchUserProfile(this.state);
+            this.state({
+               userId: userId
+            }, ()=>{
+                fetchUserProfile(this.state);
+            });
         } else {
             toProfileUser(user);
         }
@@ -58,10 +54,27 @@ class Profile extends React.Component {
         return userId !== user.id;
     };
 
+    handleTabChange = (key) => {
+        let fetchTableType;
+        if (parseInt(key) === 0) {
+            fetchTableType = TableType.available;
+        }
+        if (parseInt(key) === 1) {
+            fetchTableType = TableType.mine;
+        }
+        if (parseInt(key) === 2) {
+            fetchTableType = TableType.finished;
+        }
 
-    profileComponent = (user, projectDat, isEnemy) => (
+        this.setState({
+            fetchTableType: fetchTableType
+        })
+    };
 
-        <Row>
+    profileComponent = (user, projectDat, isEnemy) => {
+        const {match: {params}} = this.props;
+
+        return (<Row>
             <Col span={9}>
                 <Card
                     hoverable
@@ -105,20 +118,24 @@ class Profile extends React.Component {
             </Col>
             <Divider type="horizontal"/>
             <h3>Проекты:</h3>
-            <Tabs defaultActiveKey="1">
+            <Tabs defaultActiveKey="1" onChange={this.handleTabChange}>
                 <Tabs.TabPane tab="Доступные проекты" key="1">
                     <div className='project-list'>
-                        <FetchList pageable={this.state}/>
+                        <FetchList userObject={params}/>
                     </div>
                 </Tabs.TabPane>
-                <Tabs.TabPane tab="Мои" key="2">Мои</Tabs.TabPane>
+                <Tabs.TabPane tab="Мои" key="2">
+                    <div>
+                        <FetchList userObject={params}/>
+                    </div>
+                </Tabs.TabPane>
                 <Tabs.TabPane tab="Завершенные" key="3">Завершенные</Tabs.TabPane>
             </Tabs>
-        </Row>
-    );
+        </Row>)
+    };
 
     render() {
-        const {profileData, projectData, userData, match:{params}} = this.props;
+        const {profileData, projectData, userData, match: {params}} = this.props;
         let user = null;
         if (profileData.user == null) {
             user = userData.user;
@@ -144,7 +161,8 @@ class Profile extends React.Component {
                         </Card>
                     </Col>
                     <Col span={8}>
-                        <Card title={(isEnemy ? name : 'Моя') + ' активность'} extra={<a href="#"><Icon type="setting"/></a>}>Card
+                        <Card title={(isEnemy ? name : 'Моя') + ' активность'}
+                              extra={<a href="#"><Icon type="setting"/></a>}>Card
                             content</Card>
                     </Col>
                 </Row>

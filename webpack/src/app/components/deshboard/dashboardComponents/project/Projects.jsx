@@ -15,6 +15,7 @@ import {chosenProject, tokenHeader} from "../../../../actions/api/Api";
 import FetchSearch from "../../commoncomponents/FetchSearch";
 import moment from "moment";
 import {chooseProject} from '../../../../actions/UserAction';
+import {TableType} from "../../../../utils/table/TableUtils";
 
 const setData = (projects) => {
     const data = [];
@@ -45,20 +46,12 @@ class Projects extends React.Component {
 
     constructor(props) {
         super(props);
-        this.changeableConunt = null;
+        this.state = {
+            current: 1,
+            pageSize: 20,
+            idFetched: false
+        };
     }
-
-    state = {
-        current: 1,
-        pageSize: 20,
-        idFetched: false
-    };
-
-    fetchTableType = {
-        "available": 0,
-        "mine": 1,
-        "finished": 2
-    };
 
     menu = (
         <Menu>
@@ -80,19 +73,20 @@ class Projects extends React.Component {
         {
             dataIndex: 'avatar',
             key: 'avatar',
-            render: (text, record) => <Link to={`/dashboard/project/id=${record.projectId}?title=${record.projectName}`} onClick={() => {
-                const {chooseProject, projectData: {projects}} = this.props;
-                const primaryProject = projects.find((element, index, array) => {
-                    const {primaryProject} = element;
-                    if (primaryProject.id === record.projectId) {
-                        putStorageItem(chosenProject, primaryProject.id);
-                        return primaryProject;
-                    }
-                });
+            render: (text, record) => <Link to={`/dashboard/project/id=${record.projectId}?title=${record.projectName}`}
+                                            onClick={() => {
+                                                const {chooseProject, projectData: {projects}} = this.props;
+                                                const primaryProject = projects.find((element, index, array) => {
+                                                    const {primaryProject} = element;
+                                                    if (primaryProject.id === record.projectId) {
+                                                        putStorageItem(chosenProject, primaryProject.id);
+                                                        return primaryProject;
+                                                    }
+                                                });
 
-                message.info('Вы выбрали проект ' + record.projectName);
-                chooseProject(primaryProject);
-            }}>
+                                                message.info('Вы выбрали проект ' + record.projectName);
+                                                chooseProject(primaryProject);
+                                            }}>
                 <Avatar size='large' shape='square'/></Link>
         }, {
             title: 'Название',
@@ -144,42 +138,58 @@ class Projects extends React.Component {
     componentWillMount() {
         const {projectData: {isFetched, isLoading}, projectActions} = this.props;
         if (!isFetched && !isLoading && getStorageItem(tokenHeader)) {
-            this.state.fetchTableType = this.fetchTableType.available;
-            projectActions.fetchProjectData(this.state);
+            this.setState({
+                fetchTableType: TableType.available
+            }, () => {
+                this.fetchData(this.state);
+            });
         }
     }
 
     handleSearchChange = (value) => {
         const {projectActions} = this.props;
-        this.state.projectName = value;
-        projectActions.fetchProjectData(this.state);
+        this.setState({
+            projectName: value
+        }, () => {
+            this.fetchData(this.state);
+        });
     };
 
     handlePaginationChange = (pageable) => {
         const {current, pageSize} = pageable;
         const {projectActions} = this.props;
 
-        this.state.current = current;
-        this.state.pageSize = pageSize;
-        projectActions.fetchProjectData(this.state);
+        this.setState({
+            current: current,
+            pageSize: pageSize
+        }, () => {
+            this.fetchData(this.state)
+        });
     };
 
     handleTabChange = (key) => {
+        let fetchTableType;
 
-        console.log(key);
-        const {projectActions} = this.props;
         if (parseInt(key) === 0) {
-            this.state.fetchTableType = this.fetchTableType.available;
-            projectActions.fetchProjectData(this.state);
+            fetchTableType = TableType.available;
         }
         if (parseInt(key) === 1) {
-            this.state.fetchTableType = this.fetchTableType.mine;
-            projectActions.fetchProjectData(this.state);
+            fetchTableType = TableType.mine;
         }
         if (parseInt(key) === 2) {
-            this.state.fetchTableType = this.fetchTableType.finished;
-            projectActions.fetchProjectData(this.state);
+            fetchTableType = TableType.finished;
         }
+
+        this.setState({
+            fetchTableType: fetchTableType
+        }, () => {
+            this.fetchData(this.state)
+        });
+    };
+
+    fetchData = (data) => {
+        const {projectActions} = this.props;
+        projectActions.fetchProjectData(data);
     };
 
     handleProfileChange = () => {

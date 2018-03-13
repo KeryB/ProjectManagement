@@ -8,39 +8,51 @@ import moment from "moment/moment";
 import {Link} from "react-router-dom";
 import * as Path from '../../../utils/RoutePath';
 import {isEmpty} from "lodash";
+import {dateFormat, toFormat} from "../../../utils/DateUtils";
 
 class FetchList extends React.Component {
 
-    static = {
-        projectData: PropTypes.object.isRequired,
-        pageable: PropTypes.object.isRequired,
-    };
-
-    state = {
-        loading: true,
-        loadingMore: false,
-        showLoadingMore: true,
-        pageable: {},
-        data: [],
+    constructor(props){
+        super(props);
+        this.state = {
+            loading: true,
+            loadingMore: false,
+            showLoadingMore: true,
+            pageable: {
+                current: 0,
+                pageSize: 8,
+                userId: 0
+            },
+            data: [],
+        }
     }
 
-    componentDidMount() {
-        const {pageable} = this.props;
-        let {loading, data} = this.state;
+    static = {
+        projectData: PropTypes.object.isRequired,
+        userObject: PropTypes.object.isRequired,
+    };
 
-        this.state.pageable = pageable;
-        this.getData(pageable, (resp) => {
-            this.setState({
-                loading: false,
-                data: resp
-            })
+    componentDidMount() {
+        const {userObject} = this.props;
+
+        this.setState({
+            pageable:{
+                ...this.state.pageable,
+                userId: parseInt(userObject.id)
+            }
+        }, () => {
+            console.log(this.state);
+            this.getData(this.state.pageable, (resp) => {
+                this.setState({
+                    loading: false,
+                    data: resp
+                })
+            });
         });
     }
 
     getData = (pageable, successCallback) => {
         const {projectActions} = this.props;
-        // this.state.pageable.userId = 5;
-        console.log(this.state.pageable);
         projectActions.fetchProjects(pageable, successCallback)
     };
 
@@ -52,9 +64,10 @@ class FetchList extends React.Component {
         pageable.current++;
         this.getData(pageable, (res) => {
             const data = this.state.data.concat(res);
-
-            this.state.data = data;
-            this.state.loadingMore = false;
+            this.setState({
+                data: data,
+                loadingMore: false
+            });
         });
     }
 
@@ -78,7 +91,7 @@ class FetchList extends React.Component {
                 loadMore={loadMore}
                 dataSource={data}
                 renderItem={item => (
-                    <List.Item actions={[<span>{moment(item.creationDate).format('DD/MM/YYYY')}</span>]}>
+                    <List.Item actions={[<span>{toFormat(item.creationDate)}</span>]}>
                         <List.Item.Meta
                             avatar={<Link to={Path.ROOT}><Badge status="processing"
                                                                 text={<Avatar shape="square"/>}/></Link>}
