@@ -45,7 +45,7 @@ export default (state = initialState, action = {}) => {
                 isLoading: false,
             };
         case Types.FETCH_USER_DATA_SUCCESS:
-            console.log(action)
+            console.log(...action);
             const payload = action.payload[0];
             return {
                 ...state,

@@ -58,6 +58,10 @@ class App extends React.Component {
         }
     }
 
+    componentDidMount(){
+        console.log(this.props)
+    }
+
 
     render() {
         const {userData: {user, isLoading, projectPermissions, tokenStatus}, location, history} = this.props;

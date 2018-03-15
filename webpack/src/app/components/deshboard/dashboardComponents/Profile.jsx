@@ -28,22 +28,24 @@ class Profile extends React.Component {
 
 
     static propTypes = {
-        userData: PropTypes.object.isRequired,
+        profileData: PropTypes.object.isRequired
     };
 
     componentDidMount() {
         const {userData: {user}, fetchUserProfile, toProfileUser, match: {params}} = this.props;
         const userId = parseInt(params.id);
+        console.log(this.props)
 
-        if (this.checkOnEnemy(user, params)) {
-            this.state({
-               userId: userId
-            }, ()=>{
-                fetchUserProfile(this.state);
-            });
-        } else {
-            toProfileUser(user);
-        }
+        // if (this.checkOnEnemy(user, params)) {
+        //     this.setState({
+        //         userId: userId
+        //     }, () => {
+        //         fetchUserProfile(this.state);
+        //     });
+        // } else {
+        //
+        //     toProfileUser(user);
+        // }
     }
 
     componentWillReceiveProps(props) {
@@ -120,13 +122,11 @@ class Profile extends React.Component {
             <h3>Проекты:</h3>
             <Tabs defaultActiveKey="1" onChange={this.handleTabChange}>
                 <Tabs.TabPane tab="Доступные проекты" key="1">
-                    <div className='project-list'>
-                        <FetchList userObject={params}/>
-                    </div>
+                    <FetchList userObject={this.state}/>
                 </Tabs.TabPane>
                 <Tabs.TabPane tab="Мои" key="2">
                     <div>
-                        <FetchList userObject={params}/>
+                        <FetchList userObject={this.state}/>
                     </div>
                 </Tabs.TabPane>
                 <Tabs.TabPane tab="Завершенные" key="3">Завершенные</Tabs.TabPane>
@@ -135,15 +135,13 @@ class Profile extends React.Component {
     };
 
     render() {
-        const {profileData, projectData, userData, match: {params}} = this.props;
-        let user = null;
-        if (profileData.user == null) {
-            user = userData.user;
-        } else {
-            user = profileData.user;
-        }
+        const {profileData:{user}} = this.props;
+        // if (profileData.user == null) {
+        //     user = userData.user;
+        // } else {
+        //     user = profileData.user;
+        // }
 
-        const isEnemy = this.checkOnEnemy(userData.user, params);
         const name = user.firstName + ' ' + user.secondName;
 
         return (
