@@ -14,4 +14,5 @@ public interface UserProjectRepository extends JpaRepository<UserProject, Intege
     int countAllByPrimaryUserId(int userId);
 
     UserProject findByPrimaryProjectIdAndPrimaryUserId (int projectId, int userId);
+
 }

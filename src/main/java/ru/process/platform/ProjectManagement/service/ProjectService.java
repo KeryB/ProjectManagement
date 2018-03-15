@@ -24,17 +24,21 @@ import java.util.List;
 @Service
 public class ProjectService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+
+    private final ProjectRepository projectRepository;
+
+    private final UserProjectRepository userProjectRepository;
+
+    private final SpecificationService specificationService;
 
     @Autowired
-    private ProjectRepository projectRepository;
-
-    @Autowired
-    private UserProjectRepository userProjectRepository;
-
-    @Autowired
-    private SpecificationService specificationService;
+    public ProjectService(SpecificationService specificationService, UserRepository userRepository, ProjectRepository projectRepository, UserProjectRepository userProjectRepository) {
+        this.specificationService = specificationService;
+        this.userRepository = userRepository;
+        this.projectRepository = projectRepository;
+        this.userProjectRepository = userProjectRepository;
+    }
 
     public UserProjectPermissionDto getProjectPermission(int userId, ProjectFilterRequestDto filter) {
         User user = userRepository.findOne(userId);
@@ -97,4 +101,11 @@ public class ProjectService {
 
         return projects.getContent();
     }
+
+//    @Transactional
+//    public void getProjectData(int projectId) {
+//        specificationService.getProjectLeadSpecification()
+//        userProjectRepository.find
+//    }
+
 }

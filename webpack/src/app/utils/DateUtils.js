@@ -1,5 +1,5 @@
-import moment from "moment/moment";
+import moment from "moment";
 
 export const toFormat = (element) => {
-    moment(element).format('DD-MM-YYYY')
+    return moment(element).format('DD-MM-YYYY')
 };

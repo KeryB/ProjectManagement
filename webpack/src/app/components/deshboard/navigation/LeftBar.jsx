@@ -36,10 +36,10 @@ const menu = (countProjects) => (
         </Menu.Item>
         <Menu.Divider/>
         <Menu.Item>
-            <Link to={Path.ADD_PROJECT}><Icon type="user-add"/> Добавить в проект </Link>
+            <Link to={Path.ADD_TO_PROJECT}><Icon type="user-add"/> Добавить в проект </Link>
         </Menu.Item>
         <Menu.Item>
-            <Link to={Path.ADD_PROJECT}><Icon type="area-chart"/> Текущий проект</Link>
+            <Link to={Path.ADD_TO_PROJECT}><Icon type="area-chart"/> Текущий проект</Link>
         </Menu.Item>
     </Menu>
 );
@@ -77,7 +77,7 @@ class LeftBar extends React.Component {
                             </Link>
                         </Menu.Item>
                         <Menu.Item>
-                            <Link to={Path.ADD_PROJECT}><Icon type="user-add"/> Добавить в проект </Link>
+                            <Link to={Path.ADD_TO_PROJECT}><Icon type="user-add"/> Добавить в проект </Link>
                         </Menu.Item>
                         {chosenProject != null ?
                         <Menu.Item>

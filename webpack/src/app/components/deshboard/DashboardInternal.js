@@ -22,6 +22,7 @@ class DashboardInternal extends React.Component {
                     <Route path={Path.PROFILE} render={(props)=>(<Profile {...props} userData={userData}/>)}/>
                     <Route path={Path.Settings} render={()=>(<UserSettings userData={userData}/>)}/>
                     <Route breadcrumbName="project:/id" path={Path.ACTUAL_PROJECT} render={()=>(<ActualProject projectData={projectData}/>)} />
+                    <Route path={Path.ADD_TO_PROJECT} component/>
                     <Route path={Path.CREATE_PROJECT} component={ProjectCreation}/>
                 </Switch>
             </DashBoard>
