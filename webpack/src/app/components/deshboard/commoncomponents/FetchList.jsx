@@ -12,7 +12,7 @@ import {dateFormat, toFormat} from "../../../utils/DateUtils";
 
 class FetchList extends React.Component {
 
-    constructor(props){
+    constructor(props) {
         super(props);
         this.state = {
             loading: true,
@@ -21,7 +21,8 @@ class FetchList extends React.Component {
             pageable: {
                 current: 0,
                 pageSize: 8,
-                userId: 0
+                userId: 0,
+                fetchTableType: 0
             },
             data: [],
         }
@@ -38,9 +39,10 @@ class FetchList extends React.Component {
         console.log(userObject);
 
         this.setState({
-            pageable:{
+            pageable: {
                 ...this.state.pageable,
-                userId: parseInt(userObject.id)
+                userId: userObject.id,
+                fetchTableType: userObject.fetchTableType
             }
         }, () => {
             console.log(this.state);
@@ -55,7 +57,7 @@ class FetchList extends React.Component {
 
     getData = (pageable, successCallback) => {
         const {projectActions} = this.props;
-        projectActions.fetchProjects(pageable, successCallback)
+        projectActions.fetchProjectsProfile(pageable, successCallback)
     };
 
     onLoadMore = () => {
@@ -71,7 +73,7 @@ class FetchList extends React.Component {
                 loadingMore: false
             });
         });
-    }
+    };
 
     render() {
         const {loading, loadingMore, showLoadingMore, data} = this.state;

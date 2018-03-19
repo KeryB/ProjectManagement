@@ -32,20 +32,19 @@ class Profile extends React.Component {
     };
 
     componentDidMount() {
-        const {userData: {user}, fetchUserProfile, toProfileUser, match: {params}} = this.props;
+        const {userData:{user}, match: {params}, toProfileUser, fetchUserProfile} = this.props;
         const userId = parseInt(params.id);
-        console.log(this.props)
 
-        // if (this.checkOnEnemy(user, params)) {
-        //     this.setState({
-        //         userId: userId
-        //     }, () => {
-        //         fetchUserProfile(this.state);
-        //     });
-        // } else {
-        //
-        //     toProfileUser(user);
-        // }
+        this.setState({
+            userId: userId
+        }, () => {
+            if (this.checkOnEnemy(user, params)) {
+                fetchUserProfile(this.state);
+            } else {
+                toProfileUser(user);
+            }
+        });
+
     }
 
     componentWillReceiveProps(props) {
@@ -73,8 +72,9 @@ class Profile extends React.Component {
         })
     };
 
-    profileComponent = (user, projectDat, isEnemy) => {
-        const {match: {params}} = this.props;
+    profileComponent = (userdata) => {
+        const {match:{params}, userData:{user}} = this.props;
+        const isEnemy = this.checkOnEnemy(user, params);
 
         return (<Row>
             <Col span={9}>
@@ -96,25 +96,25 @@ class Profile extends React.Component {
                         label="Nickname"
                     >
                         <span
-                            className="ant-form-text">{isEmpty(user.nickName) ? 'Поле не заполнено' : user.nickName}</span>
+                            className="ant-form-text">{isEmpty(userdata.nickName) ? 'Поле не заполнено' : userdata.nickName}</span>
                     </Form.Item>
                     <Form.Item
                         {...formItemLayout}
                         label="Имя и Фамилия"
                     >
-                        <span className="ant-form-text">{user.firstName + ' ' + user.secondName}</span>
+                        <span className="ant-form-text">{userdata.firstName + ' ' + userdata.secondName}</span>
                     </Form.Item>
                     <Form.Item
                         {...formItemLayout}
                         label="Email"
                     >
-                        <span className="ant-form-text">{user.email}</span>
+                        <span className="ant-form-text">{userdata.email}</span>
                     </Form.Item>
                     <Form.Item
                         {...formItemLayout}
                         label="Дата Регистрации"
                     >
-                        <span className="ant-form-text">{moment(user.creationDate).format('LL')}</span>
+                        <span className="ant-form-text">{moment(userdata.creationDate).format('LL')}</span>
                     </Form.Item>
                 </Form>
             </Col>
@@ -135,35 +135,38 @@ class Profile extends React.Component {
     };
 
     render() {
-        const {profileData:{user}} = this.props;
-        // if (profileData.user == null) {
-        //     user = userData.user;
-        // } else {
-        //     user = profileData.user;
-        // }
-
-        const name = user.firstName + ' ' + user.secondName;
+        const {profileData:{user}, match:{params}} = this.props;
+        let isEnemy = false;
+        let name;
+        if(user != null){
+            isEnemy = this.checkOnEnemy(user, params);
+            name = user.firstName + ' ' + user.secondName;
+        }
 
         return (
             <div className='profile'>
-                <div className='header-profile'>
-                    <h2>
-                        Профиль: {name}
-                    </h2>
-                </div>
+                { user == null ? <Spin/> :
+                    <div>
+                        <div className='header-profile'>
+                            <h2>
+                                Профиль: {name}
+                            </h2>
+                        </div>
 
-                <Row gutter={16} style={{paddingTop: '20px'}}>
-                    <Col span={16}>
-                        <Card>
-                            {this.profileComponent(user, projectData, isEnemy)}
-                        </Card>
-                    </Col>
-                    <Col span={8}>
-                        <Card title={(isEnemy ? name : 'Моя') + ' активность'}
-                              extra={<a href="#"><Icon type="setting"/></a>}>Card
-                            content</Card>
-                    </Col>
-                </Row>
+                        <Row gutter={16} style={{paddingTop: '20px'}}>
+                            <Col span={16}>
+                                <Card>
+                                    {this.profileComponent(user, isEnemy)}
+                                </Card>
+                            </Col>
+                            <Col span={8}>
+                                <Card title={(isEnemy ? name : 'Моя') + ' активность'}
+                                      extra={<a href="#"><Icon type="setting"/></a>}>Card
+                                    content</Card>
+                            </Col>
+                        </Row>
+                    </div>
+                }
             </div>
         )
     }
@@ -172,6 +175,7 @@ class Profile extends React.Component {
 function mapStateToProps(state) {
     return {
         profileData: state.profile,
+        userData: state.user
     }
 }
 

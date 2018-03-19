@@ -3,6 +3,8 @@ import * as Types from "../const/ActionTypes";
 import * as Methods from "../const/http/HttpMethods";
 import {API_AUTH_UPDATE_TOKEN, API_USER_FETCH} from "../const/ApiPath";
 import {METHODS_CALL} from "../const/ActionTypes";
+import {PROJECT_PREFIX} from "./project/ProjectAction";
+import {fetchByIdAction} from "./reduxCrud/crudActions";
 
 export const API_USER = '/api/user';
 
@@ -11,6 +13,9 @@ export const FETCH_USER_PROFILE_SUCCESS = 'FETCH_USER_PROFILE_SUCCESS';
 export const FETCH_USER_PROFILE_FAILED = 'FETCH_USER_PROFILE_FAILED';
 
 export const TO_PROFILE_USER = 'TO_PROFILE_USER';
+
+export const USER_PREFIX = 'USER';
+export const USER_AFFIX = 'USERS';
 
 export function makeAuth(path, data, successCallback, errorCallback) {
     return {
@@ -57,7 +62,7 @@ export function chooseProject(data) {
 export function fetchUserProfile(data) {
     return {
         type: Types.API_CALL,
-        actions:[FETCH_USER_PROFILE_REQUEST, FETCH_USER_PROFILE_SUCCESS, FETCH_USER_PROFILE_FAILED],
+        actions: [FETCH_USER_PROFILE_REQUEST, FETCH_USER_PROFILE_SUCCESS, FETCH_USER_PROFILE_FAILED],
         promise: api(API_USER + '/fetchUserProfile', Methods.POST, data),
     }
 }
@@ -68,4 +73,7 @@ export function toProfileUser(data) {
         action: TO_PROFILE_USER,
         object: data
     }
+}
+export function fetchUsersByProjectId(data) {
+    return fetchByIdAction(USER_AFFIX, PROJECT_PREFIX, "/api/user/fetchUsers", data)
 }

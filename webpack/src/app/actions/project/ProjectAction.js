@@ -4,9 +4,10 @@ import {API_PROJECT_FETCH_DATA} from "../../const/ApiPath";
 import {API_CALL} from "../../const/ActionTypes";
 import {api} from "../api/Api";
 import {METHODS_CALL} from "../../const/ActionTypes";
-import {saveAction} from "../reduxCrud/crudActions";
+import {fetchByIdAction, saveAction} from "../reduxCrud/crudActions";
+import {USER_PREFIX} from "../UserAction";
 
-export const SAVE_PROJECT_PREFIX = 'PROJECT';
+export const PROJECT_PREFIX = 'PROJECT';
 
 export const FETCH_PROJECTS_REQUEST = 'FETCH_PROJECTS_REQUEST';
 export const FETCH_PROJECTS_SUCCESS = 'FETCH_PROJECTS_SUCCESS';
@@ -20,15 +21,19 @@ export function fetchProjectData(data) {
     }
 }
 
-export function fetchProjects(data, successCallback) {
+export function fetchProjectsProfile(data, successCallback) {
     return {
         type: API_CALL,
         actions: [FETCH_PROJECTS_REQUEST, FETCH_PROJECTS_SUCCESS, FETCH_PROJECTS_FAILED],
-        promise: api('/api/project/fetchProjects', Methods.POST, data),
+        promise: api('/api/project/fetchProjectsProfile', Methods.POST, data),
         successCallback
     }
 }
 
 export function saveProject(data, successCallback, errorCallback) {
-    return saveAction(SAVE_PROJECT_PREFIX, "/api/project/saveProject", {data, successCallback, errorCallback})
+    return saveAction(PROJECT_PREFIX, "/api/project/saveProject", {data, successCallback, errorCallback})
+}
+
+export function fetchProjectsByUserId() {
+    return fetchByIdAction(PROJECT_PREFIX, USER_PREFIX, "/api/project/fetchProjects")
 }

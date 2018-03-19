@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.process.platform.ProjectManagement.dto.request.RegistrationRequestDto;
 import ru.process.platform.ProjectManagement.dto.response.UserProjectPermissionDto;
+import ru.process.platform.ProjectManagement.entity.UserProject;
 import ru.process.platform.ProjectManagement.entity.project.Project;
 import ru.process.platform.ProjectManagement.entity.user.User;
 import ru.process.platform.ProjectManagement.entity.user.UserRole;
@@ -17,8 +18,10 @@ import ru.process.platform.ProjectManagement.repository.jdbcTemplate.Paging;
 import ru.process.platform.ProjectManagement.utils.error.ErrorMessage;
 import ru.process.platform.ProjectManagement.utils.error.ErrorStatus;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -103,8 +106,20 @@ public class UserService {
     }
 
     public User getUserProfile(int userId) {
-
         User user = userRepository.findOne(userId);
         return user;
+    }
+
+    public List<User> findUsersInProject(Integer projectId) {
+        List<User> users = new ArrayList<>();
+
+        if(projectId != null) {
+            users = userProjectRepository.findByPrimaryProjectId(projectId)
+                    .stream()
+                    .map(UserProject::getPrimaryUser)
+                    .collect(Collectors.toList());
+        }
+
+        return users;
     }
 }

@@ -213,7 +213,7 @@ module.exports = function (env) {
                     },
                 },
                 {
-                    test: /\.less$/,
+                    test: /\.(css|less)$/,
                     use:  cssLoader,
                 },
                 {

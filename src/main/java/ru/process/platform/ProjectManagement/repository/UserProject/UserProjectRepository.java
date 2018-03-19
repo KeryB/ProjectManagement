@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import ru.process.platform.ProjectManagement.entity.UserProject;
 
+import java.util.List;
+
 
 public interface UserProjectRepository extends JpaRepository<UserProject, Integer>, JpaSpecificationExecutor<UserProject> {
 
@@ -15,4 +17,8 @@ public interface UserProjectRepository extends JpaRepository<UserProject, Intege
 
     UserProject findByPrimaryProjectIdAndPrimaryUserId (int projectId, int userId);
 
+    //todo Сделать с учетом роли в проекте!!
+    List<UserProject> findByPrimaryUserId(int userId);
+
+    List<UserProject> findByPrimaryProjectId(int projectId);
 }

@@ -53,7 +53,6 @@ class LeftBar extends React.Component {
     render() {
 
         const {projectData: {countProjects, chosenProject}} = this.props;
-        console.log(this.props);
 
         return (
             <Col span={4} className='left-bar'>
@@ -104,11 +103,23 @@ class LeftBar extends React.Component {
                         </a>
                     </Menu.Item>
                     <Menu.Item key="5">
-                        <a href="#">
+                        <Link to={Path.TASK_PROJECT_LIST}>
                             <Icon type="profile"/>
                             <span>Список задач</span>
-                        </a>
+                        </Link>
                     </Menu.Item>
+                    <SubMenu key="sub2" title={<span><Icon type="profile"/>Задачи</span>}>
+                        <Menu.Item>
+                            <Link to={Path.TASK_PROJECT_LIST}>
+                                <Icon type="right-circle-o"/> Задачи
+                            </Link>
+                        </Menu.Item>
+                        <Menu.Item>
+                            <Link to={Path.TASK_PROJECT_LIST}>
+                                <Icon type="right-circle-o"/> Задачи по всем проектам
+                            </Link>
+                        </Menu.Item>
+                    </SubMenu>
                     <Menu.Item key="6">
                         <a href="#">
                             <Icon type="file"/>

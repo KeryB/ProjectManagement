@@ -50,13 +50,12 @@ class FetchSearch extends React.Component {
         this.props.onChange(value);
     };
 
-    handleChangeState=()=>{
+    handleChangeState = () => {
         this.setState({value: ''});
-
     };
 
     render() {
-        const {autoTimeout, placeHolder} = this.props;
+        const {placeHolder} = this.props;
         const {isLoading, value} = this.state;
         const suffix = value ? <Icon type="close-circle" onClick={this.handleChange}/> :
             <Icon type="search"/>;

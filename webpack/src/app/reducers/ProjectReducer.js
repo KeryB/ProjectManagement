@@ -1,6 +1,5 @@
-import * as Status from '../utils/AuthStatus';
 import * as Types from "../const/ActionTypes";
-import {SAVE_PROJECT_PREFIX} from "../actions/project/ProjectAction";
+import {PROJECT_PREFIX} from "../actions/project/ProjectAction";
 
 const initialState = {
     isFetched: false,
@@ -29,7 +28,7 @@ export default (state = initialState, action = {}) => {
                 ...state,
                 isLoading: false,
             };
-        case SAVE_PROJECT_PREFIX + '_SAVE_SUCCESS':
+        case PROJECT_PREFIX + '_SAVE_SUCCESS':
             state.projects.unshift(action.payload[0]);
             return {
                 ...state

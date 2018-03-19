@@ -20,6 +20,7 @@ import ru.process.platform.ProjectManagement.service.predicates.SpecificationSer
 
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ProjectService {
@@ -94,12 +95,21 @@ public class ProjectService {
     }
 
     @Transactional
-    public List<Project> findProjects(int userId, ProjectFilterRequestDto filterRequestDto) {
+    public List<Project> findProjectsProfile(int userId, ProjectFilterRequestDto filterRequestDto) {
 
         Page<Project> projects = userProjectRepository.findByPrimaryUserIdOrderByPrimaryProjectCreationDateDesc(userId, new PageRequest(filterRequestDto.getCurrent(), filterRequestDto.getPageSize()))
                 .map(UserProject::getPrimaryProject);
 
         return projects.getContent();
+    }
+
+    @Transactional
+    public List<Project> findProjectsByUserId(int userId) {
+
+        return userProjectRepository.findByPrimaryUserId(userId)
+                .stream()
+                .map(UserProject::getPrimaryProject)
+                .collect(Collectors.toList());
     }
 
 //    @Transactional

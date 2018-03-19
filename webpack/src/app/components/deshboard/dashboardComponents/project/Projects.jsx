@@ -192,10 +192,6 @@ class Projects extends React.Component {
         projectActions.fetchProjectData(data);
     };
 
-    handleProfileChange = () => {
-
-    }
-
     renderTable = (projects, totalPages, isLoading, {pageSize, current}) => (
         <Table columns={this.columns}
                dataSource={setData(projects)}

@@ -7,6 +7,8 @@ import Projects from "./dashboardComponents/project/Projects";
 import ProjectCreation from "./dashboardComponents/ProjectCreation";
 import UserSettings from "./dashboardComponents/UserSettings";
 import ActualProject from "./dashboardComponents/project/ActualProject";
+import TaskCreation from "./dashboardComponents/TaskCreation";
+import TaskProjectList from "./dashboardComponents/TaskProjectList";
 
 
 class DashboardInternal extends React.Component {
@@ -23,6 +25,8 @@ class DashboardInternal extends React.Component {
                     <Route path={Path.Settings} render={()=>(<UserSettings userData={userData}/>)}/>
                     <Route breadcrumbName="project:/id" path={Path.ACTUAL_PROJECT} render={()=>(<ActualProject projectData={projectData}/>)} />
                     <Route path={Path.CREATE_PROJECT} component={ProjectCreation}/>
+                    <Route path={Path.CREATE_TASK} component={TaskCreation}/>
+                    <Route path={Path.TASK_PROJECT_LIST} component={TaskProjectList}/>
                 </Switch>
             </DashBoard>
         )

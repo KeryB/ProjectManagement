@@ -21,6 +21,7 @@ import ru.process.platform.ProjectManagement.utils.error.ErrorMessage;
 import ru.process.platform.ProjectManagement.utils.error.ErrorStatus;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/user", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -88,5 +89,16 @@ public class UserController {
         User user = userService.getUserProfile(userId);
 
         return RestResponse.ok(user);
+    }
+
+    @PostMapping(value = "/fetchUsers")
+    public RestResponse fetchUsers(HttpServletRequest request, @RequestBody Integer projectId) {
+        Token token = jwtService.getClaimsFromToken(request.getHeader(tokenHeader));
+        if (token == null) {
+            return RestResponse.error(ErrorStatus.INVALID_TOKEN_HEADER, ErrorMessage.INVALID_TOKEN_HEADER);
+        }
+
+        List<User> usersInProject = userService.findUsersInProject(projectId);
+        return RestResponse.ok(usersInProject);
     }
 }

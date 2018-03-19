@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import Navbar from "../Navbar";
-import {Menu, Icon, Avatar, Dropdown} from 'antd';
+import {Menu, Icon, Avatar, Dropdown, Button} from 'antd';
 import {Link} from "react-router-dom";
 import * as Path from '../../../utils/RoutePath'
 
@@ -38,6 +38,7 @@ class AuthHeader extends React.Component {
         const {user, logout} = this.props;
         return (
             <div>
+                <Link to={Path.CREATE_TASK}> Создать задачу</Link>
                 <Dropdown overlay={profileMenu(logout, user)} trigger={['click']}>
                     <a className='float-right'>
                         <Avatar size='large'/>
