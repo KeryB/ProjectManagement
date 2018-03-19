@@ -2,7 +2,8 @@ import * as React from "react";
 import {Menu, Icon, Row, Col, Avatar, Layout} from 'antd';
 import LeftBar from "./LeftBar";
 import DashboardTimeline from "./DashboardTimeline";
-const { Header, Content, Sider } = Layout;
+
+const {Header, Content, Sider} = Layout;
 
 class DashBoard extends React.Component {
 
@@ -15,10 +16,8 @@ class DashBoard extends React.Component {
             <div className='dashboard'>
                 <Row gutter={48} style={{padding: '10px', margin: '0px'}}>
                     <LeftBar chosenProject={chosenProject} projectData={projectData}/>
-                    <Layout style={{ padding: '0 15px 24px' }}>
-                        <Content style={{ background: '#fff', padding: 24, margin: 0, minHeight: 280 }}>
-                            {children}
-                        </Content>
+                    <Layout style={{padding: '0 15px 24px'}}>
+                        {children}
                     </Layout>
                 </Row>
             </div>

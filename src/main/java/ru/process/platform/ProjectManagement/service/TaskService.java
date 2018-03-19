@@ -39,9 +39,11 @@ public class TaskService {
     }
 
     @Transactional
-    public Task createTask(TaskRequestDto taskRequestDto) {
+    public Task createTask(TaskRequestDto taskRequestDto, Integer userId) {
 
-        User findUser = userRepository.findOne(taskRequestDto.getUserId());
+        User assigneeUser = userRepository.findOne(taskRequestDto.getUserId());
+        User reporterUser = userRepository.findOne(userId);
+
         Project findProject = projectRepository.findOne(taskRequestDto.getProjectId());
 
         Task task = new Task();
@@ -53,7 +55,8 @@ public class TaskService {
         task.setDateEnd(taskRequestDto.getDateEnd());
         task.setTime(taskRequestDto.getTime());
         task.setPrimaryProject(findProject);
-        task.setUser(findUser);
+        task.setAssignee(assigneeUser);
+        task.setReporter(reporterUser);
 
         return taskRepository.save(task);
     }
@@ -61,18 +64,6 @@ public class TaskService {
     public Map<Project, ProjectTaskDataDto> getProjectTaskData(Integer userId) {
 
         Map<Project, ProjectTaskDataDto> projectTaskData = new HashMap<>();
-
-//        userProjects
-//                .stream()
-//                .map(userProject -> {
-//                    ProjectTaskDataDto projectTaskDataDto = new ProjectTaskDataDto();
-//                    List<UserProject> usersInProject = userProjectRepository.findByPrimaryProjectId(userProject.getPrimaryProject().getId());
-//                    projectTaskDataDto.setUsers(usersInProject);
-//                    List<Task> tasks = taskRepository.findByPrimaryProjectId(userId);
-//                    projectTaskDataDto.setTasks(tasks);
-//                    return projectTaskDataDto;
-//                })
-//                .collect(Collectors.toList())
 
         if (userId != null) {
             List<UserProject> primaryProjectId = userProjectRepository.findByPrimaryUserId(userId);

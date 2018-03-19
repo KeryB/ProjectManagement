@@ -55,7 +55,7 @@ public class TaskController {
             return RestResponse.error(ErrorStatus.INVALID_TOKEN_HEADER, ErrorMessage.INVALID_TOKEN_HEADER);
         }
 
-        Task task = taskService.createTask(taskRequestDto);
+        Task task = taskService.createTask(taskRequestDto, token.getId());
         return RestResponse.ok(task);
     }
 

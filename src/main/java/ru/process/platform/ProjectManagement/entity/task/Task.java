@@ -90,6 +90,5 @@ public class Task implements ITask{
     private User assignee;
 
     @ManyToOne
-    @JoinColumn(name = JpaUtils.USER_PRIMARY_KEY)
     private User reporter;
 }
