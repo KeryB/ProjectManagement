@@ -20,7 +20,7 @@ const Option = Select.Option;
 const getProjectData = (projects) => {
     let data = [];
     projects.forEach((item, i) => {
-        data.push(<Option key={item.id}><Avatar size='small'/> {item.title}</Option>)
+        data.push(<Option key={item.id} value={item.title}><Avatar size='small'/> {item.title}</Option>)
     });
     return data;
 };
@@ -28,7 +28,7 @@ const getProjectData = (projects) => {
 const getUserData = (user) => {
     let data = [];
     user.forEach((item, i) => {
-        data.push(<Option key={item.id}><Avatar size='small'/> {item.firstName + ' ' + item.secondName}</Option>)
+        data.push(<Option key={item.id} value={item.title}><Avatar size='small'/> {item.firstName + ' ' + item.secondName}</Option>)
     });
     return data;
 };
@@ -153,7 +153,7 @@ class TaskCreation extends React.Component {
         return (
             <div className='create-task'>
                 <Modal
-                    width='650px'
+                    width='750px'
                     visible={visible}
                     title={<span><Icon type="solution"/> Создание задачи</span>}
                     onCancel={this.handleCancel}
@@ -167,11 +167,10 @@ class TaskCreation extends React.Component {
                         </Form>
                     ]}
                 >
-                    <Form onSubmit={this.handleSubmit}>
+                    <Form onSubmit={this.handleSubmit} layout='inline'>
                         <FormItem
                             label="Выберете проект"
-                            labelCol={{span: 7}}
-                            wrapperCol={{span: 13}}
+                            wrapperCol={{ span: 14, offset: 4 }}
                         >
                             {getFieldDecorator('projectId', {
                                 rules: [{required: true, message: 'Проект на выбран!'}],
@@ -188,8 +187,7 @@ class TaskCreation extends React.Component {
 
                         <FormItem
                             label="Название"
-                            labelCol={{span: 7}}
-                            wrapperCol={{span: 13}}
+                            wrapperCol={{ span: 14, offset: 4 }}
                         >
                             {getFieldDecorator('title', {
                                 rules: [{required: true, message: 'Название задачи не введено!'}],

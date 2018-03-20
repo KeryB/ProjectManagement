@@ -19,6 +19,10 @@ class FetchSelector extends React.Component {
         data: PropTypes.array.isRequired,
     };
 
+    onSelect=(e)=>{
+      console.log(e);
+    };
+
     render() {
         const {data, handleFocusSelector, onChange, commonsData: {isLoading}} = this.props;
 
@@ -35,6 +39,7 @@ class FetchSelector extends React.Component {
                     mode="combobox"
                     onFocus={handleFocusSelector}
                     onChange={onChange}
+                    onSelect={this.onSelect}
                 >
                     {data}
                 </Select>

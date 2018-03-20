@@ -36,12 +36,10 @@ class FetchList extends React.Component {
     componentDidMount() {
         const {userObject} = this.props;
 
-        console.log(userObject);
-
         this.setState({
             pageable: {
                 ...this.state.pageable,
-                userId: userObject.id,
+                userId: userObject.userId,
                 fetchTableType: userObject.fetchTableType
             }
         }, () => {

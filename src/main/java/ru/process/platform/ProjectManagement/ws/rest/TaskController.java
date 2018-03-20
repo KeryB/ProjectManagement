@@ -72,4 +72,17 @@ public class TaskController {
         return RestResponse.ok(projectTaskData);
     }
 
+    @PostMapping(value = "/fetchTaskData")
+    public RestResponse fetchTaskData(HttpServletRequest request){
+        String header = request.getHeader(tokenHeader);
+        Token token = jwtService.getClaimsFromToken(header);
+
+        if (token == null) {
+            return RestResponse.error(ErrorStatus.INVALID_TOKEN_HEADER, ErrorMessage.INVALID_TOKEN_HEADER);
+        }
+
+        Map<Project, ProjectTaskDataDto> projectTaskData = taskService.getProjectTaskData(token.getId());
+        return RestResponse.ok(projectTaskData);
+    }
+
 }

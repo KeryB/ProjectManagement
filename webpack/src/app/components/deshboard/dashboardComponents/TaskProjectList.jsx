@@ -1,5 +1,9 @@
 import * as React from "react";
 import {Col, List, Row, Avatar, Card, Divider, Tabs, Dropdown, Menu, Button, Icon, Input, Pagination} from "antd";
+import {connect} from "react-redux";
+import {bindActionCreators} from "redux";
+import {fetchTaskData} from "../../../actions/TaskActions";
+import PropTypes from "prop-types";
 
 const TabPane = Tabs.TabPane;
 
@@ -10,42 +14,19 @@ for (let i = 0; i < 25; i++) {
 
 class TaskProjectList extends React.Component {
 
+    static propTypes = {
+        taskData: PropTypes.object.isRequired
+    };
+
     state = {
         data: [],
         loading: false,
         hasMore: true,
-    }
-    getData = (callback) => {
-    }
+    };
 
-    componentWillMount() {
-        this.getData((res) => {
-            this.setState({
-                data: res.results,
-            });
-        });
-    }
-
-    handleInfiniteOnLoad = () => {
-        let data = this.state.data;
-        this.setState({
-            loading: true,
-        });
-        if (data.length > 14) {
-            message.warning('Infinite List loaded all');
-            this.setState({
-                hasMore: false,
-                loading: false,
-            });
-            return;
-        }
-        this.getData((res) => {
-            data = data.concat(res.results);
-            this.setState({
-                data,
-                loading: false,
-            });
-        });
+    componentDidMount() {
+        const {fetchTaskData} = this.props;
+        fetchTaskData();
     }
 
     render() {
@@ -59,9 +40,9 @@ class TaskProjectList extends React.Component {
                 <div className='indent-p-block'>
                     <div className='filter-panel'>
                         <Input.Search
-                            placeholder="Введите название задачи"
+                            placeholder="Поиск"
                             onSearch={value => console.log(value)}
-                            style={{width: '20%', maxWidth:'220px'}}
+                            style={{width: '20%', maxWidth: '220px'}}
                         />
 
                         <a className='a-btn-primary'>
@@ -92,13 +73,10 @@ class TaskProjectList extends React.Component {
                                             />
                                         </div>
                                         <div className='pagination-panel'>
-                                            <Pagination size="small" total={50} />
+                                            <Pagination size="small" total={50}/>
                                         </div>
                                     </Col>
                                     <Col span={16}>
-                                        <Card>
-                                            asd
-                                        </Card>
                                     </Col>
                                 </Row>
                             </TabPane>
@@ -115,4 +93,16 @@ class TaskProjectList extends React.Component {
 
 }
 
-export default TaskProjectList
+function mapStateToProps(state) {
+    return {
+        taskData: state.task
+    }
+}
+
+function mapDispatchToProps(dispatch) {
+    return {
+        fetchTaskData: bindActionCreators(fetchTaskData, dispatch)
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(TaskProjectList)

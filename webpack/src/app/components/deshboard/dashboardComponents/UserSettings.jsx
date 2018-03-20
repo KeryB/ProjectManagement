@@ -59,85 +59,89 @@ class UserSettings extends React.Component {
         console.log(showModal)
         return (
             <div className='settings'>
-                <h2>
-                    Настройки
-                </h2>
+                <div className='p-block'>
+                    <h2>
+                        Настройки
+                    </h2>
+                </div>
 
-                <Tabs defaultActiveKey="1" onChange={this.handleChangeTabs}>
-                    <Tabs.TabPane tab="Профиль" key="1">
-                        <Row gutter={16}>
-                            <Form onSubmit={this.handleSubmit}>
-                                <Form.Item
-                                    label="E-mail"
-                                    labelCol={{span: 2}}
-                                    wrapperCol={{offset: 3}}
-                                >
-                                    {getFieldDecorator('email', {
-                                        rules: [{required: true, message: 'Поля обязательно для заполнения'}],
-                                    })(
-                                        <Input style={{width: '50%'}}/>
-                                    )}
-                                </Form.Item>
-                                <Form.Item
-                                    label="Поменять пароль"
-                                    labelCol={{span: 2}}
-                                    wrapperCol={{offset: 3}}
-                                >
-                                    <Button type='primary' onClick={this.handleChangePassword}><Icon type="key"/>Сменить</Button>
-                                    <ChangePasswordModal showModal={this.state.showModal} />
-                                </Form.Item>
-                                <Divider/>
+                <div className='indent-p-block'>
+                    <Tabs defaultActiveKey="1" onChange={this.handleChangeTabs}>
+                        <Tabs.TabPane tab="Профиль" key="1">
+                            <Row gutter={16}>
+                                <Form onSubmit={this.handleSubmit}>
+                                    <Form.Item
+                                        label="E-mail"
+                                        labelCol={{span: 2}}
+                                        wrapperCol={{offset: 3}}
+                                    >
+                                        {getFieldDecorator('email', {
+                                            rules: [{required: true, message: 'Поля обязательно для заполнения'}],
+                                        })(
+                                            <Input style={{width: '50%'}}/>
+                                        )}
+                                    </Form.Item>
+                                    <Form.Item
+                                        label="Поменять пароль"
+                                        labelCol={{span: 2}}
+                                        wrapperCol={{offset: 3}}
+                                    >
+                                        <Button type='primary' onClick={this.handleChangePassword}><Icon type="key"/>Сменить</Button>
+                                        <ChangePasswordModal showModal={this.state.showModal} />
+                                    </Form.Item>
+                                    <Divider/>
 
-                                <Form.Item
-                                    label="Изображение профиля"
-                                    labelCol={{span: 2}}
-                                    wrapperCol={{offset: 3}}
-                                >
-                                    {getFieldDecorator('icon', {})(
-                                        <UploadAvatar onChange={this.handleChangeState}/>
-                                    )}
-                                </Form.Item>
-                                <Divider/>
-                                <Form.Item
-                                    label="Имя"
-                                    labelCol={{span: 2}}
-                                    wrapperCol={{offset: 3}}
-                                >
-                                    {getFieldDecorator('firstName', {
-                                        rules: [{required: true, message: 'Поля обязательно для заполнения'}]
-                                    })(
-                                        <Input style={{width: '50%'}}/>
-                                    )}
-                                </Form.Item>
-                                <Form.Item
-                                    label="Фамилия"
-                                    labelCol={{span: 2}}
-                                    wrapperCol={{offset: 3}}
-                                >
-                                    {getFieldDecorator('secondName', {
-                                        rules: [{required: true, message: 'Поля обязательно для заполнения'}]
-                                    })(
-                                        <Input style={{width: '50%'}}/>
-                                    )}
-                                </Form.Item>
-                                <Form.Item
-                                    label="Дата Рождения"
-                                    labelCol={{span: 2}}
-                                    wrapperCol={{offset: 3}}
-                                >
-                                    {getFieldDecorator('birthDay', {})(
-                                        <DatePicker/>
-                                    )}
-                                </Form.Item>
-                                <Divider/>
-                                <Button type='primary' loading={loading} style={{left: "44%"}}
-                                        htmlType='submit'>{!loading ? <Icon type="save"/> : undefined}Сохранить</Button>
-                            </Form>
-                        </Row>
-                    </Tabs.TabPane>
-                    <Tabs.TabPane tab="Уведомления" key="2">Content of Tab Pane 2</Tabs.TabPane>
-                    <Tabs.TabPane tab="Проекты" key="3">Content of Tab Pane 3</Tabs.TabPane>
-                </Tabs>
+                                    <Form.Item
+                                        label="Изображение профиля"
+                                        labelCol={{span: 2}}
+                                        wrapperCol={{offset: 3}}
+                                    >
+                                        {getFieldDecorator('icon', {})(
+                                            <UploadAvatar onChange={this.handleChangeState}/>
+                                        )}
+                                    </Form.Item>
+                                    <Divider/>
+                                    <Form.Item
+                                        label="Имя"
+                                        labelCol={{span: 2}}
+                                        wrapperCol={{offset: 3}}
+                                    >
+                                        {getFieldDecorator('firstName', {
+                                            rules: [{required: true, message: 'Поля обязательно для заполнения'}]
+                                        })(
+                                            <Input style={{width: '50%'}}/>
+                                        )}
+                                    </Form.Item>
+                                    <Form.Item
+                                        label="Фамилия"
+                                        labelCol={{span: 2}}
+                                        wrapperCol={{offset: 3}}
+                                    >
+                                        {getFieldDecorator('secondName', {
+                                            rules: [{required: true, message: 'Поля обязательно для заполнения'}]
+                                        })(
+                                            <Input style={{width: '50%'}}/>
+                                        )}
+                                    </Form.Item>
+                                    <Form.Item
+                                        label="Дата Рождения"
+                                        labelCol={{span: 2}}
+                                        wrapperCol={{offset: 3}}
+                                    >
+                                        {getFieldDecorator('birthDay', {})(
+                                            <DatePicker/>
+                                        )}
+                                    </Form.Item>
+                                    <Divider/>
+                                    <Button type='primary' loading={loading} style={{left: "44%"}}
+                                            htmlType='submit'>{!loading ? <Icon type="save"/> : undefined}Сохранить</Button>
+                                </Form>
+                            </Row>
+                        </Tabs.TabPane>
+                        <Tabs.TabPane tab="Уведомления" key="2">Content of Tab Pane 2</Tabs.TabPane>
+                        <Tabs.TabPane tab="Проекты" key="3">Content of Tab Pane 3</Tabs.TabPane>
+                    </Tabs>
+                </div>
             </div>
         )
     }

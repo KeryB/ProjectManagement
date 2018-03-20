@@ -12,7 +12,6 @@ import java.util.List;
 @Setter
 @EqualsAndHashCode
 public class ProjectTaskDataDto {
-
     private List<UserProject> users;
     private List<Task> tasks;
 }

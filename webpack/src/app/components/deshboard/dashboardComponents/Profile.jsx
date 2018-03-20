@@ -75,6 +75,7 @@ class Profile extends React.Component {
     profileComponent = (userdata) => {
         const {match:{params}, userData:{user}} = this.props;
         const isEnemy = this.checkOnEnemy(user, params);
+console.log(this.state);
 
         return (<Row>
             <Col span={9}>
@@ -147,13 +148,15 @@ class Profile extends React.Component {
             <div className='profile'>
                 { user == null ? <Spin/> :
                     <div>
-                        <div className='header-profile'>
-                            <h2>
-                                Профиль: {name}
-                            </h2>
+                        <div className='p-block'>
+                            <div className='header-profile'>
+                                <h2>
+                                    Профиль: {name}
+                                </h2>
+                            </div>
                         </div>
 
-                        <Row gutter={16} style={{paddingTop: '20px'}}>
+                        <Row gutter={16} style={{paddingTop: '10px'}}>
                             <Col span={16}>
                                 <Card>
                                     {this.profileComponent(user, isEnemy)}
