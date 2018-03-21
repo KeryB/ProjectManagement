@@ -1,6 +1,7 @@
-import {Select} from "antd";
+import {Select, Form, Input} from "antd";
 
 const Option = Select.Option;
+const FormItem = Form.Item;
 
 export const FormSelect = ({
                                input,
@@ -17,10 +18,9 @@ export const FormSelect = ({
     if (!input.value && (mode === 'tags' || mode === 'multiple')) {
         input.value = [];
     }
-
     const select =
         <Select {...{...input, placeholder, size, disabled, mode, ...rest}}>
-            {options.map(({value, label}) => <Option key={value} value={value}>{label}</Option>)}
+            {options.map(({value, label}) => <Option key={value} value={label}>{label}</Option>)}
         </Select>;
 
     return <FormItem label={label}
@@ -29,4 +29,15 @@ export const FormSelect = ({
                      help={touched && error ? error : undefined}>
         {select}
     </FormItem>;
+};
+
+
+export const FormInput = ({input, label, placeholder, type, meta: {touched, error, warning}}) => {
+
+    return <FormItem label={label}
+                     required={required}
+                     validateStatus={touched && error ? 'error' : undefined}
+                     help={touched && error ? error : undefined}>
+        <Input {...input} placeholder={placeholder} type={type}/>
+    </FormItem>
 };

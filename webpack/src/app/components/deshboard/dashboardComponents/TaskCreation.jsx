@@ -14,13 +14,15 @@ import {fetchUsersByProjectId} from "../../../actions/UserAction";
 import {saveTask} from "../../../actions/reduxCrud/SaveActions";
 import {showErrorNotification, showSuccessNotification} from "../../../utils/Messages";
 import {Field, reduxForm, SubmissionError} from 'redux-form'
+import {required} from '../../forms/Validation';
+import {FormSelect} from '../../forms/Inputs';
 
 const Option = Select.Option;
 
 const getProjectData = (projects) => {
     let data = [];
     projects.forEach((item, i) => {
-        data.push(<Option key={item.id} value={item.title}><Avatar size='small'/> {item.title}</Option>)
+        data.push({value:item.id, label: item.title})
     });
     return data;
 };
@@ -49,14 +51,6 @@ const priorityTask = () => {
     });
     return priorityTask;
 };
-
-const renderComboBox = ({input, label, type, meta: {touched, error, warning}}) =>(
-    <FetchSelector
-        commonsData={commonsData}
-        handleFocusSelector={this.handleChangeCombobox}
-        data={getProjectData(projects)}/>
-);
-
 
 class TaskCreation extends React.Component {
 
@@ -120,7 +114,7 @@ class TaskCreation extends React.Component {
         });
     };
 
-    handleChangeCombobox = () => {
+    handleFocusComboBox = () => {
         const {commonsData: {projects}, fetchProjects} = this.props;
         if (isEmpty(projects)) {
             fetchProjects();
@@ -159,14 +153,13 @@ class TaskCreation extends React.Component {
             <form onSubmit={handleSubmit(this.handleSubmit)}>
                 <Field
                     name='projectId'
-                    disabled={disabled}
+                    onFocus={this.handleFocusComboBox}
                     label="Выберете проект"
-                    options={TYPE_OPTIONS}
-                    required
-                    validate={required}
+                    options={getProjectData(projects)}
+                    mode='combobox'
+                    validate={[required]}
                     placeholder='Выберите тип...'
                     component={FormSelect}/>
-                />
 
             </form>
         )
