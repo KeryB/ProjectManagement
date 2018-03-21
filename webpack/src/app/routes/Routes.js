@@ -1,7 +1,7 @@
 import React from 'react';
 import {Route} from 'react-router-dom';
 import App from '../components/App';
-import AuthProvider from "../components/forms/AuthProvider";
+import AuthProvider from "../components/AuthProvider";
 
 export const routes = (
     <div>

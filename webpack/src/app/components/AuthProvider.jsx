@@ -1,12 +1,12 @@
 import React from 'react'
 import {Icon, Tabs, Button} from 'antd';
 import {Field, reduxForm, SubmissionError} from 'redux-form'
-import {email, inputName, maxLength, required, PASSWORD_IS_NOT_CONFIRM} from "./Validation";
+import {email, inputName, maxLength, required, PASSWORD_IS_NOT_CONFIRM} from "./forms/Validation";
 import {connect} from "react-redux";
-import * as userAction from "../../actions/UserAction";
+import * as userAction from "../actions/UserAction";
 import {bindActionCreators} from "redux";
-import {API_AUTH_LOGIN, API_AUTH_REGISTRATION} from "../../const/ApiPath";
-import {EMAIL_NOT_UNIQUE} from "../../const/http/HttpStatus";
+import {API_AUTH_LOGIN, API_AUTH_REGISTRATION} from "../const/ApiPath";
+import {EMAIL_NOT_UNIQUE} from "../const/http/HttpStatus";
 import PropTypes from 'prop-types';
 
 const TabPane = Tabs.TabPane;

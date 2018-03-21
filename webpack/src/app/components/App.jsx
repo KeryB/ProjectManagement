@@ -2,7 +2,7 @@ import React from 'react';
 import Navbar from "./deshboard/Navbar";
 import {connect} from "react-redux";
 import * as Path from '../utils/RoutePath';
-import Login from './forms/AuthProvider';
+import Login from './AuthProvider';
 import {Redirect, Route, Switch} from "react-router-dom";
 import * as Roles from "../utils/Roles";
 import {getStorageItem} from "../utils/token/LocalStorage";

@@ -10,6 +10,7 @@ import * as Path from '../../../utils/RoutePath';
 import {Link} from "react-router-dom";
 import {fetchUserProfile, toProfileUser} from "../../../actions/UserAction";
 import {TableType} from "../../../utils/table/TableUtils";
+import {fetchProjectsProfile} from "../../../actions/project/ProjectAction";
 
 const formItemLayout = {
     labelCol: {span: 3},
@@ -32,7 +33,7 @@ class Profile extends React.Component {
     };
 
     componentDidMount() {
-        const {userData:{user}, match: {params}, toProfileUser, fetchUserProfile} = this.props;
+        const {userData: {user}, match: {params}, toProfileUser, fetchUserProfile, fetchProjectsProfile} = this.props;
         const userId = parseInt(params.id);
 
         this.setState({
@@ -43,11 +44,9 @@ class Profile extends React.Component {
             } else {
                 toProfileUser(user);
             }
+            fetchProjectsProfile();
         });
 
-    }
-
-    componentWillReceiveProps(props) {
     }
 
     checkOnEnemy = (user, params) => {
@@ -69,13 +68,22 @@ class Profile extends React.Component {
 
         this.setState({
             fetchTableType: fetchTableType
-        })
+        }, () => {
+
+        });
+
     };
 
+    RenderList = () => {
+
+        return <FetchList
+            userObject={this.state}/>
+    };
+
+
     profileComponent = (userdata) => {
-        const {match:{params}, userData:{user}} = this.props;
+        const {match: {params}, userData: {user}} = this.props;
         const isEnemy = this.checkOnEnemy(user, params);
-console.log(this.state);
 
         return (<Row>
             <Col span={9}>
@@ -123,12 +131,10 @@ console.log(this.state);
             <h3>Проекты:</h3>
             <Tabs defaultActiveKey="1" onChange={this.handleTabChange}>
                 <Tabs.TabPane tab="Доступные проекты" key="1">
-                    <FetchList userObject={this.state}/>
+                    {this.RenderList()}
                 </Tabs.TabPane>
                 <Tabs.TabPane tab="Мои" key="2">
-                    <div>
-                        <FetchList userObject={this.state}/>
-                    </div>
+                    {this.RenderList()}
                 </Tabs.TabPane>
                 <Tabs.TabPane tab="Завершенные" key="3">Завершенные</Tabs.TabPane>
             </Tabs>
@@ -136,17 +142,17 @@ console.log(this.state);
     };
 
     render() {
-        const {profileData:{user}, match:{params}} = this.props;
+        const {profileData: {user}, match: {params}} = this.props;
         let isEnemy = false;
         let name;
-        if(user != null){
+        if (user != null) {
             isEnemy = this.checkOnEnemy(user, params);
             name = user.firstName + ' ' + user.secondName;
         }
 
         return (
             <div className='profile'>
-                { user == null ? <Spin/> :
+                {user == null ? <Spin/> :
                     <div>
                         <div className='p-block'>
                             <div className='header-profile'>
@@ -185,7 +191,8 @@ function mapStateToProps(state) {
 function mapDispatchToState(dispatch) {
     return {
         fetchUserProfile: bindActionCreators(fetchUserProfile, dispatch),
-        toProfileUser: bindActionCreators(toProfileUser, dispatch)
+        toProfileUser: bindActionCreators(toProfileUser, dispatch),
+        fetchProjectsProfile: bindActionCreators(fetchProjectsProfile, dispatch)
     }
 }
 

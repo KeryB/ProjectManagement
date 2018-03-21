@@ -136,7 +136,7 @@ class Projects extends React.Component {
     ];
 
     componentWillMount() {
-        const {projectData: {isFetched, isLoading}, projectActions} = this.props;
+        const {projectData: {isFetched, isLoading}} = this.props;
         if (!isFetched && !isLoading && getStorageItem(tokenHeader)) {
             this.setState({
                 fetchTableType: TableType.available
