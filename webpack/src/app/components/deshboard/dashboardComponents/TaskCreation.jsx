@@ -1,5 +1,5 @@
 import * as React from "react";
-import {Modal, Button, Icon, Select, Avatar} from 'antd';
+import {Modal, Button, Icon, Select, Avatar, Divider} from 'antd';
 import * as Path from '../../../utils/RoutePath'
 import {PriorityTask, TaskTypeOption} from "../../../utils/task/TaskUtils";
 import {Editor} from 'react-draft-wysiwyg';
@@ -15,7 +15,7 @@ import {saveTask} from "../../../actions/reduxCrud/SaveActions";
 import {showErrorNotification, showSuccessNotification} from "../../../utils/Messages";
 import {Field, reduxForm, SubmissionError} from 'redux-form'
 import {required} from '../../forms/Validation';
-import {FormSelect} from '../../forms/Inputs';
+import {FormSelect, TextField} from '../../forms/Inputs';
 
 const Option = Select.Option;
 
@@ -39,7 +39,7 @@ const getUserData = (user) => {
 const taskType = () => {
     const taskType = [];
     TaskTypeOption.forEach((item, index) => {
-        taskType.push(<Option key={item.value}>{item.avatar}{' ' + item.name}</Option>)
+        taskType.push({value:item.value, label:item.name})
     });
     return taskType;
 };
@@ -47,9 +47,13 @@ const taskType = () => {
 const priorityTask = () => {
     const priorityTask = [];
     PriorityTask.forEach((item, index) => {
-        priorityTask.push(<Option key={item.value}><Avatar size='small'/> {item.name}</Option>)
+        priorityTask.push({value:item.value, label:item.name})
     });
     return priorityTask;
+};
+const formItemLayout = {
+    labelCol: { span: 8 },
+    wrapperCol: { span: 8 },
 };
 
 class TaskCreation extends React.Component {
@@ -154,11 +158,43 @@ class TaskCreation extends React.Component {
                 <Field
                     name='projectId'
                     onFocus={this.handleFocusComboBox}
-                    label="Выберете проект"
+                    label="Выберите проект"
                     options={getProjectData(projects)}
                     mode='combobox'
-                    validate={[required]}
-                    placeholder='Выберите тип...'
+                    validate={required}
+                    required
+                    formItemLayout={formItemLayout}
+                    placeholder='Выберите проект...'
+                    component={FormSelect}/>
+                <Field
+                    name='title'
+                    label='Введите название задачи'
+                    validate={required}
+                    required
+                    formItemLayout={formItemLayout}
+                    component={TextField}
+                />
+                <Divider/>
+                <Field
+                    name='taskType'
+                    onFocus={this.handleFocusComboBox}
+                    label="Выберите тип задачи"
+                    options={taskType()}
+                    validate={required}
+                    required
+                    formItemLayout={formItemLayout}
+                    placeholder='Выберите тип задачи'
+                    component={FormSelect}/>
+
+                <Field
+                    name='taskPriority'
+                    onFocus={this.handleFocusComboBox}
+                    label="Выберите приоритет задачи"
+                    options={priorityTask()}
+                    validate={required}
+                    required
+                    formItemLayout={formItemLayout}
+                    placeholder='Приоритет'
                     component={FormSelect}/>
 
             </form>
