@@ -15,7 +15,7 @@ import {saveTask} from "../../../actions/reduxCrud/SaveActions";
 import {showErrorNotification, showSuccessNotification} from "../../../utils/Messages";
 import {Field, reduxForm, SubmissionError} from 'redux-form'
 import {required} from '../../forms/Validation';
-import {FormSelect, TextField} from '../../forms/Inputs';
+import {FormDatePicker, FormEditWysiwyg, FormSelect, TextField} from '../../forms/Inputs';
 
 const Option = Select.Option;
 
@@ -30,7 +30,7 @@ const getProjectData = (projects) => {
 const getUserData = (user) => {
     let data = [];
     user.forEach((item, i) => {
-        data.push(<Option key={item.id} value={item.title}><Avatar size='small'/> {item.firstName + ' ' + item.secondName}</Option>)
+        data.push({value:item.id, label: item.firstName + ' ' + item.secondName})
     });
     return data;
 };
@@ -88,28 +88,31 @@ class TaskCreation extends React.Component {
     };
 
     //todo editor blocks
-    handleSubmit = (e) => {
-        const {saveTask, history} = this.props;
-        e.preventDefault();
-        this.props.form.validateFields((err, values) => {
-            console.log(values, this.state);
-            if (!err) {
-                values.userId = parseInt(values.userId);
-                values.projectId = parseInt(values.projectId);
-                values.taskPriority = parseInt(values.taskPriority);
-                if (values.dateEnd) {
-                    values.dateEnd = values.dateEnd.toDate();
-                }
-                values.taskType = parseInt(values.taskType);
-                saveTask(values, ()=>{
-                    showSuccessNotification('success', 'Задача ' + values.title + '-' + values.projectId + ' успешно создана')
-                    history.push(Path.ROOT)
-                }, () => {
-                    showErrorNotification('error', 'Что-то пошло не так(');
-                    history.push(Path.ROOT)
-                });
-            }
-        });
+    handleSubmit = (values) => {
+        console.log(values);
+
+
+        // const {saveTask, history} = this.props;
+        // e.preventDefault();
+        // this.props.form.validateFields((err, values) => {
+        //     console.log(values, this.state);
+        //     if (!err) {
+        //         values.userId = parseInt(values.userId);
+        //         values.projectId = parseInt(values.projectId);
+        //         values.taskPriority = parseInt(values.taskPriority);
+        //         if (values.dateEnd) {
+        //             values.dateEnd = values.dateEnd.toDate();
+        //         }
+        //         values.taskType = parseInt(values.taskType);
+        //         saveTask(values, ()=>{
+        //             showSuccessNotification('success', 'Задача ' + values.title + '-' + values.projectId + ' успешно создана')
+        //             history.push(Path.ROOT)
+        //         }, () => {
+        //             showErrorNotification('error', 'Что-то пошло не так(');
+        //             history.push(Path.ROOT)
+        //         });
+        //     }
+        // });
     };
 
     onEditorStateChange = (editorState) => {
@@ -127,11 +130,13 @@ class TaskCreation extends React.Component {
     handleFocusAssegnee = () => {
         const {commonsData: {users}, fetchUsers} = this.props;
         const {projectId} = this.state;
+        console.log(this.state);
         if (projectId != null) {
             fetchUsers(projectId)
         }
     };
     handleProjectChange = (value) => {
+        console.log(value);
         if (value) {
             this.setState({
                 projectId: parseInt(value)
@@ -158,6 +163,7 @@ class TaskCreation extends React.Component {
                 <Field
                     name='projectId'
                     onFocus={this.handleFocusComboBox}
+                    onChange={this.handleProjectChange}
                     label="Выберите проект"
                     options={getProjectData(projects)}
                     mode='combobox'
@@ -169,6 +175,7 @@ class TaskCreation extends React.Component {
                 <Field
                     name='title'
                     label='Введите название задачи'
+                    placeholder='Название задачи'
                     validate={required}
                     required
                     formItemLayout={formItemLayout}
@@ -197,13 +204,45 @@ class TaskCreation extends React.Component {
                     placeholder='Приоритет'
                     component={FormSelect}/>
 
+                <Field
+                    name='userId'
+                    onFocus={this.handleFocusAssegnee}
+                    label="Выберите пользователя"
+                    options={getUserData(users)}
+                    mode='combobox'
+                    validate={required}
+                    required
+                    formItemLayout={formItemLayout}
+                    placeholder='Выберите пользователя'
+                    component={FormSelect}/>
+
+                <Field
+                    name='dateEnd'
+                    label="Выберите пользователя"
+                    formItemLayout={{
+                        labelCol: { span: 8 },
+                        wrapperCol: { span: 15 },
+                    }}
+                    placeholder='Дата заверешения задачи'
+                    component={FormDatePicker}/>
+
+                <Field
+                    name='description'
+                    label="Описание"
+                    formItemLayout={{
+                        labelCol: { span: 4 },
+                        wrapperCol: { span: 17 },
+                    }}
+                    onEditorStateChange={this.onEditorStateChange}
+                    component={FormEditWysiwyg}/>
+
             </form>
         )
     }
 
     render() {
-        const {visible, loading, editorState} = this.state;
-        const {form: {getFieldDecorator}, commonsData, commonsData: {users, projects}} = this.props;
+        const {visible, loading} = this.state;
+        const {submitting, handleSubmit} = this.props;
 
         return (
             <div className='create-task'>
@@ -213,99 +252,15 @@ class TaskCreation extends React.Component {
                     title={<span><Icon type="solution"/> Создание задачи</span>}
                     onCancel={this.handleCancel}
                     footer={[
+                        <form onSubmit={handleSubmit(this.handleSubmit)}>
                             <Button key="back" onClick={this.handleCancel}>Return</Button>,
 
-                            <Button key="submit" type="primary" loading={loading} htmlType="submit">
+                            <Button key="submit" type="primary" loading={submitting} htmlType="submit">
                                 Создать
                             </Button>
+                        </form>
                     ]}
                 >
-
-
-                    {/*<Form onSubmit={this.handleSubmit} layout='inline'>*/}
-                        {/*<FormItem*/}
-                            {/*label="Выберете проект"*/}
-                            {/*wrapperCol={{ span: 14, offset: 4 }}*/}
-                        {/*>*/}
-                            {/*{getFieldDecorator('projectId', {*/}
-                                {/*rules: [{required: true, message: 'Проект на выбран!'}],*/}
-                            {/*})(*/}
-                                {/*<FetchSelector*/}
-                                    {/*commonsData={commonsData}*/}
-                                    {/*handleFocusSelector={this.handleChangeCombobox}*/}
-                                    {/*handleSubmit={this.handleSubmit}*/}
-                                    {/*onChange={this.handleProjectChange}*/}
-                                    {/*data={getProjectData(projects)}*/}
-                                {/*/>*/}
-                            {/*)}*/}
-                        {/*</FormItem>*/}
-
-                        {/*<FormItem*/}
-                            {/*label="Название"*/}
-                            {/*wrapperCol={{ span: 14, offset: 4 }}*/}
-                        {/*>*/}
-                            {/*{getFieldDecorator('title', {*/}
-                                {/*rules: [{required: true, message: 'Название задачи не введено!'}],*/}
-                            {/*})(*/}
-                                {/*<Input/>*/}
-                            {/*)}*/}
-                        {/*</FormItem>*/}
-                        {/*<Divider/>*/}
-
-                        {/*<FormItem*/}
-                            {/*label="Тип задачи"*/}
-                            {/*labelCol={{span: 7}}*/}
-                            {/*wrapperCol={{span: 13}}*/}
-                        {/*>*/}
-                            {/*{getFieldDecorator('taskType', {*/}
-                                {/*rules: [{required: true, message: 'Выберете тип задачи!'}],*/}
-                            {/*})(*/}
-                                {/*<Select*/}
-                                    {/*placeholder="Пожалйста, выберете тип задачи"*/}
-                                    {/*onChange={this.handleSelectChange}*/}
-                                {/*>*/}
-                                    {/*{taskType()}*/}
-                                {/*</Select>*/}
-                            {/*)}*/}
-                        {/*</FormItem>*/}
-
-                        {/*<FormItem*/}
-                            {/*label="Приоритет"*/}
-                            {/*labelCol={{span: 7}}*/}
-                            {/*wrapperCol={{span: 13}}*/}
-                        {/*>*/}
-                            {/*{getFieldDecorator('taskPriority', {*/}
-                                {/*rules: [{*/}
-                                    {/*required: true,*/}
-                                    {/*message: 'Выберете приоритет задачи!'*/}
-                                {/*}],*/}
-                            {/*})(*/}
-                                {/*<Select*/}
-                                    {/*placeholder="Пожалйста, выберете приоритет задачи"*/}
-                                {/*>*/}
-                                    {/*{priorityTask()}*/}
-                                {/*</Select>*/}
-                            {/*)}*/}
-                        {/*</FormItem>*/}
-                        {/*<FormItem*/}
-                            {/*label="Назначить"*/}
-                            {/*labelCol={{span: 7}}*/}
-                            {/*wrapperCol={{span: 13}}*/}
-                        {/*>*/}
-                            {/*{getFieldDecorator('userId', {*/}
-                                {/*rules: [{*/}
-                                    {/*required: true,*/}
-                                    {/*message: 'Выберете приоритет задачи!'*/}
-                                {/*}],*/}
-                            {/*})(*/}
-                                {/*<FetchSelector*/}
-                                    {/*commonsData={commonsData}*/}
-                                    {/*handleFocusSelector={this.handleFocusAssegnee}*/}
-                                    {/*handleSubmit={this.handleSubmit}*/}
-                                    {/*data={getUserData(users)}*/}
-                                {/*/>*/}
-                            {/*)}*/}
-                        {/*</FormItem>*/}
                         {/*<FormItem*/}
                             {/*label="Дата завершения задачи"*/}
                             {/*labelCol={{span: 9}}*/}

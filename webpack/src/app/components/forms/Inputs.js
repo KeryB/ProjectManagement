@@ -1,4 +1,6 @@
-import {Select, Form, Input} from "antd";
+import {Select, Form, Input, DatePicker, TimePicker} from "antd";
+import {DATE_ONLY_FORMAT, fullDateTimeFormat} from "../../utils/DateUtils";
+import {Editor} from "react-draft-wysiwyg";
 
 const Option = Select.Option;
 const FormItem = Form.Item;
@@ -9,23 +11,22 @@ export const FormSelect = ({
                                label,
                                disabled,
                                required,
-                               formItemLayout={},
+                               formItemLayout = {},
                                meta: {touched, error},
                                placeholder,
                                mode,
                                size = 'default',
-                               ...   rest,
+                               ...rest,
                            }) => {
     if (!input.value && (mode === 'tags' || mode === 'multiple')) {
         input.value = [];
     }
+    
 
-    console.log(placeholder);
-
-    const select =
-        <Select {...{...input, placeholder, size, disabled, mode, ...rest}}>
-            {options.map(({value, label}) => <Option key={value} value={label}>{label}</Option>)}
-        </Select>;
+    const data =[];
+    options.forEach(({value,label}, i)=>{
+        data.push(<Option key={value}>{label}</Option>)
+    });
 
     return <FormItem label={label}
                      required={required}
@@ -33,8 +34,10 @@ export const FormSelect = ({
                      wrapperCol={formItemLayout.wrapperCol}
                      validateStatus={touched && error ? 'error' : undefined}
                      help={touched && error ? error : undefined}>
-        {select}
-    </FormItem>;
+        <Select {...{...input, placeholder, size, disabled, mode, ...rest}}>
+            {data}
+        </Select>
+    </FormItem>
 };
 
 
@@ -43,7 +46,7 @@ export const TextField = ({
                               icon,
                               label,
                               disabled,
-                              formItemLayout={},
+                              formItemLayout = {},
                               required,
                               placeholder,
                               type = 'text',
@@ -54,6 +57,7 @@ export const TextField = ({
                           }) => {
 
     const Comp = type === 'textarea' ? Input.TextArea : Input;
+
     return <FormItem label={label}
                      required={required}
                      labelCol={formItemLayout.labelCol}
@@ -67,28 +71,25 @@ export const TextField = ({
 };
 
 export const FormDatePicker = ({
-                                   input:                        {onBlue, ...inputRest}, meta: {touched, error},
+                                   input, meta: {touched, error},
                                    placeholder = '',
                                    disabled = false, label,
                                    required = false,
+                                   formItemLayout = {},
                                    range = false,
                                    size = 'default',
                                    withTime = false,
                                    name, validate, normalize, ...rest
                                }) => {
-    //if (!input.value) input.value = moment();
-    const format = withTime ? fullDateTimeFormat : DATE_ONLY_FORMAT;
-    const Component = range ? DatePicker.RangePicker : DatePicker;
+    // const format = withTime ? fullDateTimeFormat : DATE_ONLY_FORMAT;
+    // const Component = range ? DatePicker.RangePicker : DatePicker;
     return <FormItem required={required}
                      label={label}
                      validateStatus={touched && error ? 'error' : undefined}
+                     labelCol={formItemLayout.labelCol}
+                     wrapperCol={formItemLayout.wrapperCol}
                      help={touched && error ? error : undefined}>
-        <Component showTime={withTime}
-                   format={format}
-                   {...rest}
-                   {...inputRest}
-                   size={size}
-                   disabled={disabled}
+        <DatePicker
                    placeholder={placeholder}/>
     </FormItem>;
 };
@@ -142,6 +143,32 @@ export const FormAutoComplete = ({
             onSelect={(v, o) => input.onChange(o.key)}
             placeholder={placeholder}
             {...rest}
+        />
+    </FormItem>;
+};
+
+export const FormEditWysiwyg = ({
+                                    input,
+                                    label,
+                                    meta: {touched, error},
+                                    placeholder,
+                                    formItemLayout = {},
+                                    editorState,
+                                    required = false,
+                                    ...rest,
+                                }) => {
+
+    return <FormItem required={required}
+                     label={label}
+                     validateStatus={touched && error ? 'error' : undefined}
+                     labelCol={formItemLayout.labelCol}
+                     wrapperCol={formItemLayout.wrapperCol}
+                     help={touched && error ? error : undefined}>
+        <Editor {...{...input, placeholder, ...rest}}
+                editorState={editorState}
+                toolbarClassName="toolbarClassName"
+                wrapperClassName="wrapperClassName"
+                editorClassName="editorClassName"
         />
     </FormItem>;
 };
