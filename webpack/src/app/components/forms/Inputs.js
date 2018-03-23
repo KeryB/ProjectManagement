@@ -1,5 +1,5 @@
-import {Select, Form, Input, DatePicker, TimePicker} from "antd";
-import {DATE_ONLY_FORMAT, fullDateTimeFormat} from "../../utils/DateUtils";
+import {Select, Form, Input, DatePicker, TimePicker, AutoComplete} from "antd";
+import {DATE_ONLY_FORMAT, fullDateTimeFormat, hourMinuteFormat} from "../../utils/DateUtils";
 import {Editor} from "react-draft-wysiwyg";
 
 const Option = Select.Option;
@@ -24,8 +24,8 @@ export const FormSelect = ({
     
 
     const data =[];
-    options.forEach(({value,label}, i)=>{
-        data.push(<Option key={value}>{label}</Option>)
+    options.forEach((item, i)=>{
+        data.push(<Option key={item.value} value={item.label}>{item.label}</Option>)
     });
 
     return <FormItem label={label}
@@ -34,7 +34,7 @@ export const FormSelect = ({
                      wrapperCol={formItemLayout.wrapperCol}
                      validateStatus={touched && error ? 'error' : undefined}
                      help={touched && error ? error : undefined}>
-        <Select {...{...input, placeholder, size, disabled, mode, ...rest}}>
+        <Select placeholder={placeholder}{ ...rest}>
             {data}
         </Select>
     </FormItem>
@@ -81,7 +81,7 @@ export const FormDatePicker = ({
                                    withTime = false,
                                    name, validate, normalize, ...rest
                                }) => {
-    // const format = withTime ? fullDateTimeFormat : DATE_ONLY_FORMAT;
+    const format = withTime ? fullDateTimeFormat : DATE_ONLY_FORMAT;
     // const Component = range ? DatePicker.RangePicker : DatePicker;
     return <FormItem required={required}
                      label={label}
@@ -89,7 +89,7 @@ export const FormDatePicker = ({
                      labelCol={formItemLayout.labelCol}
                      wrapperCol={formItemLayout.wrapperCol}
                      help={touched && error ? error : undefined}>
-        <DatePicker
+        <DatePicker format={format}
                    placeholder={placeholder}/>
     </FormItem>;
 };
@@ -99,6 +99,7 @@ export const FormTimePicker = ({
                                    disabled, label, required = false,
                                    placeholder = '',
                                    size = 'default',
+                                   formItemLayout = {},
                                    seconds = false,
                                    ...    rest
                                }) => {
@@ -106,7 +107,10 @@ export const FormTimePicker = ({
     return <FormItem required={required}
                      label={label}
                      validateStatus={touched && error ? 'error' : undefined}
+                     labelCol={formItemLayout.labelCol}
+                     wrapperCol={formItemLayout.wrapperCol}
                      help={touched && error ? error : undefined}>
+
         <TimePicker {...inputRest}
                     {...rest}
                     format={seconds ? undefined : hourMinuteFormat}
@@ -124,23 +128,30 @@ export const FormAutoComplete = ({
                                      required,
                                      meta: {touched, error},
                                      placeholder,
+                                     formItemLayout={},
                                      name, validate,
                                      wrapperProps = {},
                                      ...   rest,
                                  }) => {
+
+    console.log(input);
     return <FormItem label={label}
                      required={required}
                      {...wrapperProps}
+                     labelCol={formItemLayout.labelCol}
+                     wrapperCol={formItemLayout.wrapperCol}
                      validateStatus={touched && error ? 'error' : undefined}
                      help={touched && error ? error : undefined}>
+
+
         <AutoComplete
             dataSource={options}
-            disabled={disabled}
-            filterOption={filterOptions}
-            value={input.value}
-            optionLabelProp='value'
+            onFocus={input.onFocus}
             onChange={input.onChange}
-            onSelect={(v, o) => input.onChange(o.key)}
+            value={input.value}
+            disabled={disabled}
+            optionLabelProp='value'
+            filterOption={(inputValue, option) => option.props.children.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1}
             placeholder={placeholder}
             {...rest}
         />
@@ -164,11 +175,10 @@ export const FormEditWysiwyg = ({
                      labelCol={formItemLayout.labelCol}
                      wrapperCol={formItemLayout.wrapperCol}
                      help={touched && error ? error : undefined}>
-        <Editor {...{...input, placeholder, ...rest}}
-                editorState={editorState}
+        <Editor {...{...input, ...rest}}
                 toolbarClassName="toolbarClassName"
-                wrapperClassName="wrapperClassName"
-                editorClassName="editorClassName"
+                wrapperClassName="wrapped-editro-task"
+                editorClassName="editor-task"
         />
     </FormItem>;
 };

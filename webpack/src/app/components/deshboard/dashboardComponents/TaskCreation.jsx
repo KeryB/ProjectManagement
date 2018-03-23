@@ -1,5 +1,5 @@
 import * as React from "react";
-import {Modal, Button, Icon, Select, Avatar, Divider} from 'antd';
+import {Modal, Button, Icon, Select, Avatar, Divider, AutoComplete} from 'antd';
 import * as Path from '../../../utils/RoutePath'
 import {PriorityTask, TaskTypeOption} from "../../../utils/task/TaskUtils";
 import {Editor} from 'react-draft-wysiwyg';
@@ -15,7 +15,10 @@ import {saveTask} from "../../../actions/reduxCrud/SaveActions";
 import {showErrorNotification, showSuccessNotification} from "../../../utils/Messages";
 import {Field, reduxForm, SubmissionError} from 'redux-form'
 import {required} from '../../forms/Validation';
-import {FormDatePicker, FormEditWysiwyg, FormSelect, TextField} from '../../forms/Inputs';
+import {
+    FormAutoComplete, FormDatePicker, FormEditWysiwyg, FormSelect, FormTimePicker,
+    TextField
+} from '../../forms/Inputs';
 
 const Option = Select.Option;
 
@@ -54,6 +57,15 @@ const priorityTask = () => {
 const formItemLayout = {
     labelCol: { span: 8 },
     wrapperCol: { span: 8 },
+};
+const dataSource = ['Burns Bay Road', 'Downing Street', 'Wall Street'];
+
+const getDataSource = (projects) => {
+    let data = [];
+    projects.forEach((item, i) => {
+        data.push(<Option key={item.id} >{item.title}</Option>)
+    });
+    return data;
 };
 
 class TaskCreation extends React.Component {
@@ -160,18 +172,29 @@ class TaskCreation extends React.Component {
         const {submitting, handleSubmit, commonsData, commonsData: {users, projects}} = this.props;
         return (
             <form onSubmit={handleSubmit(this.handleSubmit)}>
+                {/*<Field*/}
+                    {/*name='projectId'*/}
+                    {/*onFocus={this.handleFocusComboBox}*/}
+                    {/*onChange={this.handleProjectChange}*/}
+                    {/*label="Выберите проект"*/}
+                    {/*options={getProjectData(projects)}*/}
+                    {/*mode='combobox'*/}
+                    {/*validate={required}*/}
+                    {/*required*/}
+                    {/*formItemLayout={formItemLayout}*/}
+                    {/*placeholder='Выберите проект...'*/}
+                    {/*component={FormSelect}/>*/}
                 <Field
                     name='projectId'
                     onFocus={this.handleFocusComboBox}
                     onChange={this.handleProjectChange}
                     label="Выберите проект"
-                    options={getProjectData(projects)}
-                    mode='combobox'
+                    options={getDataSource(projects)}
                     validate={required}
                     required
                     formItemLayout={formItemLayout}
                     placeholder='Выберите проект...'
-                    component={FormSelect}/>
+                    component={FormAutoComplete}/>
                 <Field
                     name='title'
                     label='Введите название задачи'
@@ -225,6 +248,15 @@ class TaskCreation extends React.Component {
                     }}
                     placeholder='Дата заверешения задачи'
                     component={FormDatePicker}/>
+                <Field
+                    name='time'
+                    label="Время задачи"
+                    formItemLayout={{
+                        labelCol: { span: 8 },
+                        wrapperCol: { span: 11 },
+                    }}
+                    placeholder='Время на задачу'
+                    component={FormTimePicker}/>
 
                 <Field
                     name='description'
@@ -242,7 +274,7 @@ class TaskCreation extends React.Component {
 
     render() {
         const {visible, loading} = this.state;
-        const {submitting, handleSubmit} = this.props;
+        const {submitting, handleSubmit, commonsData: {users, projects}} = this.props;
 
         return (
             <div className='create-task'>
@@ -299,7 +331,14 @@ class TaskCreation extends React.Component {
                         {/*</FormItem>*/}
                     {/*</Form>*/}
 
-
+                    <AutoComplete
+                        style={{ width: 200 }}
+                        onFocus={this.handleFocusComboBox}
+                        onChange={this.handleProjectChange}
+                        dataSource={getDataSource(projects)}
+                        placeholder="try to type `b`"
+                        filterOption={(inputValue, option) => option.props.children.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1}
+                    />
                     {this.taskForm()}
                 </Modal>
             </div>
