@@ -1,6 +1,8 @@
 import {Select, Form, Input, DatePicker, TimePicker, AutoComplete} from "antd";
 import {DATE_ONLY_FORMAT, fullDateTimeFormat, hourMinuteFormat} from "../../utils/DateUtils";
 import {Editor} from "react-draft-wysiwyg";
+import CreatableSelect from '../deshboard/commoncomponents/CreatableSelect';
+import React from 'react';
 
 const Option = Select.Option;
 const FormItem = Form.Item;
@@ -15,18 +17,15 @@ export const FormSelect = ({
                                meta: {touched, error},
                                placeholder,
                                mode,
+                               creatable,
                                size = 'default',
                                ...rest,
                            }) => {
     if (!input.value && (mode === 'tags' || mode === 'multiple')) {
         input.value = [];
     }
-    
 
-    const data =[];
-    options.forEach((item, i)=>{
-        data.push(<Option key={item.value} value={item.label}>{item.label}</Option>)
-    });
+    const select = <CreatableSelect {...{...input, placeholder, disabled, size, options, ...rest}}/>;
 
     return <FormItem label={label}
                      required={required}
@@ -34,9 +33,7 @@ export const FormSelect = ({
                      wrapperCol={formItemLayout.wrapperCol}
                      validateStatus={touched && error ? 'error' : undefined}
                      help={touched && error ? error : undefined}>
-        <Select placeholder={placeholder}{ ...rest}>
-            {data}
-        </Select>
+        {select}
     </FormItem>
 };
 
@@ -150,6 +147,7 @@ export const FormAutoComplete = ({
             onChange={input.onChange}
             value={input.value}
             disabled={disabled}
+            onSelect={(v, o) => input.onChange(o.key)}
             optionLabelProp='value'
             filterOption={(inputValue, option) => option.props.children.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1}
             placeholder={placeholder}

@@ -13,3 +13,13 @@ export const PriorityTask = [
     {value: 2, name: 'Критический', displayName:'CRITICAL', avatar: <Avatar size='small'><Icon type="plus-square"/></Avatar>},
     {value: 3, name: 'Незначительный', displayName:'MINOR', avatar: <Avatar size='small'><Icon type="plus-square"/></Avatar>}
 ];
+
+export const getPriorityTask = (displayName) => {
+    let taskEnum = null;
+    PriorityTask.forEach((item, index) => {
+        if(item.displayName === displayName ){
+            taskEnum = item;
+        }
+    });
+    return taskEnum;
+};

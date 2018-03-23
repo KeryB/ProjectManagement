@@ -1,6 +1,9 @@
 package ru.process.platform.ProjectManagement.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.process.platform.ProjectManagement.dto.request.TaskRequestDto;
@@ -13,6 +16,7 @@ import ru.process.platform.ProjectManagement.repository.ProjectRepository;
 import ru.process.platform.ProjectManagement.repository.TaskRepository;
 import ru.process.platform.ProjectManagement.repository.UserProject.UserProjectRepository;
 import ru.process.platform.ProjectManagement.repository.UserRepository;
+import ru.process.platform.ProjectManagement.repository.jdbcTemplate.Paging;
 import ru.process.platform.ProjectManagement.service.predicates.SpecificationService;
 
 import java.util.HashMap;
@@ -80,6 +84,12 @@ public class TaskService {
         }
 
         return projectTaskData;
+
+    }
+
+    public Page<Task> getTaskList(Integer userId, Pageable pageable) {
+
+        return taskRepository.findAll(pageable);
 
     }
 }

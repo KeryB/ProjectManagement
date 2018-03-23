@@ -8,12 +8,12 @@ import org.springframework.data.domain.Pageable;
 
 @Getter
 @Setter
-public class Paging<T> {
+public class Paging {
     private Pageable pageable;
     private int totalPages;
     private long totalElements;
 
-    public Paging(Pageable pageable, Page<T> page) {
+    public Paging(Pageable pageable, Page page) {
         this.pageable = pageable;
         this.totalPages = page.getTotalPages();
         this.totalElements = page.getTotalElements();

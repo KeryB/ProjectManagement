@@ -16,6 +16,7 @@ export default (state = initialState, action = {}) => {
                 isLoading: true
             };
         case Types.FETCH_PROJECT_DATA_SUCCESS:
+            console.log(action);
             return {
                 ...state,
                 isLoading: false,

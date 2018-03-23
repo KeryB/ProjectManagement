@@ -4,13 +4,18 @@ import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
 import {fetchTaskData} from "../../../actions/TaskActions";
 import PropTypes from "prop-types";
+import {PriorityTask} from "../../../utils/task/TaskUtils";
 
 const TabPane = Tabs.TabPane;
 
-const data = [];
-for (let i = 0; i < 25; i++) {
-    data.push({title: 'Aw'})
-}
+const getDataSource = (taskList) => {
+    const data = [];
+    taskList.forEach((item, i) => {
+        console.log(item)
+        data.push({title: item.title})
+    });
+    return data;
+};
 
 class TaskProjectList extends React.Component {
 
@@ -22,6 +27,10 @@ class TaskProjectList extends React.Component {
         data: [],
         loading: false,
         hasMore: true,
+        pageable: {
+            pageNumber: 0,
+            pageSize: 30
+        }
     };
 
     componentDidMount() {
@@ -30,6 +39,8 @@ class TaskProjectList extends React.Component {
     }
 
     render() {
+        const {pageable: {pageSize}} = this.state;
+        const {taskData: {taskList, loading}} = this.props;
         return (
             <div className='task-project-list'>
                 <div className='p-block'>
@@ -59,21 +70,17 @@ class TaskProjectList extends React.Component {
                                     <Col span={9}>
                                         <div className='demo-infinite-container'>
                                             <List
-                                                dataSource={data}
+                                                loading={loading}
+                                                dataSource={getDataSource(taskList)}
                                                 renderItem={item => (
                                                     <List.Item key={item.id}>
-                                                        <List.Item.Meta
-                                                            avatar={<Avatar
-                                                                src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"/>}
-                                                            title={<a href="https://ant.design">{item.title}</a>}
-                                                        />
-                                                        <div>Content</div>
+                                                        <a>{PriorityTask.name}{item.title}</a>
                                                     </List.Item>
                                                 )}
                                             />
                                         </div>
                                         <div className='pagination-panel'>
-                                            <Pagination size="small" total={50}/>
+                                            <Pagination size="small" total={pageSize}/>
                                         </div>
                                     </Col>
                                     <Col span={16}>

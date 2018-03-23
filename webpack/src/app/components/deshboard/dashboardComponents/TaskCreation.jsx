@@ -63,7 +63,7 @@ const dataSource = ['Burns Bay Road', 'Downing Street', 'Wall Street'];
 const getDataSource = (projects) => {
     let data = [];
     projects.forEach((item, i) => {
-        data.push(<Option key={item.id} >{item.title}</Option>)
+        data.push({text: item.title, value: item.id})
     });
     return data;
 };
@@ -172,29 +172,19 @@ class TaskCreation extends React.Component {
         const {submitting, handleSubmit, commonsData, commonsData: {users, projects}} = this.props;
         return (
             <form onSubmit={handleSubmit(this.handleSubmit)}>
-                {/*<Field*/}
-                    {/*name='projectId'*/}
-                    {/*onFocus={this.handleFocusComboBox}*/}
-                    {/*onChange={this.handleProjectChange}*/}
-                    {/*label="Выберите проект"*/}
-                    {/*options={getProjectData(projects)}*/}
-                    {/*mode='combobox'*/}
-                    {/*validate={required}*/}
-                    {/*required*/}
-                    {/*formItemLayout={formItemLayout}*/}
-                    {/*placeholder='Выберите проект...'*/}
-                    {/*component={FormSelect}/>*/}
                 <Field
                     name='projectId'
                     onFocus={this.handleFocusComboBox}
                     onChange={this.handleProjectChange}
                     label="Выберите проект"
-                    options={getDataSource(projects)}
+                    options={getProjectData(projects)}
+                    mode='combobox'
+                    creatable={true}
                     validate={required}
                     required
                     formItemLayout={formItemLayout}
                     placeholder='Выберите проект...'
-                    component={FormAutoComplete}/>
+                    component={FormSelect}/>
                 <Field
                     name='title'
                     label='Введите название задачи'
@@ -241,7 +231,7 @@ class TaskCreation extends React.Component {
 
                 <Field
                     name='dateEnd'
-                    label="Выберите пользователя"
+                    label="'Дата заверешения задачи"
                     formItemLayout={{
                         labelCol: { span: 8 },
                         wrapperCol: { span: 15 },

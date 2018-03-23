@@ -2,6 +2,8 @@ package ru.process.platform.ProjectManagement.ws.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,6 +15,7 @@ import ru.process.platform.ProjectManagement.entity.RestResponse;
 import ru.process.platform.ProjectManagement.entity.jwt.Token;
 import ru.process.platform.ProjectManagement.entity.project.Project;
 import ru.process.platform.ProjectManagement.entity.task.Task;
+import ru.process.platform.ProjectManagement.repository.jdbcTemplate.Paging;
 import ru.process.platform.ProjectManagement.service.ProjectService;
 import ru.process.platform.ProjectManagement.service.TaskService;
 import ru.process.platform.ProjectManagement.service.UserService;
@@ -73,7 +76,7 @@ public class TaskController {
     }
 
     @PostMapping(value = "/fetchTaskData")
-    public RestResponse fetchTaskData(HttpServletRequest request){
+    public RestResponse fetchTaskData(HttpServletRequest request, Pageable pageable){
         String header = request.getHeader(tokenHeader);
         Token token = jwtService.getClaimsFromToken(header);
 
@@ -81,8 +84,8 @@ public class TaskController {
             return RestResponse.error(ErrorStatus.INVALID_TOKEN_HEADER, ErrorMessage.INVALID_TOKEN_HEADER);
         }
 
-        Map<Project, ProjectTaskDataDto> projectTaskData = taskService.getProjectTaskData(token.getId());
-        return RestResponse.ok(projectTaskData);
+        Page<Task> taskList = taskService.getTaskList(token.getId(), pageable);
+        return RestResponse.ok(taskList);
     }
 
 }

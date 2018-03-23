@@ -60,7 +60,7 @@ public class ProjectService {
             });
 
             userProjectPermissionDto.setUserProjects(userProjects.getContent());
-            userProjectPermissionDto.setPaging(new Paging<>(pageRequest, userProjects));
+            userProjectPermissionDto.setPaging(new Paging(pageRequest, userProjects));
         }
         return userProjectPermissionDto;
     }
