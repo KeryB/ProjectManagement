@@ -111,7 +111,7 @@ class LeftBar extends React.Component {
                     <SubMenu key="sub2" title={<span><Icon type="profile"/>Задачи</span>}>
                         <Menu.Item>
                             <Link to={Path.TASK_PROJECT_LIST}>
-                                <Icon type="right-circle-o"/> Задачи
+                                <Icon type="right-circle-o"/> Все задачи
                             </Link>
                         </Menu.Item>
                         <Menu.Item>

@@ -102,13 +102,6 @@
       }
     }
   }
-
-  .fetch-selector {
-    .anticon-spin {
-      position: absolute;
-    }
-  }
-
   .task-project-list {
 
     .demo-infinite-container {
@@ -116,7 +109,7 @@
       border-radius: 4px;
       overflow: auto;
       padding: 8px 24px;
-      height: 700px;
+      max-height: 700px;
     }
     .demo-loading {
       position: absolute;
@@ -124,7 +117,7 @@
       left: 50%;
     }
 
-    .ant-col-9 {
+    .col-sm-4 {
       max-width: 300px;
       min-width: 150px;
     }
@@ -148,14 +141,35 @@
       }
     }
 
-    .ant-col-16 {
-      width: auto;
-    }
 
     .ant-tabs-content{
       border: none;
     }
 
+  }
+
+  .task {
+    .header-project-task{
+      .ant-avatar-lg {
+        width: 60px;
+        height: 60px;
+        line-height: 40px;
+        border-radius: 50%;
+        margin-bottom: 20px;
+      }
+
+      .project-title {
+        display: inline-block;
+        margin-left: 5px;
+      }
+    }
+
+    .task-project-list {
+      .col-sm-8{
+        flex: 2 0 74.666667%;
+        max-width: 76.666667%;
+      }
+    }
   }
 
 }

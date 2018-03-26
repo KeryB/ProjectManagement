@@ -27,6 +27,11 @@ class ActualProject extends React.Component {
                         {project.title}
                     </h2>
                 </Card>
+
+                <div className="row">
+                    <div className="col-12 col-md-8">.col-12 .col-md-8</div>
+                    <div className="col-6 col-md-4">.col-6 .col-md-4</div>
+                </div>
             </div>
         )
     }

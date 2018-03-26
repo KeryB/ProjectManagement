@@ -10,12 +10,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.process.platform.ProjectManagement.dto.request.TaskRequestDto;
-import ru.process.platform.ProjectManagement.dto.response.ProjectTaskDataDto;
+import ru.process.platform.ProjectManagement.dto.response.TaskDataDto;
 import ru.process.platform.ProjectManagement.entity.RestResponse;
 import ru.process.platform.ProjectManagement.entity.jwt.Token;
-import ru.process.platform.ProjectManagement.entity.project.Project;
 import ru.process.platform.ProjectManagement.entity.task.Task;
-import ru.process.platform.ProjectManagement.repository.jdbcTemplate.Paging;
 import ru.process.platform.ProjectManagement.service.ProjectService;
 import ru.process.platform.ProjectManagement.service.TaskService;
 import ru.process.platform.ProjectManagement.service.UserService;
@@ -24,7 +22,6 @@ import ru.process.platform.ProjectManagement.utils.error.ErrorMessage;
 import ru.process.platform.ProjectManagement.utils.error.ErrorStatus;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/api/task",consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -62,8 +59,8 @@ public class TaskController {
         return RestResponse.ok(task);
     }
 
-    @PostMapping(value = "/fetchProjectTaskData")
-    public RestResponse fetchProjectTaskData(HttpServletRequest request){
+    @PostMapping(value = "/fetchTaskData")
+    public RestResponse fetchTaskData(HttpServletRequest request, @RequestBody Task task){
         String header = request.getHeader(tokenHeader);
         Token token = jwtService.getClaimsFromToken(header);
 
@@ -71,12 +68,12 @@ public class TaskController {
             return RestResponse.error(ErrorStatus.INVALID_TOKEN_HEADER, ErrorMessage.INVALID_TOKEN_HEADER);
         }
 
-        Map<Project, ProjectTaskDataDto> projectTaskData = taskService.getProjectTaskData(token.getId());
+        TaskDataDto projectTaskData = taskService.getProjectTaskData(task.getId());
         return RestResponse.ok(projectTaskData);
     }
 
-    @PostMapping(value = "/fetchTaskData")
-    public RestResponse fetchTaskData(HttpServletRequest request, Pageable pageable){
+    @PostMapping(value = "/fetchTaskList")
+    public RestResponse fetchTaskList(HttpServletRequest request, Pageable pageable){
         String header = request.getHeader(tokenHeader);
         Token token = jwtService.getClaimsFromToken(header);
 
@@ -86,6 +83,18 @@ public class TaskController {
 
         Page<Task> taskList = taskService.getTaskList(token.getId(), pageable);
         return RestResponse.ok(taskList);
+    }
+
+    @PostMapping(value = "/addComment")
+    public RestResponse addComment(HttpServletRequest request, @RequestBody String kek){
+        String header = request.getHeader(tokenHeader);
+        Token token = jwtService.getClaimsFromToken(header);
+
+        if (token == null) {
+            return RestResponse.error(ErrorStatus.INVALID_TOKEN_HEADER, ErrorMessage.INVALID_TOKEN_HEADER);
+        }
+
+        return RestResponse.ok(true);
     }
 
 }

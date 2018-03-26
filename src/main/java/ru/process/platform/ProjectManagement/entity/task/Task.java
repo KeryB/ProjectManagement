@@ -22,6 +22,8 @@ public class Task implements ITask{
     private Date dateEnd;
     private Time time;
     private String description;
+    private Date creationDate;
+    private Date lastChange;
 
     public enum Status {
         OPEN, REOPEN, RESOLVED, IN_PROGRESS, finished, ARCHIVE
@@ -47,21 +49,21 @@ public class Task implements ITask{
 
     @Override
     @NotNull
-    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.ORDINAL)
     public Status getStatusTask() {
         return status;
     }
 
     @Override
     @NotNull
-    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.ORDINAL)
     public Priority getTaskPriority() {
         return taskPriority;
     }
 
     @Override
     @NotNull
-    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.ORDINAL)
     public TaskType getTaskType() {
         return taskType;
     }

@@ -2,7 +2,7 @@ import * as React from "react";
 import {Button, Card, DatePicker, Divider, Form, Icon, Input, Row, Tabs} from "antd";
 import UploadAvatar from "../commoncomponents/UploadAvatar";
 import PropTypes from "prop-types";
-import ChangePasswordModal from "../commoncomponents/ChangePasswordModal";
+import ChangePasswordModal from "../commoncomponents/modals/ChangePasswordModal";
 
 class UserSettings extends React.Component {
 

@@ -11,7 +11,3 @@ export function saveProject(data, successCallback, errorCallback) {
 export function saveUserSettings(data, successCallback, errorCallback) {
     return saveAction(SAVE_USER_SETTINGS, "/api/user/saveUserSettings", {data, successCallback, errorCallback})
 }
-
-export function saveTask(data, successCallback, errorCallback) {
-    return saveAction(TASK_PREFIX, "/api/task/saveTask", {data, successCallback, errorCallback})
-}

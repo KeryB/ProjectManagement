@@ -2,17 +2,23 @@ import * as React from "react";
 import {Col, List, Row, Avatar, Card, Divider, Tabs, Dropdown, Menu, Button, Icon, Input, Pagination} from "antd";
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
-import {fetchTaskData} from "../../../actions/TaskActions";
+import {fetchTaskList} from "../../../../actions/TaskActions";
 import PropTypes from "prop-types";
-import {PriorityTask} from "../../../utils/task/TaskUtils";
+import {getEnumsTask, PriorityTask} from "../../../../utils/task/TaskUtils";
+import {Link, Route, Switch} from "react-router-dom";
+import * as Path from "../../../../utils/RoutePath";
+import moment from "moment";
 
 const TabPane = Tabs.TabPane;
 
 const getDataSource = (taskList) => {
     const data = [];
     taskList.forEach((item, i) => {
-        console.log(item)
-        data.push({title: item.title})
+        data.push({
+            id: item.id,
+            title: item.title,
+            taskPriority: item.taskPriority
+        })
     });
     return data;
 };
@@ -34,13 +40,13 @@ class TaskProjectList extends React.Component {
     };
 
     componentDidMount() {
-        const {fetchTaskData} = this.props;
-        fetchTaskData();
+        const {fetchTaskList} = this.props;
+        fetchTaskList();
     }
 
     render() {
         const {pageable: {pageSize}} = this.state;
-        const {taskData: {taskList, loading}} = this.props;
+        const {taskData: {taskList, loading}, totalElements, children} = this.props;
         return (
             <div className='task-project-list'>
                 <div className='p-block'>
@@ -63,29 +69,38 @@ class TaskProjectList extends React.Component {
                     <div className='content-panel'>
                         <Tabs defaultActiveKey="1" size='small' tabPosition='right'>
                             <TabPane tab="Все задачи" key="1">
-                                <Row>
-                                    <h3>
-                                        Список задач
-                                    </h3>
-                                    <Col span={9}>
+                                <h3>
+                                    Список задач
+                                </h3>
+                                <div className="row no-gutters">
+                                    <div className="col-4 col-md-2">
                                         <div className='demo-infinite-container'>
                                             <List
                                                 loading={loading}
                                                 dataSource={getDataSource(taskList)}
                                                 renderItem={item => (
                                                     <List.Item key={item.id}>
-                                                        <a>{PriorityTask.name}{item.title}</a>
+                                                        <List.Item.Meta
+                                                            avatar={getEnumsTask(item.taskPriority, PriorityTask).avatar}
+                                                            title={<Link to={{
+                                                                pathname: `/dashboard/taskProjectList/task/${item.id}`,
+                                                                state: {isFetched: false},
+                                                            }}>{item.title}</Link>}
+                                                        />
+                                                        <div>{moment(item.creationDate).format("DD:MM:YYYY")}</div>
                                                     </List.Item>
                                                 )}
                                             />
                                         </div>
                                         <div className='pagination-panel'>
-                                            <Pagination size="small" total={pageSize}/>
+                                            {totalElements > pageSize ?
+                                                <Pagination size="small" total={pageSize}/> : undefined}
                                         </div>
-                                    </Col>
-                                    <Col span={16}>
-                                    </Col>
-                                </Row>
+                                    </div>
+                                    <div className="col-16 col-sm-8 col-md-10">
+                                        {children}
+                                    </div>
+                                </div>
                             </TabPane>
                             <TabPane tab="Обсуждаемые" key="2">
                             </TabPane>
@@ -108,7 +123,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        fetchTaskData: bindActionCreators(fetchTaskData, dispatch)
+        fetchTaskList: bindActionCreators(fetchTaskList, dispatch)
     }
 }
 

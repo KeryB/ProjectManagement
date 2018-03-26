@@ -33,25 +33,25 @@ class FetchList extends React.Component {
         userObject: PropTypes.object.isRequired,
     };
 
-    // componentDidMount() {
-    //     const {userObject} = this.props;
-    //
-    //     this.setState({
-    //         pageable: {
-    //             ...this.state.pageable,
-    //             userId: userObject.userId,
-    //             fetchTableType: userObject.fetchTableType
-    //         }
-    //     }, () => {
-    //         console.log(this.state);
-    //         this.getData(this.state.pageable, (resp) => {
-    //             this.setState({
-    //                 loading: false,
-    //                 data: resp
-    //             })
-    //         });
-    //     });
-    // }
+    componentDidMount() {
+        const {userObject} = this.props;
+
+        this.setState({
+            pageable: {
+                ...this.state.pageable,
+                userId: userObject.userId,
+                fetchTableType: userObject.fetchTableType
+            }
+        }, () => {
+            console.log(this.state);
+            this.getData(this.state.pageable, (resp) => {
+                this.setState({
+                    loading: false,
+                    data: resp
+                })
+            });
+        });
+    }
 
     componentWillReceiveProps(props){
         console.log(props);
@@ -80,6 +80,7 @@ class FetchList extends React.Component {
     render() {
         const {loading, loadingMore, showLoadingMore, data} = this.state;
         const {projectData: {projects}} = this.props;
+
 
         const loadMore = showLoadingMore ? (
             <div style={{textAlign: 'center', marginTop: 12, height: 32, lineHeight: '32px'}}>

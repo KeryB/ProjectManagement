@@ -3,6 +3,7 @@ import {DATE_ONLY_FORMAT, fullDateTimeFormat, hourMinuteFormat} from "../../util
 import {Editor} from "react-draft-wysiwyg";
 import CreatableSelect from '../deshboard/commoncomponents/CreatableSelect';
 import React from 'react';
+import FetchSelect from "../deshboard/commoncomponents/FetchSelect";
 
 const Option = Select.Option;
 const FormItem = Form.Item;
@@ -10,6 +11,7 @@ const FormItem = Form.Item;
 export const FormSelect = ({
                                input,
                                options = [],
+                               loading = false,
                                label,
                                disabled,
                                required,
@@ -17,15 +19,14 @@ export const FormSelect = ({
                                meta: {touched, error},
                                placeholder,
                                mode,
-                               creatable,
                                size = 'default',
                                ...rest,
                            }) => {
-    if (!input.value && (mode === 'tags' || mode === 'multiple')) {
-        input.value = [];
-    }
 
-    const select = <CreatableSelect {...{...input, placeholder, disabled, size, options, ...rest}}/>;
+    const data = [];
+    options.forEach(({value, label, avatar}, i) => {
+        data.push(<Option key={value}>{avatar}{label}</Option>)
+    });
 
     return <FormItem label={label}
                      required={required}
@@ -33,10 +34,12 @@ export const FormSelect = ({
                      wrapperCol={formItemLayout.wrapperCol}
                      validateStatus={touched && error ? 'error' : undefined}
                      help={touched && error ? error : undefined}>
-        {select}
+        <FetchSelect data={data}
+                     loading={loading}
+                     filterOption={(inputValue, option) => option.props.children[1].toUpperCase().indexOf(inputValue.toUpperCase()) !== -1}
+                     {...{...input, placeholder, size, disabled, mode, ...rest}}/>
     </FormItem>
 };
-
 
 export const TextField = ({
                               input,
@@ -87,7 +90,7 @@ export const FormDatePicker = ({
                      wrapperCol={formItemLayout.wrapperCol}
                      help={touched && error ? error : undefined}>
         <DatePicker format={format}
-                   placeholder={placeholder}/>
+                    placeholder={placeholder}/>
     </FormItem>;
 };
 
@@ -125,7 +128,7 @@ export const FormAutoComplete = ({
                                      required,
                                      meta: {touched, error},
                                      placeholder,
-                                     formItemLayout={},
+                                     formItemLayout = {},
                                      name, validate,
                                      wrapperProps = {},
                                      ...   rest,
@@ -174,6 +177,7 @@ export const FormEditWysiwyg = ({
                      wrapperCol={formItemLayout.wrapperCol}
                      help={touched && error ? error : undefined}>
         <Editor {...{...input, ...rest}}
+                placeholder='Введите сообщение'
                 toolbarClassName="toolbarClassName"
                 wrapperClassName="wrapped-editro-task"
                 editorClassName="editor-task"

@@ -4,8 +4,10 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import ru.process.platform.ProjectManagement.dto.filter.ProjectFilterRequestDto;
 import ru.process.platform.ProjectManagement.entity.UserProject;
+import ru.process.platform.ProjectManagement.entity.task.Task;
 import ru.process.platform.ProjectManagement.utils.StringUtils;
 
+import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +43,14 @@ public class SpecificationService {
             Predicate[] array = new Predicate[predicates.size()];
             predicates.toArray(array);
             return criteriaBuilder.and(array);
+        });
+    }
+
+    public Specification<Task> getAllTaskSpecification(int userId){
+        return ((root, criteriaQuery, criteriaBuilder) -> {
+            root.fetch("UserProject", JoinType.INNER);
+            root.fetch("primaryProject", JoinType.INNER);
+            return criteriaBuilder.equal(root.get("id"), userId);
         });
     }
 }

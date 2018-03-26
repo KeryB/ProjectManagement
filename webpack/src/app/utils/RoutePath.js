@@ -10,4 +10,5 @@ export const PROJECTS = DASHBOARD + '/projects';
 export const ADD_TO_PROJECT = DASHBOARD + '/addProject';
 export const Settings = DASHBOARD + '/settings';
 export const CREATE_TASK = DASHBOARD + "/createtask";
-export const TASK_PROJECT_LIST = DASHBOARD + '/taskProjectList'
+export const TASK_PROJECT_LIST = DASHBOARD + '/taskProjectList';
+export const TASK = TASK_PROJECT_LIST +  '/task';

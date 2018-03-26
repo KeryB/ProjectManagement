@@ -7,8 +7,11 @@ public class JpaUtils {
     public static final String USER_PROJECT_TABLE_NAME = "user_project";
     public static final String PROJECT_SETTINGS_TABLE_NAME = "project_settings";
     public static final String TASK_TABLE_NAME = "task";
+    public static final String COMMENT_TABLE_NAME = "comment";
+    public static final String NOTIFICATION = "notification";
 
     //tableId
     public static final String PROJECT_PRIMARY_KEY = "project_id";
     public static final String USER_PRIMARY_KEY = "user_id";
+    public static final String TASK_PRIMARY_KEY = "task_id";
 }
