@@ -179,7 +179,6 @@ class Task extends React.Component {
 
     componentWillMount() {
         const {match: {params}, fetchTaskData, taskReducer: {loading, isFetched}} = this.props;
-        console.log(this.props)
 
         if (!isEmpty(params) && !loading && !isFetched) {
             fetchTaskData(parseParams(params));

@@ -103,7 +103,7 @@ class TaskProjectList extends React.Component {
                                         <Pagination size="small" total={pageSize}/> : undefined}
                                 </div>
                             </div>
-                            <div className="col-16 col-sm-8 col-md-8">
+                            <div className="col-16 col-sm-8 col-md-9">
                                 {children}
                             </div>
                         </div>

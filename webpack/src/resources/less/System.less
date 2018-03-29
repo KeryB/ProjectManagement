@@ -125,12 +125,24 @@ h2 {
 
 .comment-list-container {
   margin: 5px;
+  border: 1px solid #e8e8e8;
 
   .list-header {
+    padding: 5px;
 
     .comment-sender {
       margin-left: 10px;
       display: inline-block;
+    }
+
+    .time-comment {
+      margin-right: 8px;
+      i{
+        margin-right: 2px;
+      }
+    }
+    .anticon-ellipsis{
+      cursor: pointer;
     }
   }
   .comment-content {
@@ -149,9 +161,6 @@ h2 {
     }
 
     .count-sub-messages {
-      i {
-        margin-right: 2px;
-      }
       margin-left: 5px;
     }
   }

@@ -10,6 +10,8 @@ import {bindActionCreators} from "redux";
 import {addComment} from "../../../actions/TaskActions";
 import {isEmpty} from "lodash";
 import {required} from "../../forms/Validation";
+import {Link} from "react-router-dom";
+import moment from "moment";
 
 const menu = (
     <Menu>
@@ -18,6 +20,39 @@ const menu = (
         </Menu.Item>
     </Menu>
 );
+
+const RenderComponent = (comment) => {
+
+    return(
+        <div style={{margin: '5px'}} className='comment-list-container'>
+            <div className='list-header'>
+                <Avatar size='small'/>
+                <span
+                    className='comment-sender'><h4>{item.primaryUser.firstName + ' ' + item.primaryUser.secondName}</h4></span>
+                <span style={{float: 'right'}}>
+                                   <Dropdown overlay={menu} trigger={['click']}>
+                                       <Icon type="ellipsis"/>
+                                   </Dropdown>
+                               </span>
+            </div>
+            <div className='comment-content'>{item.message}</div>
+            <div className='action-panel'>
+                                <span>
+                                    <span className='count-sub-messages'>
+                                        <IconText type="message" text="2"/>
+                                    </span>
+                                    <span className='comment-button'>
+                                        <Button icon="cloud" onClick={this.handleButtonClick}>Ответить</Button>
+                                    </span>
+                                </span>
+                <div className='editor-comment'>
+                    {showComponent ?
+                        this.EditForm() : undefined}
+                </div>
+            </div>
+        </div>
+    )
+};
 
 
 const FORM_ID = 'addComment';
@@ -63,7 +98,6 @@ class Comment extends React.Component {
 
     EditForm = () => {
         const {handleSubmit} = this.props;
-        console.log("AAAAAAAAAAAAAAAA");
         return (
             <form id={FORM_ID} onSubmit={handleSubmit(this.handleSubmit)}>
                 <Field
@@ -92,29 +126,25 @@ class Comment extends React.Component {
         </span>
         );
 
-        console.log(this.state);
+
 
         return (
             <div>
-                {showComponent ? this.EditForm() : <Input placeholder='Введите сообщение' onClick={this.handleClickInput}/> }
-                <List
-                    className="demo-loadmore-list"
-                    itemLayout="horizontal"
-                    dataSource={comments}
-                    renderItem={item => (
-                        <div style={{margin: '5px'}} className='comment-list-container'>
-                            <div className='list-header'>
-                                <Avatar size='small'/>
-                                <span
-                                    className='comment-sender'><h4>{item.primaryUser.firstName + ' ' + item.primaryUser.secondName}</h4></span>
-                                <span style={{float: 'right'}}>
+                {showComponent ? this.EditForm() :
+                    <Input placeholder='Введите сообщение' onClick={this.handleClickInput}/>}
+                <div style={{margin: '5px'}} className='comment-list-container'>
+                    <div className='list-header'>
+                        <Avatar size='small'/>
+                        <span
+                            className='comment-sender'><h4>{item.primaryUser.firstName + ' ' + item.primaryUser.secondName}</h4></span>
+                        <span style={{float: 'right'}}>
                                    <Dropdown overlay={menu} trigger={['click']}>
                                        <Icon type="ellipsis"/>
                                    </Dropdown>
                                </span>
-                            </div>
-                            <div className='comment-content'>{item.message}</div>
-                            <div className='action-panel'>
+                    </div>
+                    <div className='comment-content'>{item.message}</div>
+                    <div className='action-panel'>
                                 <span>
                                     <span className='count-sub-messages'>
                                         <IconText type="message" text="2"/>
@@ -123,15 +153,12 @@ class Comment extends React.Component {
                                         <Button icon="cloud" onClick={this.handleButtonClick}>Ответить</Button>
                                     </span>
                                 </span>
-                                <div className='editor-comment'>
-                                    {showComponent ?
-                                        this.EditForm() : undefined}
-                                </div>
-                            </div>
+                        <div className='editor-comment'>
+                            {showComponent ?
+                                this.EditForm() : undefined}
                         </div>
-
-                    )}
-                />
+                    </div>
+                </div>
             </div>
         )
     };
