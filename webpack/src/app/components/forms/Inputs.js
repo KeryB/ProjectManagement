@@ -28,6 +28,16 @@ export const FormSelect = ({
         data.push(<Option key={value}>{avatar}{label}</Option>)
     });
 
+    const renderField = ({input, label, type, meta: {touched, error, warning}}) => (
+        <div>
+            {touched && error ? <Icon type='exclamation-circle' className='error-icon'/> : undefined}
+            <input {...input} placeholder={label} type={type}>
+            </input>
+            {touched && error ? <span className="line-error"/> : <span className="line"/>}
+            {touched && error ? <label className='error-label'>{error}</label> : undefined}
+        </div>
+    );
+
     return <FormItem label={label}
                      required={required}
                      labelCol={formItemLayout.labelCol}

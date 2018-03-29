@@ -43,18 +43,50 @@ const BuildDetail = ({task}) => {
     return (
         <div className='detail'>
             <Divider orientation='left'><h4>Детализация</h4></Divider>
-            <Row style={{marginBottom: '10px'}}>
-                <Col span={2}>Тип : </Col>
-                <Col offset={2} span={6}>{taskType.avatar} {taskType.name}</Col>
-                <Col span={2}>Статус : </Col>
-                <Col offset={2} span={6}>{status.avatar}</Col>
-            </Row>
-            <Row>
-                <Col span={2}>Приоритет : </Col>
-                <Col offset={2} span={6}>{priority.avatar} {priority.name}</Col>
-                <Col span={2}>Теги : </Col>
-                <Col offset={2} span={6}>Теги</Col>
-            </Row>
+            <div className="row">
+                <div className="col">
+                    <div className="row">
+                        <div className="col">
+                            Тип :
+                        </div>
+                        <div className='col'>
+                            {taskType.avatar} {taskType.name}
+                        </div>
+                    </div>
+                </div>
+                <div className="col">
+                    <div className="row">
+                        <div className="col">
+                            Статус :
+                        </div>
+                        <div className='col'>
+                            {status.avatar}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div className="row">
+                <div className="col-6">
+                    <div className="row">
+                        <div className="col-6">
+                            Приоритет :
+                        </div>
+                        <div className='col-6'>
+                            {priority.avatar} {priority.name}
+                        </div>
+                    </div>
+                </div>
+                <div className="col-6">
+                    <div className="row">
+                        <div className="col-6">
+                            Теги :
+                        </div>
+                        <div className='col-6'>
+                            Теги
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     )
 };
@@ -156,17 +188,12 @@ class Task extends React.Component {
 
     componentWillReceiveProps(props) {
         const {match: {params}, fetchTaskData, taskReducer: {loading}, location: {state}} = props;
-        const {isFetched} = this.state;
+        const oldParams =  this.props.match.params;
 
-        console.log(isFetched);
-        this.setState({
-            isFetched: true
-        }, () => {
-            if (!isEmpty(params) && !loading && !isFetched) {
-                console.log(parseParams(params));
-                fetchTaskData(parseParams(params));
-            }
-        })
+        if (!isEmpty(params) && oldParams.id !== params.id) {
+            console.log(oldParams);
+            fetchTaskData(parseParams(params));
+        }
     }
 
     handleClickCommentButton = () => {
@@ -182,7 +209,7 @@ class Task extends React.Component {
             <div className='p-block task' onClick={this.handleClickCommentButton}>
                 {isEmpty(payload) ? <Spin/> :
                     <div className="row">
-                        <div className="col-12 col-md-8">
+                        <div className="col-12 col-md-9">
                             <div className='header-project-task'>
                                 <Link to={Path.ACTUAL_PROJECT}><Avatar size='large'/></Link>
                                 <div className='project-title'>
@@ -218,7 +245,7 @@ class Task extends React.Component {
                                 </Tabs>
                             </div>
                         </div>
-                        <div className="col-6 col-md-4">
+                        <div className="col-6 col-md-3">
                             <BuildPeopleData task={task} users={users}/>
                         </div>
                     </div>}

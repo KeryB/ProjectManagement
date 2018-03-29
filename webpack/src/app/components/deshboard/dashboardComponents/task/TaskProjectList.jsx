@@ -67,46 +67,46 @@ class TaskProjectList extends React.Component {
                         </a>
                     </div>
                     <div className='content-panel'>
-                        <Tabs defaultActiveKey="1" size='small' tabPosition='right'>
-                            <TabPane tab="Все задачи" key="1">
-                                <h3>
-                                    Список задач
-                                </h3>
-                                <div className="row no-gutters">
-                                    <div className="col-4 col-md-2">
-                                        <div className='demo-infinite-container'>
-                                            <List
-                                                loading={loading}
-                                                dataSource={getDataSource(taskList)}
-                                                renderItem={item => (
-                                                    <List.Item key={item.id}>
-                                                        <List.Item.Meta
-                                                            avatar={getEnumsTask(item.taskPriority, PriorityTask).avatar}
-                                                            title={<Link to={{
-                                                                pathname: `/dashboard/taskProjectList/task/${item.id}`,
-                                                                state: {isFetched: false},
-                                                            }}>{item.title}</Link>}
-                                                        />
-                                                        <div>{moment(item.creationDate).format("DD:MM:YYYY")}</div>
-                                                    </List.Item>
-                                                )}
-                                            />
-                                        </div>
-                                        <div className='pagination-panel'>
-                                            {totalElements > pageSize ?
-                                                <Pagination size="small" total={pageSize}/> : undefined}
-                                        </div>
-                                    </div>
-                                    <div className="col-16 col-sm-8 col-md-10">
-                                        {children}
-                                    </div>
+                        {/*<Tabs defaultActiveKey="1" size='small' tabPosition='right'>*/}
+                            {/*<TabPane tab="Все задачи" key="1">*/}
+                            {/*</TabPane>*/}
+                            {/*<TabPane tab="Обсуждаемые" key="2">*/}
+                            {/*</TabPane>*/}
+                            {/*<TabPane tab="Исполняемые" key="3">Content of Tab Pane 3</TabPane>*/}
+                            {/*<TabPane tab="Архивные" key="4">Content of Tab Pane 3</TabPane>*/}
+                        {/*</Tabs>*/}
+                        <h3>
+                            Список задач
+                        </h3>
+                        <div className="row no-gutters">
+                            <div className="col-4 col-md-3">
+                                <div className='demo-infinite-container'>
+                                    <List
+                                        loading={loading}
+                                        dataSource={getDataSource(taskList)}
+                                        renderItem={item => (
+                                            <List.Item key={item.id}>
+                                                <List.Item.Meta
+                                                    avatar={getEnumsTask(item.taskPriority, PriorityTask).avatar}
+                                                    title={<Link to={{
+                                                        pathname: `/dashboard/taskProjectList/task/${item.id}`,
+                                                        state: {isFetched: false},
+                                                    }}>{item.title}</Link>}
+                                                />
+                                                <div>{moment(item.creationDate).format("DD:MM:YYYY")}</div>
+                                            </List.Item>
+                                        )}
+                                    />
                                 </div>
-                            </TabPane>
-                            <TabPane tab="Обсуждаемые" key="2">
-                            </TabPane>
-                            <TabPane tab="Исполняемые" key="3">Content of Tab Pane 3</TabPane>
-                            <TabPane tab="Архивные" key="4">Content of Tab Pane 3</TabPane>
-                        </Tabs>
+                                <div className='pagination-panel'>
+                                    {totalElements > pageSize ?
+                                        <Pagination size="small" total={pageSize}/> : undefined}
+                                </div>
+                            </div>
+                            <div className="col-16 col-sm-8 col-md-8">
+                                {children}
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

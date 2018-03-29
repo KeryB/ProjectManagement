@@ -5,9 +5,11 @@ import {Editor} from "react-draft-wysiwyg";
 import {EditorState} from 'draft-js';
 import {connect} from "react-redux";
 import {Field, reduxForm} from "redux-form";
-import {FormEditWysiwyg} from "../../forms/Inputs";
+import {FormEditWysiwyg, TextField} from "../../forms/Inputs";
 import {bindActionCreators} from "redux";
 import {addComment} from "../../../actions/TaskActions";
+import {isEmpty} from "lodash";
+import {required} from "../../forms/Validation";
 
 const menu = (
     <Menu>
@@ -49,18 +51,19 @@ class Comment extends React.Component {
     };
 
     handleSubmit = (values) => {
-        const{addComment} = this.props;
+        const {addComment} = this.props;
         addComment(values.comment);
     };
 
-    handleCancelComment=()=>{
-     this.setState({
-         showComponent: false
-     })
+    handleCancelComment = () => {
+        this.setState({
+            showComponent: false
+        })
     };
 
     EditForm = () => {
         const {handleSubmit} = this.props;
+        console.log("AAAAAAAAAAAAAAAA");
         return (
             <form id={FORM_ID} onSubmit={handleSubmit(this.handleSubmit)}>
                 <Field
@@ -73,12 +76,15 @@ class Comment extends React.Component {
         )
     };
 
+    handleClickInput = () => {
+        this.setState({
+            showComponent: true
+        })
+    };
+
     RenderComments = (comments) => {
-        if (!comments) {
-            return (
-                <Button>Комментировать</Button>
-            )
-        }
+        const {handleSubmit} = this.props;
+        const {showComponent} = this.state;
         const IconText = ({type, text}) => (
             <span>
         <Icon type={type} style={{marginRight: 8}}/>
@@ -86,42 +92,47 @@ class Comment extends React.Component {
         </span>
         );
 
+        console.log(this.state);
+
         return (
-            <List
-                className="demo-loadmore-list"
-                itemLayout="horizontal"
-                dataSource={comments}
-                renderItem={item => (
-                    <div style={{margin: '5px'}} className='comment-list-container'>
-                        <div className='list-header'>
-                            <Avatar size='small'/>
-                            <span
-                                className='comment-sender'><h4>{item.primaryUser.firstName + ' ' + item.primaryUser.secondName}</h4></span>
-                            <span style={{float: 'right'}}>
-                           <Dropdown overlay={menu} trigger={['click']}>
-                               <Icon type="ellipsis"/>
-                           </Dropdown>
-                       </span>
-                        </div>
-                        <div className='comment-content'>{item.message}</div>
-                        <div className='action-panel'>
-                        <span>
-                            <span className='count-sub-messages'>
-                                <IconText type="message" text="2"/>
-                            </span>
-                            <span className='comment-button'>
-                                <Button icon="cloud" onClick={this.handleButtonClick}>Ответить</Button>
-                            </span>
-                        </span>
-                            <div className='editor-comment'>
-                                {this.state.showComponent ?
-                                    this.EditForm() : undefined}
+            <div>
+                {showComponent ? this.EditForm() : <Input placeholder='Введите сообщение' onClick={this.handleClickInput}/> }
+                <List
+                    className="demo-loadmore-list"
+                    itemLayout="horizontal"
+                    dataSource={comments}
+                    renderItem={item => (
+                        <div style={{margin: '5px'}} className='comment-list-container'>
+                            <div className='list-header'>
+                                <Avatar size='small'/>
+                                <span
+                                    className='comment-sender'><h4>{item.primaryUser.firstName + ' ' + item.primaryUser.secondName}</h4></span>
+                                <span style={{float: 'right'}}>
+                                   <Dropdown overlay={menu} trigger={['click']}>
+                                       <Icon type="ellipsis"/>
+                                   </Dropdown>
+                               </span>
+                            </div>
+                            <div className='comment-content'>{item.message}</div>
+                            <div className='action-panel'>
+                                <span>
+                                    <span className='count-sub-messages'>
+                                        <IconText type="message" text="2"/>
+                                    </span>
+                                    <span className='comment-button'>
+                                        <Button icon="cloud" onClick={this.handleButtonClick}>Ответить</Button>
+                                    </span>
+                                </span>
+                                <div className='editor-comment'>
+                                    {showComponent ?
+                                        this.EditForm() : undefined}
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                )}
-            />
+                    )}
+                />
+            </div>
         )
     };
 
