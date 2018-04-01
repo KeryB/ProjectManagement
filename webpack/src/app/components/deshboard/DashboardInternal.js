@@ -10,6 +10,10 @@ import ActualProject from "./dashboardComponents/project/ActualProject";
 import TaskCreation from "./dashboardComponents/task/TaskCreation";
 import TaskProjectList from "./dashboardComponents/task/TaskProjectList";
 import TaskProjectListInternal from "./dashboardComponents/task/TaskProjectListInternal";
+import ProjectSettings from "./dashboardComponents/settings/ProjectSettings";
+import ProjectUserSettings from "./dashboardComponents/settings/ProjectSettingsUser";
+import ProjectSettingsRole from "./dashboardComponents/settings/ProjectSettingsRole";
+import Chats from "./dashboardComponents/chats/Chats";
 
 
 class DashboardInternal extends React.Component {
@@ -28,6 +32,10 @@ class DashboardInternal extends React.Component {
                     <Route path={Path.CREATE_PROJECT} component={ProjectCreation}/>
                     <Route path={Path.CREATE_TASK} component={TaskCreation}/>
                     <Route path={Path.TASK_PROJECT_LIST} component={TaskProjectListInternal}/>
+                    <Route path={Path.PROJECT_SETTINGS} component={ProjectSettings}/>
+                    <Route path={Path.PROJECT_SETTINGS_USER} component={ProjectUserSettings}/>
+                    <Route path={Path.PROJECT_SETTINGS_ROLE} component={ProjectSettingsRole}/>
+                    <Route path={Path.CHATS} component={Chats}/>
                 </Switch>
             </DashBoard>
         )

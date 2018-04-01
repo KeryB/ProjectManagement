@@ -39,10 +39,11 @@ const menu = (countProjects) => (
             <Link to={Path.ADD_TO_PROJECT}><Icon type="user-add"/> Добавить в проект </Link>
         </Menu.Item>
         <Menu.Item>
-            <Link to={Path.ADD_TO_PROJECT}><Icon type="area-chart"/> Текущий проект</Link>
+            <Link to={Path.ADD_TO_PROJECT}> <Icon type="file"/> Текущий проект</Link>
         </Menu.Item>
     </Menu>
 );
+
 
 class LeftBar extends React.Component {
 
@@ -97,10 +98,10 @@ class LeftBar extends React.Component {
                         </a>
                     </Menu.Item>
                     <Menu.Item key="3">
-                        <a href="#">
+                        <Link to={Path.CHATS}>
                             <Icon type="message"/>
                             <span>Чаты</span>
-                        </a>
+                        </Link>
                     </Menu.Item>
                     <Menu.Item key="5">
                         <Link to={Path.TASK_PROJECT_LIST}>
@@ -120,17 +121,24 @@ class LeftBar extends React.Component {
                             </Link>
                         </Menu.Item>
                     </SubMenu>
-                    <Menu.Item key="6">
-                        <a href="#">
-                            <Icon type="file"/>
-                            <span>Файлы проекта</span>
-                        </a>
-                    </Menu.Item>
+                    <SubMenu key="sub3" title={<div><Icon type="usergroup-add" /><span>Роли</span><span> и Пользователи</span></div>}>
+                        {chosenProject != null ?
+                        <Menu.Item>
+                            <Link to={`/dashboard/users/project:${chosenProject.primaryProject.id}`}>
+                                <Icon type="user"/> Пользователи
+                            </Link>
+                        </Menu.Item> : undefined }
+                        {chosenProject != null ? <Menu.Item>
+                            <Link to={`/dashboard/permission/project:${chosenProject.primaryProject.id}`}>
+                                <Icon type="right-circle-o"/> Роли(Права)
+                            </Link>
+                        </Menu.Item> : undefined}
+                    </SubMenu>
                     <Menu.Item key="7">
-                        <a href="#">
+                        <Link to={Path.PROJECT_SETTINGS}>
                             <Icon type="setting"/>
                             <span>Настройки</span>
-                        </a>
+                        </Link>
                     </Menu.Item>
 
                 </Menu>

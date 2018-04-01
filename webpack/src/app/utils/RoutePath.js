@@ -12,3 +12,8 @@ export const Settings = DASHBOARD + '/settings';
 export const CREATE_TASK = DASHBOARD + "/createtask";
 export const TASK_PROJECT_LIST = DASHBOARD + '/taskProjectList';
 export const TASK = TASK_PROJECT_LIST +  '/task';
+export const PROJECT_SETTINGS = DASHBOARD + '/project-settings';
+
+export const PROJECT_SETTINGS_USER = DASHBOARD + '/users/project:id';
+export const PROJECT_SETTINGS_ROLE = DASHBOARD + '/permission/project:id';
+export const CHATS = DASHBOARD + '/chats';

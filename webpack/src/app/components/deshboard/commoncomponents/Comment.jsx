@@ -21,40 +21,6 @@ const menu = (
     </Menu>
 );
 
-const RenderComponent = (comment) => {
-
-    return(
-        <div style={{margin: '5px'}} className='comment-list-container'>
-            <div className='list-header'>
-                <Avatar size='small'/>
-                <span
-                    className='comment-sender'><h4>{item.primaryUser.firstName + ' ' + item.primaryUser.secondName}</h4></span>
-                <span style={{float: 'right'}}>
-                                   <Dropdown overlay={menu} trigger={['click']}>
-                                       <Icon type="ellipsis"/>
-                                   </Dropdown>
-                               </span>
-            </div>
-            <div className='comment-content'>{item.message}</div>
-            <div className='action-panel'>
-                                <span>
-                                    <span className='count-sub-messages'>
-                                        <IconText type="message" text="2"/>
-                                    </span>
-                                    <span className='comment-button'>
-                                        <Button icon="cloud" onClick={this.handleButtonClick}>Ответить</Button>
-                                    </span>
-                                </span>
-                <div className='editor-comment'>
-                    {showComponent ?
-                        this.EditForm() : undefined}
-                </div>
-            </div>
-        </div>
-    )
-};
-
-
 const FORM_ID = 'addComment';
 
 class Comment extends React.Component {
@@ -126,41 +92,52 @@ class Comment extends React.Component {
         </span>
         );
 
-
-
-        return (
-            <div>
-                {showComponent ? this.EditForm() :
-                    <Input placeholder='Введите сообщение' onClick={this.handleClickInput}/>}
-                <div style={{margin: '5px'}} className='comment-list-container'>
-                    <div className='list-header'>
-                        <Avatar size='small'/>
-                        <span
-                            className='comment-sender'><h4>{item.primaryUser.firstName + ' ' + item.primaryUser.secondName}</h4></span>
-                        <span style={{float: 'right'}}>
-                                   <Dropdown overlay={menu} trigger={['click']}>
-                                       <Icon type="ellipsis"/>
-                                   </Dropdown>
-                               </span>
-                    </div>
-                    <div className='comment-content'>{item.message}</div>
-                    <div className='action-panel'>
-                                <span>
-                                    <span className='count-sub-messages'>
-                                        <IconText type="message" text="2"/>
-                                    </span>
-                                    <span className='comment-button'>
-                                        <Button icon="cloud" onClick={this.handleButtonClick}>Ответить</Button>
-                                    </span>
+        let commentList = [];
+        comments.forEach((item, i) => {
+            commentList.push(
+                <div>
+                    <div style={{margin: '5px'}} className='comment-list-container'>
+                        <div className='list-header'>
+                            <Avatar size='small'/>
+                            <span className='comment-sender'>
+                                <h4>
+                                    {item.primaryUser.firstName + ' ' + item.primaryUser.secondName}
+                                 </h4>
+                            </span>
+                            <span style={{float: 'right'}}>
+                                <span className='time-comment'>
+                                    <Icon type="clock-circle-o" />
+                                    {moment(item.creationDate).format('DD MMMM YYYY, h:mm')}
                                 </span>
-                        <div className='editor-comment'>
-                            {showComponent ?
-                                this.EditForm() : undefined}
+                                <Dropdown overlay={menu} trigger={['click']}>
+                                    <Icon type="ellipsis"/>
+                                </Dropdown>
+                            </span>
+                        </div>
+                        <div className='comment-content'>{item.message}</div>
+                        <div className='action-panel'>
+                        <span>
+                            <span className='count-sub-messages'>
+                                <IconText type="message" text="2"/>
+                            </span>
+                            <span className='comment-button'>
+                                <Button onClick={this.handleButtonClick}>Ответить</Button>
+                            </span>
+                        </span>
+                            <div className='editor-comment'>
+                                {showComponent ?
+                                    this.EditForm() : undefined}
+                            </div>
                         </div>
                     </div>
+                    <div style={{padding:'5px'}}>
+                        <Input placeholder='Введите сообщение' onClick={this.handleClickInput}/>
+                    </div>
                 </div>
-            </div>
-        )
+            )
+        });
+
+        return commentList;
     };
 
     render() {

@@ -198,6 +198,8 @@ class Projects extends React.Component {
                onChange={this.handlePaginationChange}
                pagination={{pageSize: pageSize, total: totalPages, defaultCurrent: current}}
                loading={isLoading}
+               bordered
+               size="default"
         />
     );
 
