@@ -10,7 +10,6 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.web.filter.OncePerRequestFilter;
 import ru.process.platform.ProjectManagement.entity.jwt.JwtWrapper;
 import ru.process.platform.ProjectManagement.entity.jwt.Token;
-import ru.process.platform.ProjectManagement.entity.jwt.UserDetailsImpl;
 import ru.process.platform.ProjectManagement.entity.user.User;
 import ru.process.platform.ProjectManagement.service.UserService;
 import ru.process.platform.ProjectManagement.service.security.JwtService;
@@ -60,6 +59,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authentication);
                 request.setAttribute("token", token);
+                request.setAttribute("MappedUser", user);
                 response.addHeader(roleHeader, user.getRole().name());
             } else {
                 HttpUtils.writeError(response, ErrorStatus.TOKEN_SHOULD_BE_REFRESHED, ErrorMessage.REFRESH_TOKEN_REQUIRED_MESSAGE);

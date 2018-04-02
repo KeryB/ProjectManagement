@@ -18,6 +18,7 @@ import ru.process.platform.ProjectManagement.service.UserService;
 import ru.process.platform.ProjectManagement.service.security.JwtService;
 import ru.process.platform.ProjectManagement.utils.error.ErrorMessage;
 import ru.process.platform.ProjectManagement.utils.error.ErrorStatus;
+import ru.process.platform.ProjectManagement.ws.config.MappedUser;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -44,28 +45,15 @@ public class ProjectController {
 
     //todo преобразовать токен в юзера
     @RequestMapping(value = "/fetchProjectData", method = RequestMethod.POST)
-    public RestResponse fetchProjectData(HttpServletRequest request, @RequestBody ProjectFilterRequestDto filterRequestDto) {
-        String header = request.getHeader(tokenHeader);
-        Token token = jwtService.getClaimsFromToken(header);
-
-        if (token == null) {
-            return RestResponse.error(ErrorStatus.INVALID_TOKEN_HEADER, ErrorMessage.INVALID_TOKEN_HEADER);
-        }
-        UserProjectPermissionDto projectPermission = projectService.getProjectPermission(token.getId(), filterRequestDto);
-
+    public RestResponse fetchProjectData(HttpServletRequest request,
+                                         @RequestBody ProjectFilterRequestDto filterRequestDto,
+                                         @MappedUser User user) {
+        UserProjectPermissionDto projectPermission = projectService.getProjectPermission(user.getId(), filterRequestDto);
         return RestResponse.ok(projectPermission);
     }
 
     @RequestMapping(value = "/saveProject", method = RequestMethod.POST)
-    public RestResponse saveProject(HttpServletRequest request, @RequestBody Project project) {
-        String header = request.getHeader(tokenHeader);
-        Token token = jwtService.getClaimsFromToken(header);
-
-        if (token == null) {
-            return RestResponse.error(ErrorStatus.INVALID_TOKEN_HEADER, ErrorMessage.INVALID_TOKEN_HEADER);
-        }
-        User user = userService.findById(token.getId());
-
+    public RestResponse saveProject(HttpServletRequest request, @RequestBody Project project, @MappedUser User user) {
         return RestResponse.ok(projectService.saveProject(project, user));
     }
 
@@ -83,15 +71,8 @@ public class ProjectController {
     }
 
     @RequestMapping(value = "/fetchProjects", method = RequestMethod.POST)
-    public RestResponse fetchProjects(HttpServletRequest request) {
-        String header = request.getHeader(tokenHeader);
-        Token token = jwtService.getClaimsFromToken(header);
-
-        if (token == null) {
-            return RestResponse.error(ErrorStatus.INVALID_TOKEN_HEADER, ErrorMessage.INVALID_TOKEN_HEADER);
-        }
-
-        List<Project> projects = projectService.findProjectsByUserId(token.getId());
+    public RestResponse fetchProjects(HttpServletRequest request, @MappedUser User user) {
+        List<Project> projects = projectService.findProjectsByUserId(user.getId());
         return RestResponse.ok(projects);
     }
 

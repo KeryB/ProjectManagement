@@ -4,6 +4,7 @@ import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
+import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
@@ -16,9 +17,11 @@ public class MappedUserHandlerMethodArgumentResolver implements HandlerMethodArg
     }
 
     @Override
-    public Object resolveArgument(MethodParameter methodParameter, ModelAndViewContainer modelAndViewContainer, NativeWebRequest nativeWebRequest, WebDataBinderFactory webDataBinderFactory) throws Exception {
+    public Object resolveArgument(MethodParameter methodParameter,
+                                  ModelAndViewContainer modelAndViewContainer,
+                                  NativeWebRequest nativeWebRequest,
+                                  WebDataBinderFactory webDataBinderFactory) {
 
-        String header = nativeWebRequest.getHeader("X-Auth-Token");
-        return header;
+        return nativeWebRequest.getAttribute("MappedUser",  RequestAttributes.SCOPE_REQUEST);
     }
 }
