@@ -14,6 +14,9 @@ import ProjectSettings from "./dashboardComponents/settings/ProjectSettings";
 import ProjectUserSettings from "./dashboardComponents/settings/ProjectSettingsUser";
 import ProjectSettingsRole from "./dashboardComponents/settings/ProjectSettingsRole";
 import Chats from "./dashboardComponents/chats/Chats";
+import ChatPage from "./dashboardComponents/chats/ChatPage";
+import ChatInternal from "./dashboardComponents/chats/ChatInternal";
+import MainView from "./main/MainView";
 
 
 class DashboardInternal extends React.Component {
@@ -25,6 +28,7 @@ class DashboardInternal extends React.Component {
         return (
             <DashBoard {...this.props}>
                 <Switch>
+                    <Route exact path={Path.DASHBOARD} component={MainView}/>
                     <Route breadcrumbName="projects" path={Path.PROJECTS} render={()=>(<Projects userActions={userActions}/>)} />
                     <Route path={Path.PROFILE} component={Profile}/>
                     <Route path={Path.Settings} render={()=>(<UserSettings userData={userData}/>)}/>
@@ -35,7 +39,7 @@ class DashboardInternal extends React.Component {
                     <Route path={Path.PROJECT_SETTINGS} component={ProjectSettings}/>
                     <Route path={Path.PROJECT_SETTINGS_USER} component={ProjectUserSettings}/>
                     <Route path={Path.PROJECT_SETTINGS_ROLE} component={ProjectSettingsRole}/>
-                    <Route path={Path.CHATS} component={Chats}/>
+                    <Route path={Path.CHAT} component={ChatInternal}/>
                 </Switch>
             </DashBoard>
         )

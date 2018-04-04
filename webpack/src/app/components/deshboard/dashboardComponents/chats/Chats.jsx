@@ -1,6 +1,12 @@
 import React from "react";
-import {Input, Button, Checkbox, Icon, List, Popconfirm, Table, Tabs, Avatar, Pagination, Badge} from "antd";
+import {
+    Input, Button, Checkbox, Icon, List, Popconfirm, Table, Tabs, Avatar, Pagination, Badge, Dropdown,
+    Menu, Tooltip
+} from "antd";
 import moment from "moment";
+import {Link} from "react-router-dom";
+import * as Path from "../../../../utils/RoutePath";
+
 const Search = Input.Search;
 
 const TabPane = Tabs.TabPane;
@@ -10,13 +16,44 @@ const getData = () => {
 
     for (let i = 0; i < 10; i++) {
         data.push({
-            title: "BLBLBLBLBLBL",
-            person: "KIRILL"
+            title: "Отработать что-то",
+            person: "Kir"
         })
     }
 
     return data;
 };
+
+const menu = (
+    <Menu>
+        <Menu.Item key="0">
+            <Checkbox>
+                Все
+            </Checkbox>
+        </Menu.Item>
+        <Menu.Divider />
+        <Menu.Item key="1">
+            <Checkbox>
+                Обычные
+            </Checkbox>
+        </Menu.Item>
+        <Menu.Item key="3">
+            <Checkbox>
+                Важные
+            </Checkbox>
+        </Menu.Item>
+        <Menu.Item key="4">
+            <Checkbox>
+               Обсуждаемые
+            </Checkbox>
+        </Menu.Item>
+        <Menu.Item key="5">
+            <Checkbox>
+                Закрытые
+            </Checkbox>
+        </Menu.Item>
+    </Menu>
+);
 
 
 class Chats extends React.Component {
@@ -30,6 +67,8 @@ class Chats extends React.Component {
     };
 
     render() {
+
+        console.log(this.props)
 
         return (
             <div>
@@ -46,9 +85,15 @@ class Chats extends React.Component {
                         <Search
                             placeholder="Введите название темы"
                             onSearch={value => console.log(value)}
-                            style={{ width: 200 }}
+                            style={{width: 200}}
                         />
-                        <Icon type="filter"/>
+                        <div className='filter'>
+                            <Tooltip title="Отображение">
+                                <Dropdown overlay={menu} trigger={['click']}>
+                                    <Icon type="filter"/>
+                                </Dropdown>
+                            </Tooltip>
+                        </div>
                     </div>
 
                     <div className='list-message-container'>
@@ -76,10 +121,10 @@ class Chats extends React.Component {
                                                 <Avatar src="/resources/images/post.png" style={{marginTop: '-26px'}}/>
                                             </span>
                                             <div className='chat-message-title'>
-                                                <div className='title'><a href="https://ant.design">{item.title}</a>
-                                                    <Badge count={25}/></div>
-                                                <div
-                                                    className='last-your-message'>{item.person}, {moment(new Date()).format('DD MMMM YYYY, h:mm')}</div>
+                                                <div className='title'><Link to={Path.CHAT_PAGE}>{item.title} </Link>
+                                                    <Badge count={25}/>
+                                                </div>
+                                                <div className='last-your-message'>{item.person}, {moment(new Date()).format('DD MMMM YYYY, h:mm')}</div>
                                             </div>
                                         </div>
                                         <div className='col-6 col-md-2'>

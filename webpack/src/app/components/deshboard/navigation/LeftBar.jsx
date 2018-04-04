@@ -98,7 +98,7 @@ class LeftBar extends React.Component {
                         </a>
                     </Menu.Item>
                     <Menu.Item key="3">
-                        <Link to={Path.CHATS}>
+                        <Link to={Path.CHAT_LIST}>
                             <Icon type="message"/>
                             <span>Чаты</span>
                         </Link>

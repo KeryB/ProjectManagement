@@ -16,4 +16,6 @@ export const PROJECT_SETTINGS = DASHBOARD + '/project-settings';
 
 export const PROJECT_SETTINGS_USER = DASHBOARD + '/users/project:id';
 export const PROJECT_SETTINGS_ROLE = DASHBOARD + '/permission/project:id';
-export const CHATS = DASHBOARD + '/chats';
+export const CHAT = DASHBOARD + '/chat';
+export const CHAT_LIST = CHAT + '/list';
+export const CHAT_PAGE = CHAT + '/page';
