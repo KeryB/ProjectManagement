@@ -1,5 +1,5 @@
 import React from "react";
-import { Calendar, Badge } from 'antd';
+import {Calendar, Badge, Breadcrumb, Icon} from 'antd';
 
 const getListData = (value) =>{
     let listData;
@@ -60,16 +60,29 @@ const monthCellRender = (value) =>{
     ) : null;
 }
 
-class ScheduleTaskCalendar extends React.Component {
+class DetailScheduleTaskCalendar extends React.Component {
     render() {
 
         return (
-            <div>
-                <Calendar dateCellRender={dateCellRender}
-                          monthCellRender={monthCellRender}/>
+            <div className='detail-schedule-task-calendar'>
+                <div className='p-block'>
+                    <h4>
+                        <Breadcrumb>
+                            <Breadcrumb.Item href="">
+                                <Icon type="home"/> Главная
+                            </Breadcrumb.Item>
+                            <Breadcrumb.Item href="">
+                                <Icon type="calendar" />
+                                <span>Детализированный календарь</span>
+                            </Breadcrumb.Item>
+                        </Breadcrumb>
+                    </h4>
+                    <Calendar dateCellRender={dateCellRender}
+                              monthCellRender={monthCellRender}/>
+                </div>
             </div>
         )
     }
 }
 
-export default ScheduleTaskCalendar;
+export default DetailScheduleTaskCalendar;
