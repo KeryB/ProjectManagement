@@ -1,25 +1,29 @@
 import * as React from "react";
-import {Menu, Icon, Row, Col, Avatar, Layout} from 'antd';
-import LeftBar from "./LeftBar";
-import DashboardTimeline from "./DashboardTimeline";
+import {Menu, Icon, Row, Col, Avatar, Layout, Breadcrumb, Dropdown} from 'antd';
+import AuthHeader from "./AuthHeader";
+import LayoutSider from "./LayoutSider";
 
-const {Header, Content, Sider} = Layout;
+const {Header, Content, Footer, Sider} = Layout;
+const SubMenu = Menu.SubMenu;
 
 class DashBoard extends React.Component {
 
-
     render() {
         const {children} = this.props;
-        const {userData: {chosenProject, projectData}} = this.props;
-        console.log(this.props);
+        const {userData: {projectData:{chosenProject}, user}} = this.props;
+
         return (
             <div className='dashboard'>
-                <Row gutter={48} style={{padding: '10px', margin: '0px'}}>
-                    <LeftBar chosenProject={chosenProject} projectData={projectData}/>
-                    <Layout style={{padding: '0 15px 24px'}}>
-                        {children}
+                <Layout style={{minHeight: '100vh'}}>
+                    <LayoutSider chosenProject={chosenProject}/>
+                    <Layout>
+                        <AuthHeader user={user}
+                                    project={chosenProject}/>
+                        <Content style={{margin: '16px 16px'}}>
+                            {children}
+                        </Content>
                     </Layout>
-                </Row>
+                </Layout>
             </div>
         )
     }

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import ru.process.platform.ProjectManagement.dto.filter.ProjectFilterRequestDto;
+import ru.process.platform.ProjectManagement.dto.response.ProjectDataDto;
 import ru.process.platform.ProjectManagement.dto.response.UserProjectPermissionDto;
 import ru.process.platform.ProjectManagement.entity.RestResponse;
 import ru.process.platform.ProjectManagement.entity.jwt.Token;
@@ -74,6 +75,21 @@ public class ProjectController {
     public RestResponse fetchProjects(HttpServletRequest request, @MappedUser User user) {
         List<Project> projects = projectService.findProjectsByUserId(user.getId());
         return RestResponse.ok(projects);
+    }
+
+    @RequestMapping(value = "/fetchActualProjectData", method = RequestMethod.POST)
+    public RestResponse fetchActualProjectData (HttpServletRequest request, @RequestBody Project project) {
+        if(project.getId() == null) {
+            return RestResponse.error(ErrorStatus.INVALID_PROJECT_ID,ErrorMessage.INVALID_PROJECT_ID);
+        }
+
+        project = projectService.findOne(project.getId());
+        if(project == null) {
+            return RestResponse.error(ErrorStatus.INVALID_PROJECT_ID,ErrorMessage.INVALID_PROJECT_ID);
+        }
+
+        ProjectDataDto actualProjectData = projectService.getActualProjectData(project);
+        return RestResponse.ok(actualProjectData);
     }
 
 }

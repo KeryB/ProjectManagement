@@ -26,7 +26,7 @@ public class Project {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    private Integer id;
 
     @NotNull
     private String title;
@@ -41,6 +41,9 @@ public class Project {
 
     @Enumerated(EnumType.STRING)
     private ProjectStatus projectStatus;
+
+    @Column(columnDefinition = "boolean default false")
+    private boolean locked;
 
     @OneToOne(mappedBy = "primaryProject")
     private ProjectSettings projectSettings;
