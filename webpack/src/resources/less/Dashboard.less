@@ -91,56 +91,14 @@
   //actual-project
   .actual-project {
 
-    .add-user {
-      display: inline-block;
-      float: right;
-    }
+    .card-project {
 
-    .data-container {
-      h3 {
-        text-align: center;
-        margin-bottom: 0px;
-        svg {
-          margin-right: 8px;
-        }
-      }
-      .total-users {
-        text-align: center;
-        font-size: 30px;
-        color: rgba(0,0,0,.85);
-      }
-    }
-
-    .row {
-      margin: auto;
-    }
-    .project-avatar {
+      margin: 25px;
       .ant-avatar-lg {
         width: 90px;
         height: 90px;
         border-radius: 10%;
-      }
-    }
-    .title-container {
-      display: inline-block;
-      position: absolute;
-      padding: 0 15px;
-    }
-
-    .second-container-project {
-      .row {
-
-        .col-sm-8 {
-          padding-left: 0px;
-        }
-
-        .col-sm-4 {
-          padding-right: 0px
-        }
-      }
-
-      .file-table {
-        margin-top: 15px;
+        left: 40%;
       }
     }
   }
@@ -198,7 +156,6 @@
   }
 
   .task {
-    padding: 0 20px;
     .header-project-task {
       .ant-avatar-lg {
         width: 60px;
@@ -231,7 +188,7 @@
     }
   }
 
-  .chat-list {
+  .indent-p-block {
     .filter {
       margin-left: 10px;
       font-size: 18px;
@@ -241,6 +198,7 @@
         color: #40a9ff;
       }
     }
+
     .list-message-container {
 
       margin-top: 10px;
@@ -260,8 +218,6 @@
         border-radius: initial;
         padding: initial;
         margin: 5px;
-        width: 52px;
-        height: 52px;
       }
       .ant-checkbox {
         margin-top: -23px;
@@ -280,20 +236,9 @@
 
         .title {
           vertical-align: bottom;
-          .title-header {
-            color: rgba(0, 0, 0, .85);
-            display: inline-block;
-            padding-right: 5px;
-
-            a {
-              vertical-align: bottom;
-              color: rgba(0, 0, 0, .85);
-            }
+          a {
+            vertical-align: bottom;
           }
-        }
-
-        .stuff {
-          margin-top: 5px;
         }
 
         .last-your-message {
@@ -358,112 +303,8 @@
     }
   }
 
-  .form-add-message {
+  .form-add-message{
     margin-top: 10px;
-  }
-
-  .main-view {
-    .setting-task-main {
-      float: right;
-      cursor: pointer;
-      font-size: 15px;
-      i:hover {
-        color: #40a9ff;
-      }
-      .change-view-mode {
-        font-size: 18px;
-        svg {
-          margin-right: 5px;
-        }
-        svg:hover {
-          color: #40a9ff;
-        }
-
-        .default-view-mode {
-          color: #40a9ff;
-        }
-      }
-    }
-    .table {
-      .ant-avatar {
-        border-radius: initial;
-      }
-    }
-  }
-
-  .timeline {
-
-    .date-header {
-      border-bottom: 1px solid #e8e8e8;
-    }
-
-    .content {
-      margin-top: 10px;
-      margin-left: auto;
-      .actions {
-        margin-left: 10px;
-
-        .footer-timeline {
-          margin-top: 5px;
-          font-size: 12px;
-        }
-      }
-    }
-
-    .load-more {
-      text-align: center;
-    }
-    .ant-avatar {
-      width: 50px;
-      height: 50px;
-      border-radius: initial;
-    }
-    p {
-      margin-bottom: 0;
-    }
-  }
-
-  .task-list {
-
-    .filter-panel {
-      margin-top: 10px;
-
-      .filter-buttons {
-        padding-right: 10px;
-      }
-
-      .filter-active {
-        padding-top: 10px;
-      }
-
-      .filter-search {
-        padding: 0 15px;
-        i {
-          position: initial;
-        }
-      }
-
-      a {
-        font-size: 15px;
-      }
-    }
-  }
-
-  .tisk-list-schedule {
-    padding: 10px 5px 0px;
-    border-bottom: 1px solid #e8e8e8;
-
-    h4 {
-      margin-bottom: 0;
-    }
-
-    .ant-avatar {
-      margin-bottom: 21px;
-    }
-    .ant-avatar-sm {
-      width: 30px;
-      height: 30px;
-    }
   }
 
 }

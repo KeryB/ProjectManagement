@@ -67,10 +67,17 @@ class TaskProjectList extends React.Component {
                         </a>
                     </div>
                     <div className='content-panel'>
+                        {/*<Tabs defaultActiveKey="1" size='small' tabPosition='right'>*/}
+                            {/*<TabPane tab="Все задачи" key="1">*/}
+                            {/*</TabPane>*/}
+                            {/*<TabPane tab="Обсуждаемые" key="2">*/}
+                            {/*</TabPane>*/}
+                            {/*<TabPane tab="Исполняемые" key="3">Content of Tab Pane 3</TabPane>*/}
+                            {/*<TabPane tab="Архивные" key="4">Content of Tab Pane 3</TabPane>*/}
+                        {/*</Tabs>*/}
                         <h3>
                             Список задач
                         </h3>
-                        <Divider/>
                         <div className="row no-gutters">
                             <div className="col-4 col-md-3">
                                 <div className='demo-infinite-container'>

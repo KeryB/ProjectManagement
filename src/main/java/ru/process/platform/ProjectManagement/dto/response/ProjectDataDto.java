@@ -11,7 +11,7 @@ import java.util.List;
 
 @Setter
 @Getter
-public class ProjectDataDto extends AbstractDto {
+public class ProjectDataDto extends AbstractDto{
 
     private List<User> users;
     private Project project;

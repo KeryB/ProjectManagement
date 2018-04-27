@@ -1,4 +1,4 @@
-import {Avatar, Button, Dropdown, Icon, List, Menu, Tooltip} from 'antd';
+import {Avatar, Button, Dropdown, Icon, List, Menu} from 'antd';
 import React from 'react';
 import moment from "moment/moment";
 
@@ -82,17 +82,5 @@ export const SubTaskData = ({title, data}) => {
                 {data.format("DD:MM:YYYY")}
             </div>
         </div>
-    )
-};
-
-export const DefaultViewMode = ({defaultValue, className, onClick, tooltipTitle}) => {
-
-    const defaultClassname = defaultValue ? className + ' default-view-mode' : className;
-    return (
-        <Tooltip placement="topLeft" title={tooltipTitle}>
-            <span>
-                <i className={defaultClassname} onClick={onClick}/>
-            </span>
-        </Tooltip>
     )
 };

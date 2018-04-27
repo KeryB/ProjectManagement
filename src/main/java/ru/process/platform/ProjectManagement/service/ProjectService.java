@@ -8,7 +8,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.process.platform.ProjectManagement.dto.filter.ProjectFilterRequestDto;
-import ru.process.platform.ProjectManagement.dto.response.ProjectDataDto;
 import ru.process.platform.ProjectManagement.dto.response.UserProjectPermissionDto;
 import ru.process.platform.ProjectManagement.entity.UserProject;
 import ru.process.platform.ProjectManagement.entity.project.Project;
@@ -111,17 +110,6 @@ public class ProjectService {
                 .stream()
                 .map(UserProject::getPrimaryProject)
                 .collect(Collectors.toList());
-    }
-
-    public ProjectDataDto getActualProjectData(Project project) {
-        ProjectDataDto projectDataDto = new ProjectDataDto();
-        projectDataDto.setProject(project);
-        List<User> users = userProjectRepository.findByPrimaryProjectId(project.getId())
-                .stream()
-                .map(UserProject::getPrimaryUser)
-                .collect(Collectors.toList());
-        projectDataDto.setUsers(users);
-        return projectDataDto;
     }
 
 //    @Transactional

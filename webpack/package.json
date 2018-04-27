@@ -43,7 +43,6 @@
     "webpack-dev-server": "2.11.1"
   },
   "dependencies": {
-    "Font-Awesome": "FortAwesome/Font-Awesome",
     "antd": "^3.2.0",
     "babel-runtime": "^6.26.0",
     "bootstrap": "^4.0.0",
@@ -65,6 +64,8 @@
     "redux": "^3.7.2",
     "redux-form": "^7.2.3",
     "redux-thunk": "^2.2.0",
+    "semantic-ui-css": "^2.2.14",
+    "semantic-ui-react": "^0.78.2",
     "toastr": "^2.1.4",
     "validator": "^9.4.0",
     "velocity-animate": "^1.5.1"

@@ -41,9 +41,7 @@ const columns = [{
     dataIndex: 'delete',
     key: 'delete',
     render: (text, record) =>
-        <Icon type="close-circle-o" onClick={(e)=>{
-            e.stopPropagation();
-            console.log("")
+        <Icon type="close-circle-o" onClick={()=>{
         }}/>
 }];
 

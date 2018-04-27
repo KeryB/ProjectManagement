@@ -5,11 +5,55 @@ import * as Path from "../../../utils/RoutePath";
 import {Link} from "react-router-dom";
 import {isEmpty} from "lodash";
 
+const MenuItemGroup = Menu.ItemGroup;
+const SubMenu = Menu.SubMenu;
+
+const projectMenuItemGroup = (chosenProject) => (
+
+    <span>
+        <Badge dot> <Avatar shape="square" size='large' className='project-avatar'/></Badge>
+        <span className='span5-left'>
+            {chosenProject !== null ? <span>{chosenProject.primaryProject.title}</span> :
+                <span>Проект не выбран</span>}
+                    </span>
+    </span>
+
+);
+
+const menu = (countProjects) => (
+    <Menu>
+        <Menu.Item>
+            <Link to={Path.CREATE_PROJECT}>
+                <Icon type="right-circle-o"/> Создать новый проект
+            </Link>
+        </Menu.Item>
+        <Menu.Divider/>
+        <Menu.Item>
+            <Link to={Path.PROJECTS} className='show-all-projects'>
+                <Icon type="bars"/> Показать все проекты
+                <Badge style={{marginLeft: '10px'}} count={countProjects}/>
+            </Link>
+        </Menu.Item>
+        <Menu.Divider/>
+        <Menu.Item>
+            <Link to={Path.ADD_TO_PROJECT}><Icon type="user-add"/> Добавить в проект </Link>
+        </Menu.Item>
+        <Menu.Item>
+            <Link to={Path.ADD_TO_PROJECT}> <Icon type="file"/> Текущий проект</Link>
+        </Menu.Item>
+    </Menu>
+);
+
+
 class LeftBar extends React.Component {
 
+    handleClick = (e) => {
+        console.log('click ', e);
+    };
 
     render() {
 
+        const {projectData: {countProjects, chosenProject}} = this.props;
 
         return (
             <Col span={4} className='left-bar'>
@@ -37,7 +81,7 @@ class LeftBar extends React.Component {
                         </Menu.Item>
                         {chosenProject != null ?
                         <Menu.Item>
-                           <Link to={`/dashboard/project/${chosenProject.primaryProject.id}`}><Icon type="file"/> Текущий проект</Link>
+                           <Link to={`/dashboard/project/id=${chosenProject.primaryProject.id}`}><Icon type="area-chart"/> Текущий проект</Link>
                         </Menu.Item> : undefined}
                     </SubMenu>
                     <Menu.Divider/>
@@ -48,15 +92,15 @@ class LeftBar extends React.Component {
                         </a>
                     </Menu.Item>
                     <Menu.Item key="2">
-                        <Link to={Path.MAIL}>
+                        <a href="#">
                             <Icon type="mail"/>
                             <span>Почта</span>
-                        </Link>
+                        </a>
                     </Menu.Item>
                     <Menu.Item key="3">
                         <Link to={Path.CHAT_LIST}>
                             <Icon type="message"/>
-                            <span>Чаты <Badge count={9}/></span>
+                            <span>Чаты</span>
                         </Link>
                     </Menu.Item>
                     <Menu.Item key="5">
@@ -103,4 +147,7 @@ class LeftBar extends React.Component {
     }
 }
 
+LeftBar.propTypes = {
+    projectData: PropTypes.object.isRequired
+};
 export default LeftBar;

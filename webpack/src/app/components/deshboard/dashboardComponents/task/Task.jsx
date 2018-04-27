@@ -205,7 +205,7 @@ class Task extends React.Component {
         const {taskReducer: {taskData: {payload: {task, project, users, comments, loading}}, taskData: {payload}}} = this.props;
 
         return (
-            <div className='task' onClick={this.handleClickCommentButton}>
+            <div className='p-block task' onClick={this.handleClickCommentButton}>
                 {isEmpty(payload) ? <Spin/> :
                     <div className="row">
                         <div className="col-12 col-md-9">

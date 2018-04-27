@@ -1,4 +1,5 @@
 import React from 'react';
+import Navbar from "./deshboard/Navbar";
 import {connect} from "react-redux";
 import * as Path from '../utils/RoutePath';
 import Login from './AuthProvider';
@@ -74,7 +75,7 @@ class App extends React.Component {
                             <Icon type="loading" className='spinner-large' spin/>
                         </div> :
                         <div>
-                            {/*<Navbar location={location} user={user} />*/}
+                            <Navbar location={location} user={user} />
                             <Switch>
                                 <LoginRoute path={Path.LOGIN}
                                             component={Login}

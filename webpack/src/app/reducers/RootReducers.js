@@ -3,7 +3,7 @@ import {reducer} from 'redux-form';
 import user from './UserReducer';
 import project from './ProjectReducer';
 import profile from './ProfileReducer';
-import actualProject from './ActualProjectReducer';
+import actualProject from './ActualProject';
 import commonStateless from './CommonStatelessReducer';
 import task from  './TaskReducer';
 

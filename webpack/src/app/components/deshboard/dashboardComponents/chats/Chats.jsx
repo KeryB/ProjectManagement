@@ -1,7 +1,7 @@
 import React from "react";
 import {
     Input, Button, Checkbox, Icon, List, Popconfirm, Table, Tabs, Avatar, Pagination, Badge, Dropdown,
-    Menu, Tooltip, Divider, Breadcrumb
+    Menu, Tooltip
 } from "antd";
 import moment from "moment";
 import {Link} from "react-router-dom";
@@ -31,7 +31,7 @@ const menu = (
                 Все
             </Checkbox>
         </Menu.Item>
-        <Menu.Divider/>
+        <Menu.Divider />
         <Menu.Item key="1">
             <Checkbox>
                 Обычные
@@ -44,7 +44,7 @@ const menu = (
         </Menu.Item>
         <Menu.Item key="4">
             <Checkbox>
-                Обсуждаемые
+               Обсуждаемые
             </Checkbox>
         </Menu.Item>
         <Menu.Item key="5">
@@ -54,27 +54,6 @@ const menu = (
         </Menu.Item>
     </Menu>
 );
-
-const IconText = ({type, text}) => (
-    <span>
-    <Icon type={type} style={{marginRight: 8}}/>
-        {text}
-  </span>
-);
-
-const menuActions = (
-
-    <Menu>
-        <Menu.Item key="0">
-            <a href="http://www.alipay.com/">1st menu item</a>
-        </Menu.Item>
-        <Menu.Item key="1">
-            <a href="http://www.taobao.com/">2nd menu item</a>
-        </Menu.Item>
-        <Menu.Divider/>
-        <Menu.Item key="3">3rd menu item</Menu.Item>
-    </Menu>
-)
 
 
 class Chats extends React.Component {
@@ -92,52 +71,43 @@ class Chats extends React.Component {
         console.log(this.props)
 
         return (
-            <div className='chat-list'>
+            <div>
                 <div className='p-block'>
-                    <div>
-                        <h3>
-                            <Breadcrumb>
-                                <Breadcrumb.Item href="">
-                                    <Icon type="home"/> Главная
-                                </Breadcrumb.Item>
-                                <Breadcrumb.Item>
-                                    Список чатов
-                                </Breadcrumb.Item>
-                            </Breadcrumb>
-                        </h3>
-                        <div>
-                            <Search
-                                placeholder="Введите название темы"
-                                onSearch={value => console.log(value)}
-                                style={{width: 200}}
-                            />
-                            <span className='filter'>
-                                <Tooltip title="Отображение">
-                                    <Dropdown overlay={menu} trigger={['click']}>
-                                        <Icon type="filter"/>
-                                    </Dropdown>
-                                </Tooltip>
-                            </span>
-                            <div className='display-inline-block float-right'>
-                                <a className='a-btn-primary'><Icon type="plus-circle-o"/> Добавить тему</a>
-                            </div>
-                        </div>
+                    <div className='display-inline-block'>
+                        <h3>BREADCRUMB</h3>
+                    </div>
+                    <div className='display-inline-block float-right'>
+                        <a className='a-btn-primary'><Icon type="plus-circle-o"/> Добавить тему</a>
                     </div>
                 </div>
                 <div className='indent-p-block'>
+                    <div>
+                        <Search
+                            placeholder="Введите название темы"
+                            onSearch={value => console.log(value)}
+                            style={{width: 200}}
+                        />
+                        <div className='filter'>
+                            <Tooltip title="Отображение">
+                                <Dropdown overlay={menu} trigger={['click']}>
+                                    <Icon type="filter"/>
+                                </Dropdown>
+                            </Tooltip>
+                        </div>
+                    </div>
 
                     <div className='list-message-container'>
-                        {/*<div className='row header-list'>*/}
-                        {/*<div className='col-6 col-md-8'>*/}
-                        {/*<Icon type="caret-right"/> Тема обсуждения*/}
-                        {/*</div>*/}
-                        {/*<div className='col-6 col-md-2'>*/}
-                        {/*<Icon type="message"/> Ответов*/}
-                        {/*</div>*/}
-                        {/*<div className='col-6 col-md-2'>*/}
-                        {/*Последнее сообщение от:*/}
-                        {/*</div>*/}
-                        {/*</div>*/}
+                        <div className='row header-list'>
+                            <div className='col-6 col-md-8'>
+                                <Icon type="caret-right"/> Тема обсуждения
+                            </div>
+                            <div className='col-6 col-md-2'>
+                                <Icon type="message"/> Ответов
+                            </div>
+                            <div className='col-6 col-md-2'>
+                                Последнее сообщение от:
+                            </div>
+                        </div>
                         <List
                             className="demo-loadmore-list"
                             itemLayout="horizontal"
@@ -145,51 +115,26 @@ class Chats extends React.Component {
                             renderItem={item => (
                                 <List.Item>
                                     <div className='row'>
-                                        <div className='col-6 col-md-7'>
+                                        <div className='col-6 col-md-8'>
                                             <span>
-                                                <Checkbox style={{marginTop: '-58px'}}/>
-                                                <Avatar src="/resources/images/profile.jpeg"
-                                                        style={{marginTop: '-58px'}}/>
+                                                <Checkbox style={{marginTop: '-26px'}}/>
+                                                <Avatar src="/resources/images/post.png" style={{marginTop: '-26px'}}/>
                                             </span>
                                             <div className='chat-message-title'>
-                                                <div className='title'><h4 className='title-header'><Link
-                                                    to={Path.CHAT_PAGE}>{item.title} </Link></h4>
+                                                <div className='title'><Link to={Path.CHAT_PAGE}>{item.title} </Link>
                                                     <Badge count={25}/>
                                                 </div>
-                                                <div className='last-your-message'>
-                                                    {item.person}, {moment(new Date()).format('DD MMMM YYYY, h:mm')}
-                                                </div>
-                                                <div className='stuff'>
-                                                    <IconText type="star-o" text="156"/>
-                                                    <Divider type="vertical"/>
-                                                    <IconText type="file" text="156"/>
-                                                    <Divider type="vertical"/>
-                                                    <IconText type="message" text="2"/></div>
+                                                <div className='last-your-message'>{item.person}, {moment(new Date()).format('DD MMMM YYYY, h:mm')}</div>
                                             </div>
                                         </div>
                                         <div className='col-6 col-md-2'>
-                                            <div>
-                                                <h4>
-                                                    Создатель обсуждения:
-                                                </h4>
-                                            </div>
-                                            <div>
-                                                <a>Kek</a>
-                                            </div>
+                                            <span>
+                                                Ответов: 0
+                                            </span>
                                         </div>
                                         <div className='col-6 col-md-2'>
-                                            <div>
-                                                <h4>Последнее сообщение от: </h4>
-                                                <a>Izhdark </a>
-                                                <span>{moment(new Date()).format('DD MMMM YYYY, h:mm')}</span>
-                                            </div>
-                                        </div>
-                                        <div className='col-6 col-md-1'>
-                                            <Dropdown overlay={menuActions} trigger={['click']}>
-                                                <a className="ant-dropdown-link" href="#">
-                                                    <Icon style={{marginTop:'25px'}} type="down"/>
-                                                </a>
-                                            </Dropdown>
+                                            <div><a>Izhdark</a></div>
+                                            <div>{moment(new Date()).format('DD MMMM YYYY, h:mm')}</div>
                                         </div>
                                     </div>
                                 </List.Item>

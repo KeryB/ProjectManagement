@@ -9,14 +9,12 @@ import 'antd/dist/antd.less';
 import 'bootstrap/dist/css/bootstrap-grid.css'
 import './resources/index.less';
 import './resources/less/project-list.less'
-import './resources/less/layout-sider.less'
 import './resources/less/System.less'
 import './resources/less/Dashboard.less'
 import { LocaleProvider } from 'antd';
 import '../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import ru from 'antd/lib/locale-provider/ru_RU';
 import 'moment/locale/fr';
-import '../node_modules/Font-Awesome/svg-with-js/js/fontawesome-all.min'
 
 
 const store = configureStore();
