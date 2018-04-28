@@ -63,6 +63,7 @@ class ActualProject extends React.Component {
 
     }
 
+
     render() {
         const {actualProject: {loading, projectData, projectData: {project, users}}} = this.props;
 
