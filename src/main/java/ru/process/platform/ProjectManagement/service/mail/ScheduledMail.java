@@ -2,7 +2,6 @@ package ru.process.platform.ProjectManagement.service.mail;
 
 import com.sun.mail.imap.IMAPFolder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import ru.process.platform.ProjectManagement.entity.mail.Mail;
 
 import javax.annotation.PostConstruct;
@@ -11,7 +10,7 @@ import java.util.Date;
 import java.util.Properties;
 import java.util.concurrent.ScheduledExecutorService;
 
-@Service
+
 public class ScheduledMail {
 
     private MailMessageService mailMessageService;

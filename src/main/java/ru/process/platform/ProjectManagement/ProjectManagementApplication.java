@@ -9,6 +9,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import ru.process.platform.ProjectManagement.ws.config.MappedUserHandlerMethodArgumentResolver;
 
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 
 @SpringBootApplication
 public class ProjectManagementApplication extends WebMvcConfigurerAdapter {
@@ -20,6 +22,11 @@ public class ProjectManagementApplication extends WebMvcConfigurerAdapter {
 
 	public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
 		argumentResolvers.add(new MappedUserHandlerMethodArgumentResolver());
+	}
+
+	@Bean
+	public ScheduledExecutorService executorService() {
+		return Executors.newScheduledThreadPool(6);
 	}
 
 	public static void main(String[] args) {
