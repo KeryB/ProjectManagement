@@ -21,5 +21,7 @@ export const CHAT = DASHBOARD + '/chat';
 export const CHAT_LIST = CHAT + '/list';
 export const CHAT_PAGE = CHAT + '/page';
 
+export const DOCUMENTS = DASHBOARD + '/doc';
+
 export const TASK_LIST = DASHBOARD + "/taskList";
 export const DETAIL_SCHEDULE_TASK_CALENDAR = DASHBOARD + '/calendar';

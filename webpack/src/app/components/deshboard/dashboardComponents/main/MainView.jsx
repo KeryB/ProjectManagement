@@ -9,10 +9,6 @@ import ScheduleTaskCalendar from "./ScheduleTaskCalendar";
 const ButtonGroup = Button.Group;
 
 const columns = [{
-    title: 'Тип',
-    dataIndex: 'type',
-    key: 'type',
-}, {
     title: 'Название',
     dataIndex: 'name',
     key: 'name',
@@ -36,7 +32,6 @@ const columns = [{
 }];
 const data = [{
     key: '1',
-    type: <span>{TaskTypeOption[0].avatar} {TaskTypeOption[0].name}</span>,
     name: 'Срочно первый баг',
     priority: <span>{PriorityTask[0].avatar}</span>,
     status: <span>{TaskStatus[0].avatar}</span>,
@@ -44,7 +39,6 @@ const data = [{
     lastChange: '05.04.2018, 15:24'
 }, {
     key: '2',
-    type: <span>{TaskTypeOption[1].avatar} {TaskTypeOption[1].name}</span>,
     name: 'Срочно второй баг',
     priority: <span>{PriorityTask[1].avatar}</span>,
     status: <span>{TaskStatus[0].avatar}</span>,
@@ -52,7 +46,6 @@ const data = [{
     lastChange: '04.04.2018, 11:35'
 }, {
     key: '3',
-    type: <span>{TaskTypeOption[2].avatar} {TaskTypeOption[2].name}</span>,
     name: 'Срочно первый баг',
     priority: <span>{PriorityTask[1].avatar}</span>,
     status: <span>{TaskStatus[3].avatar}</span>,
@@ -60,7 +53,6 @@ const data = [{
     lastChange: '04.04.2018, 11:35'
 }, {
     key: '4',
-    type: <span>{TaskTypeOption[0].avatar} {TaskTypeOption[0].name}</span>,
     name: 'Срочно первый баг',
     priority: <span>{PriorityTask[1].avatar}</span>,
     status: <span>{TaskStatus[1].avatar}</span>,
@@ -68,7 +60,6 @@ const data = [{
     lastChange: '03.04.2018, 11:35'
 }, {
     key: '5',
-    type: <span>{TaskTypeOption[0].avatar} {TaskTypeOption[0].name}</span>,
     name: 'Срочно первый баг',
     priority: <span>{PriorityTask[1].avatar}</span>,
     status: <span>{TaskStatus[1].avatar}</span>,
@@ -76,7 +67,6 @@ const data = [{
     lastChange: '03.04.2018, 11:35'
 }, {
     key: '6',
-    type: <span>{TaskTypeOption[0].avatar} {TaskTypeOption[0].name}</span>,
     name: 'Срочно первый баг',
     priority: <span>{PriorityTask[1].avatar}</span>,
     status: <span>{TaskStatus[1].avatar}</span>,

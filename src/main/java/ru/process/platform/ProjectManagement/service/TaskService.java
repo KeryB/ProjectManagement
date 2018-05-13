@@ -89,10 +89,9 @@ public class TaskService {
             }
         }
 
-
         return taskDataDto;
-
     }
+
 
     //todo передалть на specification
     public Page<Task> getTaskList(Integer userId, Pageable pageable) {

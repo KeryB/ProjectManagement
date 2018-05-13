@@ -5,11 +5,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import ru.process.platform.ProjectManagement.entity.mail.Mail;
 
 import javax.annotation.PostConstruct;
-import javax.mail.*;
+import javax.mail.Folder;
+import javax.mail.Message;
+import javax.mail.Session;
+import javax.mail.Store;
 import java.util.Date;
 import java.util.Properties;
 import java.util.concurrent.ScheduledExecutorService;
-
+import java.util.concurrent.TimeUnit;
 
 public class ScheduledMail {
 
@@ -24,7 +27,7 @@ public class ScheduledMail {
 
     @PostConstruct
     public void getInstance() {
-//        executorService.scheduleAtFixedRate(() -> {
+        executorService.scheduleAtFixedRate(() -> {
             try {
                 Properties properties = getProperties();
                 Session emailSession = Session.getDefaultInstance(properties);
@@ -45,7 +48,7 @@ public class ScheduledMail {
                     if (date == null) continue;
 
                     if(lastMail == null){
-                        mailMessageService.createAndSaveMessage(message);
+                        mailMessageService.createAndSaveMessage(message, imapFolder);
                         continue;
                     }
 
@@ -53,14 +56,14 @@ public class ScheduledMail {
                     if (date.before(receivedDate) || date.equals(receivedDate)) {
                         continue;
                     }
+
+                    mailMessageService.createAndSaveMessage(message, imapFolder);
                 }
 
-            } catch (MessagingException e) {
-                e.printStackTrace();
             } catch (Exception e) {
                 e.printStackTrace();
             }
-//        }, 1, 1, TimeUnit.MINUTES);
+        }, 1, 5, TimeUnit.MINUTES);
     }
 
     private Properties getProperties() {

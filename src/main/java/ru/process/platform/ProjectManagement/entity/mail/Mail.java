@@ -28,7 +28,8 @@ public class Mail {
 
     private Date receivedDate;
 
-    private String content;
+    @Lob
+    private byte[] content;
 
     @ManyToOne
     @JoinColumn(name = JpaUtils.USER_PRIMARY_KEY)

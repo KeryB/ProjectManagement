@@ -86,12 +86,7 @@ public class UserService {
 
     @Transactional
     public User addUserToProject(User userRequest, int projectId) {
-//        UserProject userProject = userProjectRepository.findByPrimaryProject_Id(projectId);
-
-//        userProject.setLead(false);
-//        userProject.setOwner(false);
-
-        return null;
+        return userRepository.save(userRequest);
     }
 
 

@@ -75,14 +75,10 @@ class ActualProject extends React.Component {
                             <h4>
                                 <Breadcrumb>
                                     <Breadcrumb.Item href="">
-                                        <Icon type="home"/>
-                                    </Breadcrumb.Item>
-                                    <Breadcrumb.Item href="">
-                                        <Icon type="user"/>
-                                        <span>Application List</span>
+                                        <Icon type="home"/> Главная
                                     </Breadcrumb.Item>
                                     <Breadcrumb.Item>
-                                        Application
+                                        Текущий проект
                                     </Breadcrumb.Item>
                                 </Breadcrumb>
                             </h4>
@@ -95,7 +91,7 @@ class ActualProject extends React.Component {
                                             <Icon type={project.locked ? 'lock' : 'unlock'}/>
                                         </h2>
                                         <div className='project-description'>
-                                            {project.description} asdas das dasd asd
+                                            {project.description}
                                         </div>
                                     </div>
                                     <div className='add-user'><Button icon='user-add'> Добавить пользователя</Button></div>
@@ -105,13 +101,13 @@ class ActualProject extends React.Component {
                                         <div className='col-6 col-md-4'>
                                             <div>
                                                 <h3><Icon type="user"/> Пользователей</h3>
-                                                <div className='total-users'>5</div>
+                                                <div className='total-users'>1</div>
                                             </div>
                                         </div>
                                         <div className='col-6 col-md-4'>
                                             <div>
                                                 <h3><Icon type="file"/> Файлов</h3>
-                                                <div className='total-users'>3(mb)</div>
+                                                <div className='total-users'>1(mb)</div>
                                             </div>
                                         </div>
                                         <div className='col-6 col-md-4'>

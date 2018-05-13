@@ -13,13 +13,14 @@ import TaskProjectListInternal from "./dashboardComponents/task/TaskProjectListI
 import ProjectSettings from "./dashboardComponents/settings/ProjectSettings";
 import ProjectUserSettings from "./dashboardComponents/settings/ProjectSettingsUser";
 import ProjectSettingsRole from "./dashboardComponents/settings/ProjectSettingsRole";
-import Chats from "./dashboardComponents/chats/Chats";
+import Chats from "./dashboardComponents/chats/ChatList";
 import ChatPage from "./dashboardComponents/chats/ChatPage";
 import ChatInternal from "./dashboardComponents/chats/ChatInternal";
 import MainView from "./dashboardComponents/main/MainView";
 import Mail from "./dashboardComponents/mail/Mail";
 import TaskList from "./dashboardComponents/task/TaskList";
 import DetailScheduleTaskCalendar from "./dashboardComponents/main/DetailScheduleTaskCalendar";
+import Documents from "./dashboardComponents/documents/Documents";
 
 
 class DashboardInternal extends React.Component {
@@ -46,6 +47,7 @@ class DashboardInternal extends React.Component {
                     <Route path={Path.PROJECT_SETTINGS_USER} component={ProjectUserSettings}/>
                     <Route path={Path.PROJECT_SETTINGS_ROLE} component={ProjectSettingsRole}/>
                     <Route path={Path.CHAT} component={ChatInternal}/>
+                    <Route path={Path.DOCUMENTS} component={Documents}/>
                     <Route path={Path.TASK_LIST} component={TaskList}/>
                     <Route path={Path.DETAIL_SCHEDULE_TASK_CALENDAR} component={DetailScheduleTaskCalendar}/>
                 </Switch>

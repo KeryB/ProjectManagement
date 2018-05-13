@@ -33,14 +33,6 @@ class LayoutSider extends React.Component {
                             <div className='text-layout'>Главная</div>
                         </Link>
                     </Menu.Item>
-                    <Menu.Item key="2">
-                        <Link to={Path.MAIL}>
-                            <div className='icon-layout'>
-                                <Icon type="mail"/>
-                            </div>
-                            <div className='text-layout'>Почта</div>
-                        </Link>
-                    </Menu.Item>
                     <Menu.Item key="3">
                         <Link to={Path.CHAT_LIST}>
                             <div className='icon-layout'>
@@ -50,10 +42,12 @@ class LayoutSider extends React.Component {
                         </Link>
                     </Menu.Item>
                     <Menu.Item key="4">
-                        <div className='icon-layout'>
-                            <Icon type="file"/>
-                        </div>
-                        <div className='text-layout'>Файлы</div>
+                        <Link to={Path.DOCUMENTS}>
+                            <div className='icon-layout'>
+                                <Icon type="file"/>
+                            </div>
+                            <div className='text-layout'>Документы</div>
+                        </Link>
                     </Menu.Item>
                     <Menu.Item key="5">
                         {chosenProject != null ?
@@ -62,7 +56,7 @@ class LayoutSider extends React.Component {
                                     <Icon type="safety"/>
                                 </div>
                                 <div className='text-layout'>Проект</div>
-                            </Link>:
+                            </Link> :
                             undefined}
                     </Menu.Item>
 

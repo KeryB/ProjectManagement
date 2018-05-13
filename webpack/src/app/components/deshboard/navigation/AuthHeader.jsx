@@ -113,7 +113,7 @@ class AuthHeader extends React.Component {
 
                     <Dropdown overlay={notification()} trigger={['click']}>
                         <a className="notification" href="#">
-                            <Badge count={12}>
+                            <Badge count={3}>
                                 <Icon type="bell"/>
                             </Badge>
                         </a>

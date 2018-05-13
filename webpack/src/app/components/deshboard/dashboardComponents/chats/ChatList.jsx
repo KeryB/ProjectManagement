@@ -77,7 +77,7 @@ const menuActions = (
 )
 
 
-class Chats extends React.Component {
+class ChatList extends React.Component {
 
     onRow = (record) => {
         return {
@@ -127,17 +127,6 @@ class Chats extends React.Component {
                 <div className='indent-p-block'>
 
                     <div className='list-message-container'>
-                        {/*<div className='row header-list'>*/}
-                        {/*<div className='col-6 col-md-8'>*/}
-                        {/*<Icon type="caret-right"/> Тема обсуждения*/}
-                        {/*</div>*/}
-                        {/*<div className='col-6 col-md-2'>*/}
-                        {/*<Icon type="message"/> Ответов*/}
-                        {/*</div>*/}
-                        {/*<div className='col-6 col-md-2'>*/}
-                        {/*Последнее сообщение от:*/}
-                        {/*</div>*/}
-                        {/*</div>*/}
                         <List
                             className="demo-loadmore-list"
                             itemLayout="horizontal"
@@ -157,7 +146,7 @@ class Chats extends React.Component {
                                                     <Badge count={25}/>
                                                 </div>
                                                 <div className='last-your-message'>
-                                                    {item.person}, {moment(new Date()).format('DD MMMM YYYY, h:mm')}
+                                                    <a>{item.person}</a>, {moment(new Date()).format('DD MMMM YYYY, h:mm')}
                                                 </div>
                                                 <div className='stuff'>
                                                     <IconText type="star-o" text="156"/>
@@ -205,4 +194,4 @@ class Chats extends React.Component {
     }
 }
 
-export default Chats;
+export default ChatList;

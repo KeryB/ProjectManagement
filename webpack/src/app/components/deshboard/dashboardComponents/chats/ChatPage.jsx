@@ -1,5 +1,5 @@
 import React from "react";
-import {Avatar, Button, Checkbox, Divider, Dropdown, Icon, List, Menu} from "antd";
+import {Avatar, Breadcrumb, Button, Checkbox, Divider, Dropdown, Icon, List, Menu} from "antd";
 import {EditorState} from 'draft-js';
 import ChatMessage from "./ChatMessage";
 import {FormEditWysiwyg} from "../../../forms/Inputs";
@@ -73,9 +73,21 @@ class ChatPage extends React.Component {
         return (
             <div className='chat-page'>
                 <div className='p-block'>
-                    <h4>BREADCRUMB</h4>
-                </div>
-                <div className='indent-p-block'>
+                    <div>
+                        <h4>
+                            <Breadcrumb>
+                                <Breadcrumb.Item href="">
+                                    <Icon type="home"/> Главная
+                                </Breadcrumb.Item>
+                                <Breadcrumb.Item>
+                                    Список чатов
+                                </Breadcrumb.Item>
+                                <Breadcrumb.Item>
+                                    Обсуждение
+                                </Breadcrumb.Item>
+                            </Breadcrumb>
+                        </h4>
+                    </div>
                     <div className='page-header'>
                         <div className='display-inline-block'>
                             <h3>Тема обсуждения: <a>ТУТ тема</a></h3>
