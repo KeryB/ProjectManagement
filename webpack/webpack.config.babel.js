@@ -136,14 +136,11 @@ module.exports = function (env) {
             new webpack.NoEmitOnErrorsPlugin()
         );
 
-        cssLoader = [
-            {
+        cssLoader = [{
                 loader: 'style-loader',
-            },
-            {
+            },{
                 loader: 'css-loader',
-            },
-            {
+            },{
                 loader: 'less-loader',
             }
         ];

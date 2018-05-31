@@ -24,17 +24,17 @@ const columns = [{
 }];
 const data = [{
     key: '1',
-    name: <span><Icon type="folder" /> src</span>,
+    name: <span><Icon type="folder"/> src</span>,
     description: '',
     lastChange: '05.04.2018, 15:24'
-},{
+}, {
     key: '2',
-    name: <span><Icon type="folder" /> папка</span>,
+    name: <span><Icon type="folder"/> папка</span>,
     description: '',
     lastChange: '05.04.2018, 15:24'
-},{
+}, {
     key: '3',
-    name: <span><Icon type="file" /> file.txt</span>,
+    name: <span><Icon type="file"/> file.txt</span>,
     description: '',
     lastChange: '05.04.2018, 15:24'
 }];
@@ -94,7 +94,8 @@ class ActualProject extends React.Component {
                                             {project.description}
                                         </div>
                                     </div>
-                                    <div className='add-user'><Button icon='user-add'> Добавить пользователя</Button></div>
+                                    <div className='add-user'><Button icon='user-add'> Добавить пользователя</Button>
+                                    </div>
                                 </div>
                                 <div className='col-6 col-md-5 data-container'>
                                     <div className='row'>
