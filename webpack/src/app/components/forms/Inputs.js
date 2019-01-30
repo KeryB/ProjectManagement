@@ -41,6 +41,7 @@ export const FormSelect = ({
         </div>
     );
 
+
     return <FormItem label={label}
                      required={required}
                      labelCol={formItemLayout.labelCol}
