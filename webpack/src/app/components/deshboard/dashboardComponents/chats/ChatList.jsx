@@ -195,6 +195,8 @@ class ChatList extends React.Component {
                                                 </div>
                                             </div>
                                         </div>
+
+
                                         <div className='col-6 col-md-2'>
                                             <div>
                                                 <h4>
