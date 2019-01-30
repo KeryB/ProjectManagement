@@ -1,9 +1,15 @@
 import * as React from "react";
-import {Card, Row, Col, Input, Form, Select, Button, Avatar, Icon, Breadcrumb, Divider,Radio} from 'antd';
+import {Card, Row, Col, Input, Form, Select, Button, Avatar, Icon, Breadcrumb, Divider, Radio} from 'antd';
 import UploadAvatar from "../commoncomponents/UploadAvatar";
 import SaveComponent from "../commoncomponents/SaveComponent";
 import * as projectAction from "../../../actions/project/ProjectAction";
 import {saveProject} from "../../../actions/reduxCrud/SaveActions";
+import {Field, reduxForm} from "redux-form";
+import {connect} from "react-redux";
+import {bindActionCreators} from "redux";
+import {FormRadioGroup, FormSelect, openNotificationWithIcon, TextField} from "../../forms/Inputs";
+import {required} from "../../forms/Validation";
+import * as Path from "../../../utils/RoutePath";
 
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
@@ -11,6 +17,33 @@ const RadioGroup = Radio.Group;
 function handleChange(value) {
     console.log(`selected ${value}`);
 }
+
+const FORM_ID = 'projectCreationForm';
+
+const formItemLayout = {
+    labelCol: {span: 8},
+    wrapperCol: {span: 8},
+};
+
+const getRadioData = () => {
+
+    const radioStyle = {
+        display: 'block',
+        height: '30px',
+        lineHeight: '30px',
+    };
+    let data = [];
+
+    data.push({
+        key: 1,
+        value:  <Radio style={radioStyle} value='true'><Icon type="lock"/> Private</Radio>
+    }, {
+        key: 2,
+        value:  <Radio style={radioStyle} value='false'><i className="fas fa-globe"/> Public</Radio>
+    });
+
+    return data;
+};
 
 class ProjectCreation extends React.Component {
 
@@ -24,16 +57,21 @@ class ProjectCreation extends React.Component {
         console.log(this.state)
     };
 
+    onSubmit = (values) => {
+        const {saveProject, history} = this.props;
+
+        saveProject(values, ()=>{
+            openNotificationWithIcon('success', 'Успешно', 'Проект сохранен');
+            history.push(Path.ROOT);
+        }, ()=>{
+            openNotificationWithIcon('error', 'Ошибка', 'Что-то пошло не так..');
+        })
+
+    };
+
     render() {
-        const {form: {getFieldDecorator}, history} = this.props;
-
+        const {handleSubmit, history} = this.props;
         const {projectType} = this.state;
-
-        const radioStyle = {
-            display: 'block',
-            height: '30px',
-            lineHeight: '30px',
-        };
 
         return (
             <div className='project-creation'>
@@ -53,83 +91,44 @@ class ProjectCreation extends React.Component {
                             <UploadAvatar onChange={this.handleChangeState}/>
                         </div>
                         <div className='col-sm-8'>
-                            <Form onSubmit={this.handleSubmit}>
-                                <FormItem
-                                    label="Название"
-                                    labelCol={{span: 7}}
-                                    wrapperCol={{span: 13}}
-                                >
-                                    {getFieldDecorator('title', {
-                                        rules: [{required: true, message: 'Данное поле обязательно к заполнению'}],
-                                    })(
-                                        <Input placeholder='Введите название проекта'/>
-                                    )}
-                                </FormItem>
+                            <form id={FORM_ID} onSubmit={handleSubmit(this.onSubmit)} className='creation-form'>
+                                <Field name='title'
+                                       label='Название проекта'
+                                       placeholder='Введите название проекта'
+                                       validate={required}
+                                       required
+                                       formItemLayout={formItemLayout}
+                                       component={TextField}
+                                />
+                                <Field
+                                    name='projectType'
+                                    onFocus={this.handleFocusComboBox}
+                                    label='Выбирете тип проекта'
+                                    options={[]}
+                                    formItemLayout={formItemLayout}
+                                    placeholder='Тип проекта'
+                                    component={FormSelect}/>
 
-                                <FormItem
-                                    label="Выбирете тип проекта"
-                                    labelCol={{span: 7}}
-                                    wrapperCol={{span: 12}}
-                                >
-                                    {getFieldDecorator('projectType', {
-                                        rules: [{required: true, message: 'Данное поле обязательно к заполнению'}],
-                                    })(
-                                        <Select
-                                            showSearch
-                                            placeholder="Тип проекта"
-                                            optionFilterProp="children"
-                                            onChange={handleChange}
-                                            notFoundContent="Не найдено"
-                                            filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                                        >
-                                            <Select.Option value='1'>{<span><Avatar
-                                                size='small'/> хз</span>}</Select.Option>
-                                            <Select.Option value='2'>{<span><Avatar
-                                                size='small'/> хз</span>}</Select.Option>
-                                            <Select.Option value='3'>{<span><Avatar
-                                                size='small'/> хз</span>}</Select.Option>
-                                        </Select>
-                                    )}
-                                </FormItem>
-
-                                <FormItem
-                                    label="Описание"
-                                    labelCol={{span: 7}}
-                                    wrapperCol={{span: 12}}
-                                >
-                                    {getFieldDecorator('description', {})
-                                    (
-                                        <Input.TextArea rows={4}/>
-                                    )}
-                                </FormItem>
-                                <div className='visibility-level'>
-                                    <div className='row'>
-                                        <div className='col-sm-3 offset-md-1'>
-                                            <h4>Уровень видимости:</h4>
-                                        </div>
-                                        <div className='col-sm-4'>
-                                            <RadioGroup onChange={this.onChange} value={this.state.value}>
-                                                <Radio style={radioStyle} value={1}><Icon type="lock"/> Private</Radio>
-                                                <Radio style={radioStyle} value={2}><i className="fas fa-globe"/> Public</Radio>
-                                            </RadioGroup>
-                                        </div>
-                                    </div>
-                                </div>
+                                <Field name='description'
+                                       label='Описание проекта'
+                                       type='textarea'
+                                       formItemLayout={formItemLayout}
+                                       component={TextField}
+                                />
+                                <Field
+                                    name='locked'
+                                    data={getRadioData()}
+                                    label='Уровень видимости'
+                                    requred
+                                    validate={required}
+                                    formItemLayout={formItemLayout}
+                                    component={FormRadioGroup}/>
 
 
-                                <FormItem
-                                    wrapperCol={{span: 14, offset: 12}}
-                                >
-
-                                    <SaveComponent
-                                        buttonText='Создать проект'
-                                        form={this.props.form}
-                                        affix={saveProject}
-                                        history={history}
-                                    />
-
-                                </FormItem>
-                            </Form>
+                                <Button type='primary' onClick={handleSubmit(this.onSubmit)}>
+                                    Сохранить
+                                </Button>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -138,6 +137,15 @@ class ProjectCreation extends React.Component {
     }
 }
 
-ProjectCreation = Form.create()(ProjectCreation);
 
-export default ProjectCreation;
+ProjectCreation = reduxForm({
+    form: FORM_ID
+})(ProjectCreation);
+
+function mapDispatchToProps(dispatch) {
+    return {
+        saveProject: bindActionCreators(saveProject, dispatch)
+    }
+}
+
+export default connect(null, mapDispatchToProps)(ProjectCreation);

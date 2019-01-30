@@ -92,5 +92,12 @@ public class ProjectController {
         return RestResponse.ok(actualProjectData);
     }
 
+    @RequestMapping(value = "/ssave", method = RequestMethod.POST)
+    public RestResponse ssave(HttpServletRequest request, @MappedUser User user) {
+
+        projectService.createRepository();
+        return null;
+    }
+
 }
 

@@ -65,7 +65,6 @@ class App extends React.Component {
     render() {
         const {userData: {user, isLoading, projectPermissions, tokenStatus}, location, history} = this.props;
 
-        console.log(this.props);
         return (
             <div>
                 {

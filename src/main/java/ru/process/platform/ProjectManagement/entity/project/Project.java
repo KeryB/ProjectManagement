@@ -24,6 +24,11 @@ public class Project {
         supporting
     }
 
+    public enum projectType {
+        FINANCIAL,
+        SOFTWARE
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;

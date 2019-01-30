@@ -35,8 +35,8 @@ class UserList extends React.Component {
                     <List.Item>
                         <List.Item.Meta
                             avatar={<Avatar src="/resources/images/profile.jpeg" />}
-                            title={<a href="https://ant.design">{item.firstName + item.secondName}</a>}
-                            description='Супер-администратор'
+                            title={<a href="https://ant.design">{item.firstName + ' ' + item.secondName}</a>}
+                            description={<span>{item.id===52 ? "Менеджер(Исполнитель)" : "Менеджер(Заказчик)"}</span>}
                         />
                     </List.Item>
                 )}

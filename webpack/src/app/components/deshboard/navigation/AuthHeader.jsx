@@ -93,19 +93,25 @@ class AuthHeader extends React.Component {
                     <Dropdown overlay={projectActions()} trigger={['click']}>
                         <div className='project-header'>
                             <i className="far fa-folder"/>
-                            { project != null ? <h3 style={{display:'inline-block', marginBottom:'0px'}}>{project.primaryProject.title}</h3> : undefined}
+                            {project != null ? <h3 style={{
+                                display: 'inline-block',
+                                marginBottom: '0px'
+                            }}>{project.primaryProject.title}</h3> : undefined}
                         </div>
                     </Dropdown>
                     {/*<Link to={Path.CREATE_TASK}> Создать задачу</Link>*/}
                     <Dropdown overlay={profileMenu(this.logout, user)} trigger={['click']}>
                         <div className='profile-header'>
                             <a>
-                                <Avatar size='large'/>
-                                <span className='user-name'>
-                                    <span>
-                                        {user.firstName + ' ' + user.secondName}
-                                    </span>
-                                </span>
+                                <div className='display-ant-profile'>
+                                    <Avatar size='large'/>
+                                        <div className='user-name'>
+                                            <span>
+                                                {user.firstName + ' ' + user.secondName}
+                                            </span>
+                                        </div>
+                                    <div className='role-profile'>Менеджер</div>
+                                </div>
                             </a>
                         </div>
                     </Dropdown>

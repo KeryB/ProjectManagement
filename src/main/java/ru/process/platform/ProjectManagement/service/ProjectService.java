@@ -17,6 +17,7 @@ import ru.process.platform.ProjectManagement.repository.ProjectRepository;
 import ru.process.platform.ProjectManagement.repository.UserProject.UserProjectRepository;
 import ru.process.platform.ProjectManagement.repository.UserRepository;
 import ru.process.platform.ProjectManagement.repository.jdbcTemplate.Paging;
+import ru.process.platform.ProjectManagement.service.integration.JgitService;
 import ru.process.platform.ProjectManagement.service.predicates.SpecificationService;
 
 import java.util.Date;
@@ -32,14 +33,17 @@ public class ProjectService {
 
     private final UserProjectRepository userProjectRepository;
 
+    private final JgitService jgitService;
+
     private final SpecificationService specificationService;
 
     @Autowired
-    public ProjectService(SpecificationService specificationService, UserRepository userRepository, ProjectRepository projectRepository, UserProjectRepository userProjectRepository) {
+    public ProjectService(SpecificationService specificationService, UserRepository userRepository, ProjectRepository projectRepository, UserProjectRepository userProjectRepository, JgitService jgitService) {
         this.specificationService = specificationService;
         this.userRepository = userRepository;
         this.projectRepository = projectRepository;
         this.userProjectRepository = userProjectRepository;
+        this.jgitService = jgitService;
     }
 
     public UserProjectPermissionDto getProjectPermission(int userId, ProjectFilterRequestDto filter) {
@@ -83,6 +87,7 @@ public class ProjectService {
     public UserProject saveProject(Project project, User user) {
 
         project.setCreationDate(new Date());
+        project.setProjectType(Project.projectType.SOFTWARE.name());
         project.setProjectStatus(Project.ProjectStatus.processing);
         Project savedProject = projectRepository.save(project);
 
@@ -122,6 +127,15 @@ public class ProjectService {
                 .collect(Collectors.toList());
         projectDataDto.setUsers(users);
         return projectDataDto;
+    }
+
+    public void createRepository() {
+        try {
+            jgitService.createGitRepo();
+ //           Git gitRepo = jgitService.openOrCreate(new File("D:\\ideaProjects\\girProjects"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 //    @Transactional

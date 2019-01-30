@@ -1,5 +1,5 @@
 import React from "react";
-import {Avatar, Button, Checkbox, Icon, List, Popconfirm, Table, Tabs} from "antd";
+import {Avatar, Breadcrumb, Button, Checkbox, Icon, List, Popconfirm, Table, Tabs} from "antd";
 
 const TabPane = Tabs.TabPane;
 
@@ -14,15 +14,20 @@ for (let i = 0; i < 10; i++) {
 const columns = [{
     dataIndex: 'avatar',
     key: 'avatar',
+    className: 'project-user-settings-profile',
     render: (text, record) =>
         <a>
-            <Avatar/>
+            <Avatar src='/resources/images/profile.jpeg'/>
         </a>
 
 }, {
     title: 'Имя Фамилия',
     dataIndex: 'name',
-    key: 'name'
+    key: 'name',
+}, {
+    title: 'Логин',
+    dataIndex: 'login',
+    key: 'login'
 }, {
     title: 'E-mail',
     dataIndex: 'email',
@@ -31,12 +36,6 @@ const columns = [{
     title: 'Роли',
     dataIndex: 'roles',
     key: 'roles'
-}, {
-    title: 'Заблокирован',
-    dataIndex: 'locked',
-    key: 'locked',
-    render: (text, record) =>
-        <Checkbox defaultChecked={false} disabled/>
 }, {
     dataIndex: 'delete',
     key: 'delete',
@@ -48,14 +47,25 @@ const columns = [{
 }];
 
 const data = [];
-for (let i = 0; i < 10; i++) {
     data.push({
-        key: i,
-        name: `Edward King ${i}`,
-        email: 32,
-        roles: `London, Park Lane no. ${i}`,
+        key: 1,
+        name: 'Булычев Кирилл',
+        login: 'Kery BUl',
+        email: 'asd@aasdw.com',
+        roles: 'Супер-администратор',
+    }, {
+        key: 2,
+        name: 'Антон Джетович',
+        login: 'Jet',
+        email: 'jet@jetov.com',
+        roles: 'Менеджер, Зазазчик',
+    }, {
+        key: 3,
+        name: 'Денис Глотов',
+        login: 'Denis Glot',
+        email: 'denis@glotovv.com',
+        roles: 'Менеджер, Исполнитель',
     });
-}
 
 class ProjectSettingsUser extends React.Component {
 
@@ -73,7 +83,16 @@ class ProjectSettingsUser extends React.Component {
             <div>
                 <div className='p-block'>
                     <div className='display-inline-block'>
-                        <h3>BREADCRUMB</h3>
+                        <h5>
+                            <Breadcrumb>
+                                <Breadcrumb.Item href="">
+                                    <Icon type="home" />
+                                </Breadcrumb.Item>
+                                <Breadcrumb.Item>
+                                    Пользователи
+                                </Breadcrumb.Item>
+                            </Breadcrumb>
+                        </h5>
                     </div>
                     <div className='display-inline-block float-right'>
                         <a className='a-btn-primary'><Icon type="plus-circle-o"/> Добавить</a>

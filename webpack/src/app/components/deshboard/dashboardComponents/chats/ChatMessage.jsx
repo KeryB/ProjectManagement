@@ -1,7 +1,28 @@
 import React from "react";
 import moment from "moment/moment";
 import PropTypes from "prop-types";
-import {Avatar, Button, Divider, Icon} from "antd";
+import {Avatar, Button, Divider, Icon, List} from "antd";
+
+const attachments = (data) => {
+
+    return (
+        <div className='message-attachments'>
+            <List
+                dataSource={data}
+                renderItem={item => (
+                    <div className='attachment-item'>
+                        <div className='cell'>
+                            {item.type}
+                        </div>
+                        <div className='footer-cell'>
+                            {item.title}
+                        </div>
+                    </div>
+                )}
+            />
+        </div>
+    )
+};
 
 class ChatMessage extends React.Component {
 
@@ -30,11 +51,13 @@ class ChatMessage extends React.Component {
         const {isActive} = this.state;
         const touchedMessage = isActive ? <Icon type="check-circle"/> : undefined;
 
+        const {description} = item;
+        console.log(description);
         return (
             <div id={item.id} className={isActive ? 'active-message' : ' background-none'}>
                 <div className='chat-header' onClick={this.handleClickChatHeader}>
                     <span>
-                        <Icon type="clock-circle-o"/> {moment(new Date()).format('MM.DD.YYYY, h:mm')}
+                        <Icon type="clock-circle-o"/> {item.time}
                     </span>
                     <span className='show-icon-touched'>
                         {touchedMessage}
@@ -49,22 +72,27 @@ class ChatMessage extends React.Component {
                             <Avatar src='/resources/images/profile.jpeg'/>
                         </div>
                         <div style={{marginTop: '5px'}}>
-                            Роль: {item.role}
+                            <h4> <span>Роль: </span><span>{item.role}</span></h4>
                         </div>
-                        <div className='fixed-message'>
-                            <Icon type="check-circle"/> Сообщение закреплено
-                        </div>
-                        <div>
+
+                        {item.isFixed ?
+                            <div className='fixed-message'>
+                                <Icon type="check-circle"/> Сообщение закреплено
+                            </div> : undefined}
+
+                        {item.attachments ? <div>
                             <Icon type="file"/>
-                        </div>
+                        </div> : undefined}
                     </div>
                     <Divider type="vertical"/>
-                    <div className='col-md-9'>
+                    <div>
                         <div className='actual-message'>
-                            {item.description}
+                            {description.first}
+                            <p>{description.second}</p>
                         </div>
+                        {item.attachments ? attachments(item.attachments) : undefined}
                         <div className='footer'>
-                            <Button size='small'>Цитировать</Button>
+
                         </div>
                     </div>
                 </div>

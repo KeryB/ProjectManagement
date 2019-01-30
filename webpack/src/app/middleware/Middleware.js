@@ -31,7 +31,6 @@ const middleware = store => next => action => {
     }
 
     action.promise((data, role) => {
-            console.log(data);
             if (successAction) {
                 store.dispatch({type: successAction, payload: data, role: role});
             }
@@ -41,7 +40,6 @@ const middleware = store => next => action => {
             }
 
             if (role && store.getState().user.user.role !== role) {
-                console.log("kek");
             }
         }, error => {
             if (failureAction) {

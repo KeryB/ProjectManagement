@@ -29,13 +29,20 @@ const columns = [{
 }];
 
 const data = [];
-for (let i = 0; i < 1; i++) {
     data.push({
-        key: i,
+        key: 1,
         role: 'Супер-администратор',
         description: ''
+    },{
+        key: 2,
+        role: 'Заказчик',
+        description: ''
+    }, {
+        key: 3,
+        role: 'Менеджер',
+        description: ''
     });
-}
+
 
 class ProjectSettingsRole extends React.Component {
 
@@ -78,7 +85,7 @@ class ProjectSettingsRole extends React.Component {
                 <div className='indent-p-block project-settings-user'>
                     <Table columns={columns}
                            dataSource={data}
-                           size="middle"
+                           size="small"
                            onRow={this.onRow}
                            className='tr-cursor-pointer'
                     />

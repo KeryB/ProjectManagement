@@ -33,6 +33,7 @@ public class AuthenticationRestController {
     @Value("${role.header}")
     private String roleHeader;
 
+
     @Autowired
     public AuthenticationRestController(JwtService jwtService, UserService userService, AuthenticationManager authenticationManager) {
         this.jwtService = jwtService;
@@ -47,7 +48,7 @@ public class AuthenticationRestController {
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(authRequest.getEmail(),
                         authRequest.getPassword());
-        Authentication authentication = null;
+        Authentication authentication;
         try {
             authentication = authenticationManager.authenticate(authenticationToken);
             SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -58,11 +59,11 @@ public class AuthenticationRestController {
         final String token = jwtService.buildJwtToken(user);
         response.addHeader(roleHeader, user.getRole().name());
         return RestResponse.ok(token);
+
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public RestResponse register(@RequestBody @Valid RegistrationRequestDto registrationRequestDto, HttpServletResponse response) {
-
         if (userService.findByEmail(registrationRequestDto.getEmail()) != null) {
             return RestResponse.error(ErrorStatus.EMAIL_NOT_UNIQUE, ErrorMessage.EMAIL_NOT_UNIQUE);
         }

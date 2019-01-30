@@ -1,7 +1,7 @@
 import React from "react";
 import {
     Input, Button, Checkbox, Icon, List, Popconfirm, Table, Tabs, Avatar, Pagination, Badge, Dropdown,
-    Menu, Tooltip, Divider, Breadcrumb
+    Menu, Tooltip, Divider, Breadcrumb, Tag
 } from "antd";
 import moment from "moment";
 import {Link} from "react-router-dom";
@@ -14,12 +14,44 @@ const TabPane = Tabs.TabPane;
 const getData = () => {
     let data = [];
 
-    for (let i = 0; i < 10; i++) {
-        data.push({
-            title: "Отработать что-то",
-            person: "Kir"
-        })
-    }
+    data.push( {
+        title: "Продлить акции по Mercedes-Benz StarClass",
+        person: "Николаев Алексей",
+        personTime: "20 мая 2018, 15:18",
+        creator: "Зубкова Екатерина",
+        lastMessage: "Зубкова Екатерина",
+        lastMessageTime: "18 мая 2018, 14:38",
+        countFile: '0',
+        countMessage: '10',
+        badgeCount: "",
+        links: "2",
+        isArchive: false,
+        isClosed: true
+    }, {
+        title: "Обновить рекламу на сайте!",
+        person: "Булычев Кирилл",
+        personTime: "01 июня 2018, 17:52",
+        creator: "Булычев Кирилл",
+        lastMessage: "Денис Глотов",
+        lastMessageTime: "03 июня 2018, 15:50",
+        countFile: '1',
+        countMessage: '3',
+        badgeCount: "3",
+        links: "0"
+    }, {
+        title: "Продвижение программы Mercedes-Benz StarClass",
+        person: "Николаев Алексей",
+        personTime: "15 июня 2018, 14:52",
+        creator: "Зубкова Екатерина",
+        lastMessage: "Зубкова Екатерина",
+        lastMessageTime: "15 июня 2018, 17:55",
+        countFile: '3',
+        countMessage: '19',
+        badgeCount: "",
+        links: "2",
+        isArchive: true,
+        isClosed: true
+    });
 
     return data;
 };
@@ -89,8 +121,6 @@ class ChatList extends React.Component {
 
     render() {
 
-        console.log(this.props)
-
         return (
             <div className='chat-list'>
                 <div className='p-block'>
@@ -141,19 +171,28 @@ class ChatList extends React.Component {
                                                         style={{marginTop: '-58px'}}/>
                                             </span>
                                             <div className='chat-message-title'>
-                                                <div className='title'><h4 className='title-header'><Link
-                                                    to={Path.CHAT_PAGE}>{item.title} </Link></h4>
-                                                    <Badge count={25}/>
+                                                <div className='title'>
+                                                    <h4 className='title-header'>
+                                                        <Link to={{
+                                                            pathname: Path.CHAT_PAGE,
+                                                            state: {item: item}
+                                                        }}>{item.title} {item.isArchive ?
+                                                            <span>(Из архива)</span> : undefined}</Link>
+                                                    </h4>
+                                                    <Badge count={item.badgeCount}/>
                                                 </div>
                                                 <div className='last-your-message'>
-                                                    <a>{item.person}</a>, {moment(new Date()).format('DD MMMM YYYY, h:mm')}
+                                                    <a>{item.person}</a>, {item.personTime}
                                                 </div>
                                                 <div className='stuff'>
-                                                    <IconText type="star-o" text="156"/>
+                                                    <IconText type="file" text={item.countFile}/>
                                                     <Divider type="vertical"/>
-                                                    <IconText type="file" text="156"/>
+                                                    <IconText type="message" text={item.countMessage}/>
                                                     <Divider type="vertical"/>
-                                                    <IconText type="message" text="2"/></div>
+                                                    <IconText type='link' text={item.links}/>
+                                                    <Divider type="vertical"/>
+                                                    {item.isClosed ?  <Tag color="#87d068">Обсуждение закрыто</Tag> : undefined}
+                                                </div>
                                             </div>
                                         </div>
                                         <div className='col-6 col-md-2'>
@@ -163,20 +202,20 @@ class ChatList extends React.Component {
                                                 </h4>
                                             </div>
                                             <div>
-                                                <a>Kek</a>
+                                                <a>{item.creator}</a>
                                             </div>
                                         </div>
                                         <div className='col-6 col-md-2'>
                                             <div>
                                                 <h4>Последнее сообщение от: </h4>
-                                                <a>Izhdark </a>
-                                                <span>{moment(new Date()).format('DD MMMM YYYY, h:mm')}</span>
+                                                <a>{item.lastMessage}</a>
+                                                <span>{" " + item.lastMessageTime}</span>
                                             </div>
                                         </div>
                                         <div className='col-6 col-md-1'>
                                             <Dropdown overlay={menuActions} trigger={['click']}>
                                                 <a className="ant-dropdown-link" href="#">
-                                                    <Icon style={{marginTop:'25px'}} type="down"/>
+                                                    <Icon style={{marginTop: '25px'}} type="down"/>
                                                 </a>
                                             </Dropdown>
                                         </div>
@@ -185,9 +224,9 @@ class ChatList extends React.Component {
                             )}
                         />
                     </div>
-                    <div className='pagination'>
-                        <Pagination size="small" total={50}/>
-                    </div>
+                    {/*<div className='pagination'>*/}
+                    {/*<Pagination size="small" total={50}/>*/}
+                    {/*</div>*/}
                 </div>
             </div>
         )

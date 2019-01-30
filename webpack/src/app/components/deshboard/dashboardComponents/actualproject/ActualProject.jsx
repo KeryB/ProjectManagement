@@ -24,19 +24,24 @@ const columns = [{
 }];
 const data = [{
     key: '1',
-    name: <span><Icon type="folder"/> src</span>,
+    name: <span><Icon type="folder"/> структура</span>,
     description: '',
-    lastChange: '05.04.2018, 15:24'
-}, {
-    key: '2',
-    name: <span><Icon type="folder"/> папка</span>,
-    description: '',
-    lastChange: '05.04.2018, 15:24'
+    lastChange: '05.02.2018, 15:24'
 }, {
     key: '3',
-    name: <span><Icon type="file"/> file.txt</span>,
+    name: <span><Icon type="file"/> Описание.doc</span>,
     description: '',
-    lastChange: '05.04.2018, 15:24'
+    lastChange: '05.02.2018, 15:24'
+}, {
+    key: '4',
+    name: <span><Icon type="file"/> Рекламный-текст.doc</span>,
+    description: '',
+    lastChange: '05.02.2018, 15:25'
+}, {
+    key: '5',
+    name: <span><Icon type="file"/> Акции.doc</span>,
+    description: '',
+    lastChange: '05.02.2018, 15:25'
 }];
 
 
@@ -91,7 +96,7 @@ class ActualProject extends React.Component {
                                             <Icon type={project.locked ? 'lock' : 'unlock'}/>
                                         </h2>
                                         <div className='project-description'>
-                                            {project.description}
+
                                         </div>
                                     </div>
                                     <div className='add-user'><Button icon='user-add'> Добавить пользователя</Button>
@@ -102,20 +107,20 @@ class ActualProject extends React.Component {
                                         <div className='col-6 col-md-4'>
                                             <div>
                                                 <h3><Icon type="user"/> Пользователей</h3>
-                                                <div className='total-users'>1</div>
+                                                <div className='total-users'>2</div>
                                             </div>
                                         </div>
                                         <div className='col-6 col-md-4'>
                                             <div>
                                                 <h3><Icon type="file"/> Файлов</h3>
-                                                <div className='total-users'>1(mb)</div>
+                                                <div className='total-users'>2,5(mb)</div>
                                             </div>
                                         </div>
                                         <div className='col-6 col-md-4'>
                                             <div>
                                                 <h3><i className="far fa-clipboard"/>
                                                     Задач</h3>
-                                                <div className='total-users'>9</div>
+                                                <div className='total-users'>3</div>
                                             </div>
                                         </div>
                                     </div>

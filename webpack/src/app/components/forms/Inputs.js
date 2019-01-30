@@ -1,9 +1,11 @@
-import {Select, Form, Input, DatePicker, TimePicker, AutoComplete} from "antd";
+import {Select, Form, Input, DatePicker, TimePicker, AutoComplete, Radio} from "antd";
 import {DATE_ONLY_FORMAT, fullDateTimeFormat, hourMinuteFormat} from "../../utils/DateUtils";
 import {Editor} from "react-draft-wysiwyg";
 import CreatableSelect from '../deshboard/commoncomponents/CreatableSelect';
+import GroupCheckBox from '../deshboard/commoncomponents/group/GroupCheckbox';
 import React from 'react';
 import FetchSelect from "../deshboard/commoncomponents/FetchSelect";
+import {notification} from "antd/lib/index";
 
 const Option = Select.Option;
 const FormItem = Form.Item;
@@ -169,6 +171,55 @@ export const FormAutoComplete = ({
     </FormItem>;
 };
 
+export const FormRadioGroup = ({
+                                   input,
+                                   data = [],
+                                   label,
+                                   required,
+                                   meta: {touched, error},
+                                   placeholder,
+                                   formItemLayout = {},
+                                   ...rest,
+                               }) => {
+
+    return <FormItem label={label}
+                     required={required}
+                     labelCol={formItemLayout.labelCol}
+                     wrapperCol={formItemLayout.wrapperCol}
+                     validateStatus={touched && error ? 'error' : undefined}
+                     help={touched && error ? error : undefined}>
+        <Radio.Group {...{...input}}>
+            {data[0].value}
+            {data[1].value}
+        </Radio.Group>
+    </FormItem>;
+};
+
+export const FormCheckBox = ({
+                                 input,
+                                 plainOptions = [],
+                                 defaultCheckedList=[],
+                                 label,
+                                 required,
+                                 meta: {touched, error},
+                                 placeholder,
+                                 formItemLayout = {},
+                                 ...rest,
+                             }) => {
+
+    return <FormItem label={label}
+                     required={required}
+                     labelCol={formItemLayout.labelCol}
+                     wrapperCol={formItemLayout.wrapperCol}
+                     validateStatus={touched && error ? 'error' : undefined}
+                     help={touched && error ? error : undefined}>
+
+        {console.log(plainOptions)}
+        <GroupCheckBox {...{...input}} plainOptions={plainOptions} defaultCheckedList={defaultCheckedList}>
+        </GroupCheckBox>
+    </FormItem>;
+};
+
 export const FormEditWysiwyg = ({
                                     input,
                                     label,
@@ -193,4 +244,11 @@ export const FormEditWysiwyg = ({
                 editorClassName="editor-task"
         />
     </FormItem>;
+};
+
+export const openNotificationWithIcon = (type, messageText, descriptionText) => {
+    notification[type]({
+        message: messageText,
+        description: descriptionText,
+    });
 };
