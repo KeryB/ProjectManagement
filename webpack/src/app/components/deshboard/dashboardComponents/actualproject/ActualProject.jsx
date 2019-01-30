@@ -179,6 +179,8 @@ class ActualProject extends React.Component {
     }
 }
 
+
+
 function mapStateToProps(state) {
     return {
         actualProject: state.actualProject
