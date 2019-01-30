@@ -53,6 +53,7 @@ const middleware = store => next => action => {
                 return;
             }
 
+
             switch (error.status) {
                 case HttpStatus.INVALID_TOKEN_HEADER:
                     removeStorageItem(tokenHeader);
