@@ -30,6 +30,7 @@ export const FormSelect = ({
         data.push(<Option key={value}>{avatar}{label}</Option>)
     });
 
+
     const renderField = ({input, label, type, meta: {touched, error, warning}}) => (
         <div>
             {touched && error ? <Icon type='exclamation-circle' className='error-icon'/> : undefined}
