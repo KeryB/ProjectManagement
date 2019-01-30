@@ -81,6 +81,8 @@ const middleware = store => next => action => {
         return {title, content}
     }
 
+
+
     //todo если получен некорректный токе, то удалять токен, ошибка 16
 };
 
